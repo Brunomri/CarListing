@@ -26,7 +26,7 @@ public class City {
     private List<Location> cityLocations = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "state_id")
+    @JoinColumn(name = "cityToState_id")
     private State stateOfCity;
 
     public City() {

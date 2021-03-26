@@ -35,7 +35,7 @@ public class Car {
     private String fuel;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "carToUser_id")
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "car")

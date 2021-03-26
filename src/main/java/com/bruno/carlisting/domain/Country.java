@@ -21,7 +21,7 @@ public class Country {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "country")
     private List<Location> countryLocations = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "country")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "countryOfState")
     private List<State> statesInCountry = new ArrayList<>();
 
     public Country() {

@@ -25,11 +25,11 @@ public class Listing {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "listingToUser_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "car_id")
+    @JoinColumn(name = "listingToCar_id")
     private Car car;
 
     public Listing() {

@@ -24,15 +24,15 @@ public class Location {
     private Listing listing;
 
     @ManyToOne
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "locationToCountry_id")
     private Country country;
 
     @ManyToOne
-    @JoinColumn(name = "state_id")
+    @JoinColumn(name = "locationToState_id")
     private State state;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "locationToCity_id")
     private City city;
 
     public Location() {

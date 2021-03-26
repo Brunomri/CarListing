@@ -25,11 +25,11 @@ public class State {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "state")
     private List<Location> stateLocations = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "state")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "stateOfCity")
     private List<City> citiesInState = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "stateToCountry_id")
     private Country countryOfState;
 
     public State() {
