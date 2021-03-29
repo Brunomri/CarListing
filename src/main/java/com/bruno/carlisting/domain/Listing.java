@@ -15,10 +15,6 @@ public class Listing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long listingId;
 
-//    private Long cardId;
-
-//    private Long userId;
-
     private Integer price;
 
     private Integer mileage;
@@ -33,10 +29,63 @@ public class Listing {
     @JoinColumn(name = "car_id")
     private Car car;
 
-//    @OneToOne(mappedBy = "listing", cascade = CascadeType.ALL)
-//    private Location location;
-
     public Listing() {
+    }
+
+    public Listing(Integer price, Integer mileage, String description, User user, Car car) {
+        this.price = price;
+        this.mileage = mileage;
+        this.description = description;
+        this.user = user;
+        this.car = car;
+    }
+
+    public Long getListingId() {
+        return listingId;
+    }
+
+    public void setListingId(Long listingId) {
+        this.listingId = listingId;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Integer getMileage() {
+        return mileage;
+    }
+
+    public void setMileage(Integer mileage) {
+        this.mileage = mileage;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
     }
 
 }

@@ -19,8 +19,6 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cityId;
 
-//    private Integer stateId;
-
     private String cityName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
@@ -31,6 +29,43 @@ public class City {
     private State stateOfCity;
 
     public City() {
+    }
+
+    public City(String cityName, State stateOfCity) {
+        this.cityName = cityName;
+        this.stateOfCity = stateOfCity;
+    }
+
+    public Long getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public List<Location> getCityLocations() {
+        return cityLocations;
+    }
+
+    public void setCityLocations(List<Location> cityLocations) {
+        this.cityLocations = cityLocations;
+    }
+
+    public State getStateOfCity() {
+        return stateOfCity;
+    }
+
+    public void setStateOfCity(State stateOfCity) {
+        this.stateOfCity = stateOfCity;
     }
 
 }

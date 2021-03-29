@@ -14,12 +14,6 @@ public class Location {
     @Id
     private Long locationId;
 
-//    private Integer countryId;
-
-//    private Integer stateId;
-
-//    private Long cityId;
-
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "listing_id")
@@ -38,6 +32,53 @@ public class Location {
     private City city;
 
     public Location() {
+    }
+
+    public Location(Listing listing, Country country, State state, City city) {
+        this.listing = listing;
+        this.country = country;
+        this.state = state;
+        this.city = city;
+    }
+
+    public Long getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
+    }
+
+    public Listing getListing() {
+        return listing;
+    }
+
+    public void setListing(Listing listing) {
+        this.listing = listing;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
 }

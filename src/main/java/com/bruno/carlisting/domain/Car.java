@@ -19,8 +19,6 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long carId;
 
-//    private Long userId;
-
     private String make;
 
     private String model;
@@ -43,6 +41,98 @@ public class Car {
     private List<Listing> carListings = new ArrayList<>();
 
     public Car() {
+    }
+
+    public Car(String make, String model, String year, String trim, String color, String transmission,
+               String fuel, User user) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.trim = trim;
+        this.color = color;
+        this.transmission = transmission;
+        this.fuel = fuel;
+        this.user = user;
+    }
+
+    public Long getCarId() {
+        return carId;
+    }
+
+    public void setCarId(Long carId) {
+        this.carId = carId;
+    }
+
+    public String getMake() {
+        return make;
+    }
+
+    public void setMake(String make) {
+        this.make = make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getTrim() {
+        return trim;
+    }
+
+    public void setTrim(String trim) {
+        this.trim = trim;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getTransmission() {
+        return transmission;
+    }
+
+    public void setTransmission(String transmission) {
+        this.transmission = transmission;
+    }
+
+    public String getFuel() {
+        return fuel;
+    }
+
+    public void setFuel(String fuel) {
+        this.fuel = fuel;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Listing> getCarListings() {
+        return carListings;
+    }
+
+    public void setCarListings(List<Listing> carListings) {
+        this.carListings = carListings;
     }
 
 }

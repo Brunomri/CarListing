@@ -23,4 +23,32 @@ public class Role {
     public Role() {
     }
 
+    public Role(String type) {
+        this.type = type;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
 }

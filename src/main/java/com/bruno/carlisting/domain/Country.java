@@ -27,4 +27,40 @@ public class Country {
     public Country() {
     }
 
+    public Country(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public Integer getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Integer countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public List<Location> getCountryLocations() {
+        return countryLocations;
+    }
+
+    public void setCountryLocations(List<Location> countryLocations) {
+        this.countryLocations = countryLocations;
+    }
+
+    public List<State> getStatesInCountry() {
+        return statesInCountry;
+    }
+
+    public void setStatesInCountry(List<State> statesInCountry) {
+        this.statesInCountry = statesInCountry;
+    }
+
 }
