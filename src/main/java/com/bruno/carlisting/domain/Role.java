@@ -23,7 +23,4 @@ public class Role {
     public Role() {
     }
 
-    public Role(String type) {
-        this.type = type;
-    }
 }

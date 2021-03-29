@@ -19,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    private Integer roleId;
+//    private Integer roleId;
 
     private String username;
 
@@ -37,19 +37,11 @@ public class User {
 
     @ManyToMany
     @JoinTable(name = "user_roles",
-    joinColumns = @JoinColumn(name = "userToRole_id"),
-    inverseJoinColumns = @JoinColumn(name = "roleToUser_id"))
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
 
     public User() {
-    }
-
-    public User(Integer roleId, String username, String password, String displayName, String contact) {
-        this.roleId = roleId;
-        this.username = username;
-        this.password = password;
-        this.displayName = displayName;
-        this.contact = contact;
     }
 
 }

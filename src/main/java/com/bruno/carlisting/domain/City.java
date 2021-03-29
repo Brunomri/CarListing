@@ -2,6 +2,7 @@ package com.bruno.carlisting.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,22 +19,18 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cityId;
 
-    private Integer stateId;
+//    private Integer stateId;
 
     private String cityName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
     private List<Location> cityLocations = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "cityToState_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "state_id")
     private State stateOfCity;
 
     public City() {
     }
 
-    public City(Integer stateId, String cityName) {
-        this.stateId = stateId;
-        this.cityName = cityName;
-    }
 }

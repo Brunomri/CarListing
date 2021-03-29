@@ -1,6 +1,7 @@
 package com.bruno.carlisting.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,9 +15,9 @@ public class Listing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long listingId;
 
-    private Long cardId;
+//    private Long cardId;
 
-    private Long userId;
+//    private Long userId;
 
     private Integer price;
 
@@ -24,22 +25,18 @@ public class Listing {
 
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "listingToUser_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "listingToCar_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_id")
     private Car car;
+
+//    @OneToOne(mappedBy = "listing", cascade = CascadeType.ALL)
+//    private Location location;
 
     public Listing() {
     }
 
-    public Listing(Long cardId, Long userId, Integer price, Integer mileage, String description) {
-        this.cardId = cardId;
-        this.userId = userId;
-        this.price = price;
-        this.mileage = mileage;
-        this.description = description;
-    }
 }

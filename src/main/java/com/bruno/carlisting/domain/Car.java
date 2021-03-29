@@ -2,6 +2,7 @@ package com.bruno.carlisting.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +19,7 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long carId;
 
-    private Long userId;
+//    private Long userId;
 
     private String make;
 
@@ -34,26 +35,14 @@ public class Car {
 
     private String fuel;
 
-    @ManyToOne
-    @JoinColumn(name = "carToUser_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "car")
     private List<Listing> carListings = new ArrayList<>();
 
     public Car() {
-    }
-
-    public Car(Long userId, String make, String model, String year, String trim, String color, String transmission,
-               String fuel) {
-        this.userId = userId;
-        this.make = make;
-        this.model = model;
-        this.year = year;
-        this.trim = trim;
-        this.color = color;
-        this.transmission = transmission;
-        this.fuel = fuel;
     }
 
 }
