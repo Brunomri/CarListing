@@ -1,5 +1,7 @@
 package com.bruno.carlisting.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Entity
 public class Car {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +37,12 @@ public class Car {
 
     private String fuel;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "car")
     private List<Listing> carListings = new ArrayList<>();
 
