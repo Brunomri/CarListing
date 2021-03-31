@@ -3,6 +3,7 @@ package com.bruno.carlisting.controller;
 import com.bruno.carlisting.domain.Car;
 import com.bruno.carlisting.services.CarService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +22,18 @@ public class CarController {
     }
 
     @GetMapping
-    public Page<Car> findAll(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-        return carService.getAllCars(page, size);
+    public ResponseEntity<Page<Car>> findAllCars(@RequestParam(value = "page", required = false,
+                                                 defaultValue = "0") int page,
+                                                 @RequestParam(value = "size", required = false,
+                                                 defaultValue = "10") int size) {
+
+        Page<Car> carsPage = carService.getAllCars(page, size);
+        if(carsPage.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        else {
+            return ResponseEntity.ok().body(carsPage);
+        }
+
     }
 }
