@@ -9,4 +9,6 @@ public interface CarService {
 
     Page<Car> getCarsByMake(String searchMake, int page, int size);
 
+    Car createCar(Car newCar, Long userId);
+
 }

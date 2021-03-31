@@ -50,7 +50,7 @@ public class Car {
     }
 
     public Car(String make, String model, String year, String trim, String color, String transmission,
-               String fuel, User user) {
+               String fuel) {
         this.make = make;
         this.model = model;
         this.year = year;
@@ -58,7 +58,6 @@ public class Car {
         this.color = color;
         this.transmission = transmission;
         this.fuel = fuel;
-        this.user = user;
     }
 
     public Long getCarId() {
