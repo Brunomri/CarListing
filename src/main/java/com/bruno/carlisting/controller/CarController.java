@@ -7,9 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.net.URI;
 
 @CrossOrigin("*")
 @RestController
@@ -53,5 +59,13 @@ public class CarController {
             return ResponseEntity.ok().body(carsPage);
         }
 
+    }
+
+    @PostMapping(value = "/{userId}")
+    public ResponseEntity<Car> createCar(@PathVariable Long userId, @Valid @RequestBody Car car) {
+        Car newCar = carService.createCar(car, userId);
+        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/cars/{carId}").
+                buildAndExpand(newCar.getCarId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 }
