@@ -4,6 +4,8 @@ import com.bruno.carlisting.domain.User;
 import com.bruno.carlisting.exceptions.ObjectNotFoundException;
 import com.bruno.carlisting.repositories.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,7 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> getAllUsers(int page, int size) {
-        return null;
+        Pageable pageRequest = PageRequest.of(page, size);
+        return userRepository.findAll(pageRequest);
     }
 
     @Override
