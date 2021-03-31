@@ -1,5 +1,7 @@
 package com.bruno.carlisting.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,12 +33,15 @@ public class User {
 
     private String contact;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Listing> userListings = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Car> cars = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "user_roles",
     joinColumns = @JoinColumn(name = "user_id"),
