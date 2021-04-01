@@ -48,6 +48,13 @@ public class UserController {
 
     }
 
+    @GetMapping(value = "/{userId}")
+    public ResponseEntity<User> findUserById(@PathVariable Long userId) {
+
+        User user = userService.getUserById(userId);
+        return ResponseEntity.ok().body(user);
+    }
+
     @GetMapping(value = "/cars/{carId}")
     public ResponseEntity<User> findUserByCarId(@PathVariable Long carId) {
 
