@@ -11,6 +11,7 @@ INSERT INTO role (type) VALUES ('admin');
 
 -- User / Role mapping
 INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
+INSERT INTO user_roles (user_id, role_id) VALUES (1, 2);
 INSERT INTO user_roles (user_id, role_id) VALUES (2, 2);
 INSERT INTO user_roles (user_id, role_id) VALUES (3, 2);
 INSERT INTO user_roles (user_id, role_id) VALUES (4, 2);
