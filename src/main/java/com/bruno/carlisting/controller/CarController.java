@@ -22,7 +22,7 @@ import java.net.URI;
 @RequestMapping(value = "/cars")
 public class CarController {
 
-    private CarService carService;
+    private final CarService carService;
 
     public CarController(CarService carService) {
         this.carService = carService;
