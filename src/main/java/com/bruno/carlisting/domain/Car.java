@@ -11,10 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"make", "model", "year", "trim"})
+})
 public class Car {
 
     private static final long serialVersionUID = 1L;
