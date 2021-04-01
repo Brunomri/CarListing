@@ -1,15 +1,24 @@
 package com.bruno.carlisting.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(uniqueConstraints= {
+        @UniqueConstraint(columnNames = {"type"})
+})
 public class Role {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +26,7 @@ public class Role {
 
     private String type;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private List<User> users = new ArrayList<>();
 
