@@ -12,11 +12,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints= {
+        @UniqueConstraint(columnNames = {"username"})
+})
 public class User {
 
     private static final long serialVersionUID = 1L;
