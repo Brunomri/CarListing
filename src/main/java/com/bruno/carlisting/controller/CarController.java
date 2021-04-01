@@ -5,9 +5,11 @@ import com.bruno.carlisting.services.CarService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,7 +46,13 @@ public class CarController {
 
     }
 
-    @GetMapping(value = "/{make}")
+    @GetMapping(value = "/{carId}")
+    public ResponseEntity<Car> findCarById(@PathVariable Long carId) {
+        Car car = carService.getCarById(carId);
+        return ResponseEntity.ok().body(car);
+    }
+
+    @GetMapping(value = "/make/{make}")
     public ResponseEntity<Page<Car>> findCarsByMake(@PathVariable String make,
                                                     @RequestParam(value = "page", required = false,
                                                     defaultValue = "0") int page,
@@ -63,9 +71,24 @@ public class CarController {
 
     @PostMapping(value = "/{userId}")
     public ResponseEntity<Car> createCar(@PathVariable Long userId, @Valid @RequestBody Car car) {
+
         Car newCar = carService.createCar(car, userId);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/cars/{carId}").
                 buildAndExpand(newCar.getCarId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping(value = "/{carId}")
+    public ResponseEntity<Car> updateCar(@PathVariable Long carId, @Valid @RequestBody Car car) {
+
+        Car updatedCar = carService.updateCar(car, carId);
+        return ResponseEntity.ok().body(updatedCar);
+    }
+
+    @DeleteMapping(value = "/{carId}")
+    public ResponseEntity<Void> deleteCar(@PathVariable Long carId) {
+
+        carService.deleteCar(carId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -7,8 +7,14 @@ public interface CarService {
 
     Page<Car> getAllCars(int page, int size);
 
+    Car getCarById(Long carId);
+
     Page<Car> getCarsByMake(String searchMake, int page, int size);
 
     Car createCar(Car newCar, Long userId);
+
+    Car updateCar(Car car, Long carId);
+
+    void deleteCar(Long carId);
 
 }
