@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -45,15 +46,21 @@ public class RoleController {
 
     }
 
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity<Role> findRoleByUserId(@PathVariable Long userId) {
-        Role role = roleService.getRoleByUserId(userId);
+    @GetMapping(value = "/{roleId}")
+    public ResponseEntity<Role> findRoleById(@PathVariable Integer roleId) {
+        Role role = roleService.getRoleById(roleId);
+        return ResponseEntity.ok().body(role);
+    }
 
-        if(role == null) {
+    @GetMapping(value = "/users/{userId}")
+    public ResponseEntity<List<Role>> findRolesByUserId(@PathVariable Long userId) {
+        List<Role> userRoles = roleService.getRolesByUserId(userId);
+
+        if(userRoles.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         else {
-            return ResponseEntity.ok().body(role);
+            return ResponseEntity.ok().body(userRoles);
         }
 
     }
