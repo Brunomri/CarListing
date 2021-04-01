@@ -48,10 +48,10 @@ public class UserController {
 
     }
 
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity<User> findCarsByMake(@PathVariable Long userId) {
+    @GetMapping(value = "/cars/{carId}")
+    public ResponseEntity<User> findUserByCarId(@PathVariable Long carId) {
 
-        User user = userService.getUserById(userId);
+        User user = userService.getUserByCarId(carId);
         return ResponseEntity.ok().body(user);
 
     }

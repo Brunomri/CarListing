@@ -38,6 +38,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByCarId(Long carId) {
+
+        Optional<User> user = userRepository.findById(userRepository.searchUserByCarId(carId));
+        return user.orElseThrow(() -> new ObjectNotFoundException("User did not create this car! userId: " +
+                user.get().getUserId() + "carId: " + carId));
+    }
+
+    @Override
     public User createUser(User newUser, List<Integer> rolesIds) {
         List<Role> userRoles = new ArrayList<>();
         rolesIds.forEach(roleId -> userRoles.add(roleService.getRoleById(roleId)));

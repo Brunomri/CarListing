@@ -11,6 +11,8 @@ public interface UserService {
 
     User getUserById(Long userId);
 
+    User getUserByCarId(Long carId);
+
     User createUser(User newUser, List<Integer> rolesIds);
 
 }
