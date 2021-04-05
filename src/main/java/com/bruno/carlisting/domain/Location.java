@@ -1,5 +1,8 @@
 package com.bruno.carlisting.domain;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -15,6 +18,7 @@ public class Location {
     private Long locationId;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @MapsId
     @JoinColumn(name = "listing_id")
     private Listing listing;

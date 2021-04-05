@@ -17,4 +17,6 @@ public interface UserService {
 
     User updateUser(User user, Long userId, int page, int size);
 
+    void deleteUser(Long userId);
+
 }
