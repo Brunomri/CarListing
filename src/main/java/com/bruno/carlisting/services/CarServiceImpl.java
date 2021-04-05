@@ -42,6 +42,13 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    public Page<Car> getCarsByUserId(Long userId, int page, int size) {
+
+        Pageable pageRequest = PageRequest.of(page, size);
+        return carRepository.findByUser_UserId(userId, pageRequest);
+    }
+
+    @Override
     public Car createCar(Car newCar, Long userId) {
         User user = userService.getUserById(userId);
         newCar.setUser(user);
@@ -51,7 +58,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car updateCar(Car updatedCar, Long carId) {
         Optional<Car> optionalCar = carRepository.findById(carId);
-        optionalCar.orElseThrow(() -> new ObjectNotFoundException("User not found! Id: " + carId));
+        optionalCar.orElseThrow(() -> new ObjectNotFoundException("Car not found! Id: " + carId));
         Car currentCar = optionalCar.get();
 
         currentCar.setMake(updatedCar.getMake());

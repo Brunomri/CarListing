@@ -14,4 +14,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query(value = "SELECT * FROM car WHERE make = :searchMake", nativeQuery = true)
     Page<Car> searchCarsByMake(@Param("searchMake") String searchMake, Pageable pageable);
 
+    Page<Car> findByUser_UserId(Long userId, Pageable pageRequest);
+
 }

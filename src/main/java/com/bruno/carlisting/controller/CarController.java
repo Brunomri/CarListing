@@ -69,6 +69,21 @@ public class CarController {
 
     }
 
+    @GetMapping(value = "/users/{userId}")
+    public ResponseEntity<Page<Car>> findCarsByUserId(@PathVariable Long userId,
+                                        @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                                        @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+
+        Page<Car> carsPage = carService.getCarsByUserId(userId, page, size);
+        if(carsPage.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        else {
+            return ResponseEntity.ok().body(carsPage);
+        }
+
+    }
+
     @PostMapping(value = "/{userId}")
     public ResponseEntity<Car> createCar(@PathVariable Long userId, @Valid @RequestBody Car car) {
 

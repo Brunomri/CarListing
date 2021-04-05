@@ -11,6 +11,8 @@ public interface CarService {
 
     Page<Car> getCarsByMake(String searchMake, int page, int size);
 
+    Page<Car> getCarsByUserId(Long userId, int page, int size);
+
     Car createCar(Car newCar, Long userId);
 
     Car updateCar(Car car, Long carId);
