@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -75,11 +76,17 @@ public class UserController {
     }
 
     @PutMapping(value = "/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable Long userId, @Valid @RequestBody User user,
-                                       @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                       @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+    public ResponseEntity<User> updateUser(@PathVariable Long userId, @Valid @RequestBody User user) {
 
-        User updatedUser = userService.updateUser(user, userId, page, size);
+        User updatedUser = userService.updateUser(user, userId);
+        return ResponseEntity.ok().body(updatedUser);
+
+    }
+
+    @PatchMapping(value = "/{userId}/displayName")
+    public ResponseEntity<User> updateUserDisplayName(@PathVariable Long userId, @Valid @RequestBody User user) {
+
+        User updatedUser = userService.updateUserDisplayName(user, userId);
         return ResponseEntity.ok().body(updatedUser);
 
     }

@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User updatedUser, Long userId, int page, int size) {
+    public User updateUser(User updatedUser, Long userId) {
 
         Optional<User> optionalUser = userRepository.findById(userId);
         optionalUser.orElseThrow(() -> new ObjectNotFoundException("User not found! Id: " + userId));
@@ -68,8 +68,18 @@ public class UserServiceImpl implements UserService {
         currentUser.setDisplayName(updatedUser.getDisplayName());
         currentUser.setContact(updatedUser.getContact());
         currentUser.setRoles(roleService.getRolesByUserId(userId));
-//        currentUser.setCars((List<Car>) carService.getCarsByUserId(userId, page, size));
 
+        return userRepository.save(currentUser);
+    }
+
+    @Override
+    public User updateUserDisplayName(User user, Long userId) {
+
+        Optional<User> optionalUser = userRepository.findById(userId);
+        optionalUser.orElseThrow(() -> new ObjectNotFoundException("User not found! Id: " + userId));
+        User currentUser = optionalUser.get();
+
+        currentUser.setDisplayName(user.getDisplayName());
         return userRepository.save(currentUser);
     }
 

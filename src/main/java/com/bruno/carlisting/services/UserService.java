@@ -15,7 +15,9 @@ public interface UserService {
 
     User createUser(User newUser, List<Integer> rolesIds);
 
-    User updateUser(User user, Long userId, int page, int size);
+    User updateUser(User user, Long userId);
+
+    User updateUserDisplayName(User user, Long userId);
 
     void deleteUser(Long userId);
 
