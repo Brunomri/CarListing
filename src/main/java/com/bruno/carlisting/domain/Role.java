@@ -1,6 +1,8 @@
 package com.bruno.carlisting.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,6 +30,7 @@ public class Role {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "roles")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<User> users = new ArrayList<>();
 
     public Role() {

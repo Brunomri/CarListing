@@ -5,6 +5,7 @@ import com.bruno.carlisting.services.RoleService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,9 @@ public class RoleController {
     private final RoleService roleService;
 
     public RoleController(RoleService roleService) {
+
         this.roleService = roleService;
+
     }
 
     @GetMapping
@@ -48,12 +51,14 @@ public class RoleController {
 
     @GetMapping(value = "/{roleId}")
     public ResponseEntity<Role> findRoleById(@PathVariable Integer roleId) {
+
         Role role = roleService.getRoleById(roleId);
         return ResponseEntity.ok().body(role);
     }
 
     @GetMapping(value = "/users/{userId}")
     public ResponseEntity<List<Role>> findRolesByUserId(@PathVariable Long userId) {
+
         List<Role> userRoles = roleService.getRolesByUserId(userId);
 
         if(userRoles.isEmpty()) {
@@ -67,10 +72,20 @@ public class RoleController {
 
     @PostMapping
     public ResponseEntity<Role> createRole(@Valid @RequestBody Role role) {
+
         Role newRole = roleService.createRole(role);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/roles/{roleId}").
                 buildAndExpand(newRole.getRoleId()).toUri();
         return ResponseEntity.created(uri).build();
+
+    }
+
+    @DeleteMapping(value = "/{roleId}")
+    public ResponseEntity<Void> deleteRole(@PathVariable Integer roleId) {
+
+        roleService.deleteRoles(roleId);
+        return ResponseEntity.noContent().build();
+
     }
 
 }
