@@ -15,4 +15,6 @@ public interface UserService {
 
     User createUser(User newUser, List<Integer> rolesIds);
 
+    User updateUser(User user, Long userId, int page, int size);
+
 }

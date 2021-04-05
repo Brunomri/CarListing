@@ -19,10 +19,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
+//    private final CarService carService;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, RoleService roleService) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, RoleService roleService/*, CarService carService*/) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+//        this.carService = carService;
     }
 
     @Override
@@ -47,9 +49,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User newUser, List<Integer> rolesIds) {
+
         List<Role> userRoles = new ArrayList<>();
         rolesIds.forEach(roleId -> userRoles.add(roleService.getRoleById(roleId)));
         newUser.setRoles(userRoles);
         return userRepository.save(newUser);
+    }
+
+    @Override
+    public User updateUser(User updatedUser, Long userId, int page, int size) {
+
+        Optional<User> optionalUser = userRepository.findById(userId);
+        optionalUser.orElseThrow(() -> new ObjectNotFoundException("User not found! Id: " + userId));
+        User currentUser = optionalUser.get();
+
+        currentUser.setUsername(updatedUser.getUsername());
+        currentUser.setPassword(updatedUser.getPassword());
+        currentUser.setDisplayName(updatedUser.getDisplayName());
+        currentUser.setContact(updatedUser.getContact());
+        currentUser.setRoles(roleService.getRolesByUserId(userId));
+//        currentUser.setCars((List<Car>) carService.getCarsByUserId(userId, page, size));
+
+        return userRepository.save(currentUser);
     }
 }
