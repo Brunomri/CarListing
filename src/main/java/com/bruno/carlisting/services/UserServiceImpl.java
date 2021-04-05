@@ -3,7 +3,6 @@ package com.bruno.carlisting.services;
 import com.bruno.carlisting.domain.Role;
 import com.bruno.carlisting.domain.User;
 import com.bruno.carlisting.exceptions.ObjectNotFoundException;
-import com.bruno.carlisting.repositories.RoleRepository;
 import com.bruno.carlisting.repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,12 +18,10 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
-//    private final CarService carService;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, RoleService roleService/*, CarService carService*/) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService) {
         this.userRepository = userRepository;
         this.roleService = roleService;
-//        this.carService = carService;
     }
 
     @Override
