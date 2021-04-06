@@ -1,5 +1,6 @@
 package com.bruno.carlisting.services;
 
+import com.bruno.carlisting.domain.Role;
 import com.bruno.carlisting.domain.User;
 import com.bruno.carlisting.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,6 +69,34 @@ public class UserServiceTests {
 
         UserService userService = new UserServiceImpl(mockedUserRepository, mockedRoleService);
         assertEquals(user.get(), userService.getUserByCarId(987654L));
+
+    }
+
+    @Test
+    public void createUser() {
+        User user = new User();
+        user.setUserId(1L);
+
+        List<Integer> userRoles = new ArrayList<>();
+
+        Optional<Role> role1 = Optional.of(new Role());
+        role1.get().setRoleId(1);
+
+        Optional<Role> role2 = Optional.of(new Role());
+        role2.get().setRoleId(2);
+
+        userRoles.add(role1.get().getRoleId());
+        userRoles.add(role2.get().getRoleId());
+
+        when(mockedRoleService.getRoleById(1)).thenReturn(role1.get());
+        when(mockedRoleService.getRoleById(2)).thenReturn(role2.get());
+        when(mockedUserRepository.save(user)).thenReturn(user);
+
+        UserService userService = new UserServiceImpl(mockedUserRepository, mockedRoleService);
+        User newUser = userService.createUser(user, userRoles);
+        assertNotNull(newUser);
+        assertEquals(role1.get().getRoleId(), newUser.getRoles().get(0).getRoleId());
+        assertEquals(role2.get().getRoleId(), newUser.getRoles().get(1).getRoleId());
 
     }
 
