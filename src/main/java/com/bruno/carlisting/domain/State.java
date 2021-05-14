@@ -1,5 +1,10 @@
 package com.bruno.carlisting.domain;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,10 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class State {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Integer stateId;
 
     private String stateName;
@@ -31,52 +40,8 @@ public class State {
     @JoinColumn(name = "country_id")
     private Country countryOfState;
 
-    public State() {
-    }
-
     public State(String stateName, Country countryOfState) {
         this.stateName = stateName;
         this.countryOfState = countryOfState;
     }
-
-    public Integer getStateId() {
-        return stateId;
-    }
-
-    public void setStateId(Integer stateId) {
-        this.stateId = stateId;
-    }
-
-    public String getStateName() {
-        return stateName;
-    }
-
-    public void setStateName(String stateName) {
-        this.stateName = stateName;
-    }
-
-    public List<Location> getStateLocations() {
-        return stateLocations;
-    }
-
-    public void setStateLocations(List<Location> stateLocations) {
-        this.stateLocations = stateLocations;
-    }
-
-    public List<City> getCitiesInState() {
-        return citiesInState;
-    }
-
-    public void setCitiesInState(List<City> citiesInState) {
-        this.citiesInState = citiesInState;
-    }
-
-    public Country getCountryOfState() {
-        return countryOfState;
-    }
-
-    public void setCountryOfState(Country countryOfState) {
-        this.countryOfState = countryOfState;
-    }
-
 }

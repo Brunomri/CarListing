@@ -23,6 +23,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
 
+//    todo: mock User to set id
+
     @Mock
     private UserRepository mockedUserRepository;
 
@@ -51,7 +53,7 @@ public class UserServiceTests {
     @Test
     public void findExistingUserById() {
         Optional<User> user = Optional.of(new User());
-        user.get().setUserId(123456L);
+//        user.get().setUserId(123456L);
         when(mockedUserRepository.findById(123456L)).thenReturn(user);
 
         UserService userService = new UserServiceImpl(mockedUserRepository, mockedRoleService);
@@ -62,7 +64,7 @@ public class UserServiceTests {
     @Test
     public void findExistingUserByCarId() {
         Optional<User> user = Optional.of(new User());
-        user.get().setUserId(123456L);
+//        user.get().setUserId(123456L);
 
         when(mockedUserRepository.searchUserByCarId(987654L)).thenReturn(123456L);
         when(mockedUserRepository.findById(123456L)).thenReturn(user);
@@ -75,15 +77,15 @@ public class UserServiceTests {
     @Test
     public void createUser() {
         User user = new User();
-        user.setUserId(1L);
+//        user.setUserId(1L);
 
         List<Integer> userRoles = new ArrayList<>();
 
         Optional<Role> role1 = Optional.of(new Role());
-        role1.get().setRoleId(1);
+//        role1.get().setRoleId(1);
 
         Optional<Role> role2 = Optional.of(new Role());
-        role2.get().setRoleId(2);
+//        role2.get().setRoleId(2);
 
         userRoles.add(role1.get().getRoleId());
         userRoles.add(role2.get().getRoleId());

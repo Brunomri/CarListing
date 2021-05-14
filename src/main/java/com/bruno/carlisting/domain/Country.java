@@ -1,5 +1,10 @@
 package com.bruno.carlisting.domain;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,10 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Integer countryId;
 
     private String countryName;
@@ -24,43 +33,7 @@ public class Country {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "countryOfState")
     private List<State> statesInCountry = new ArrayList<>();
 
-    public Country() {
-    }
-
     public Country(String countryName) {
         this.countryName = countryName;
     }
-
-    public Integer getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(Integer countryId) {
-        this.countryId = countryId;
-    }
-
-    public String getCountryName() {
-        return countryName;
-    }
-
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
-    }
-
-    public List<Location> getCountryLocations() {
-        return countryLocations;
-    }
-
-    public void setCountryLocations(List<Location> countryLocations) {
-        this.countryLocations = countryLocations;
-    }
-
-    public List<State> getStatesInCountry() {
-        return statesInCountry;
-    }
-
-    public void setStatesInCountry(List<State> statesInCountry) {
-        this.statesInCountry = statesInCountry;
-    }
-
 }

@@ -1,6 +1,10 @@
 package com.bruno.carlisting.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,12 +22,16 @@ import java.util.List;
 @Table(uniqueConstraints= {
         @UniqueConstraint(columnNames = {"type"})
 })
+@Getter
+@Setter
+@NoArgsConstructor
 public class Role {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Integer roleId;
 
     private String type;
@@ -33,35 +41,7 @@ public class Role {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<User> users = new ArrayList<>();
 
-    public Role() {
-    }
-
     public Role(String type) {
         this.type = type;
     }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
 }

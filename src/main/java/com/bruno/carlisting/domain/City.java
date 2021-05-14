@@ -1,5 +1,10 @@
 package com.bruno.carlisting.domain;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,10 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Long cityId;
 
     private String cityName;
@@ -28,44 +37,8 @@ public class City {
     @JoinColumn(name = "state_id")
     private State stateOfCity;
 
-    public City() {
-    }
-
     public City(String cityName, State stateOfCity) {
         this.cityName = cityName;
         this.stateOfCity = stateOfCity;
     }
-
-    public Long getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(Long cityId) {
-        this.cityId = cityId;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public List<Location> getCityLocations() {
-        return cityLocations;
-    }
-
-    public void setCityLocations(List<Location> cityLocations) {
-        this.cityLocations = cityLocations;
-    }
-
-    public State getStateOfCity() {
-        return stateOfCity;
-    }
-
-    public void setStateOfCity(State stateOfCity) {
-        this.stateOfCity = stateOfCity;
-    }
-
 }
