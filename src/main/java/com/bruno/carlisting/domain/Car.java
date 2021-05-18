@@ -50,7 +50,7 @@ public class Car {
     private String model;
 
     @NotNull(message = "Year is mandatory")
-    @Min(value = 1900, message = "Year must be equal or greater than 1900")
+    @Min(value = 1900, message = "Year must be greater than or equal to 1900")
     private Integer year;
 
     @NotBlank(message = "Trim is mandatory")
