@@ -17,6 +17,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,18 +40,30 @@ public class Car {
     @Setter(AccessLevel.NONE)
     private Long carId;
 
+    @NotBlank(message = "Make is mandatory")
+    @Size(max = 30, message = "Make must have 30 characters or less")
     private String make;
 
+    @NotBlank(message = "Model is mandatory")
+    @Size(max = 30, message = "Model must have 30 characters or less")
     private String model;
 
-    private String year;
+    @NotNull(message = "Year is mandatory")
+    @Min(value = 1900, message = "Year must be equal or greater than 1900")
+    private Integer year;
 
+    @NotBlank(message = "Trim is mandatory")
+    @Size(max = 30, message = "Trim must have 30 characters or less")
     private String trim;
 
+    @NotBlank(message = "Color is mandatory")
+    @Size(max = 30, message = "Color must have 30 characters or less")
     private String color;
 
+//    @Pattern(regexp = "^(AT|MT)$")
     private String transmission;
 
+//    @Pattern(regexp = "^(Gasoline|Ethanol|Flex-Fuel|Electricity|Hybrid)$")
     private String fuel;
 
     @JsonIgnore
@@ -59,7 +75,7 @@ public class Car {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "car")
     private List<Listing> carListings = new ArrayList<>();
 
-    public Car(String make, String model, String year, String trim, String color, String transmission,
+    public Car(String make, String model, Integer year, String trim, String color, String transmission,
                String fuel) {
         this.make = make;
         this.model = model;
