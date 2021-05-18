@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.net.URI;
 
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value = "/cars")
+@Validated
 public class CarController {
 
     private final CarService carService;
@@ -40,10 +46,10 @@ public class CarController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(produces = "application/json")
-    public ResponseEntity<Page<Car>> findAllCars(@RequestParam(value = "page", required = false,
-                                                 defaultValue = "0") int page,
-                                                 @RequestParam(value = "size", required = false,
-                                                 defaultValue = "10") int size) {
+    public ResponseEntity<Page<Car>> findAllCars(@RequestParam(value = "page", required = false, defaultValue = "0")
+                                 @Min(value = 0, message = "Page number must be greater than or equal to 0") int page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "10")
+                                 @Min(value = 1, message = "Page size must be greater than or equal to 1") int size) {
 
         Page<Car> carsPage = carService.getAllCars(page, size);
         if(carsPage.isEmpty()) {
@@ -52,7 +58,6 @@ public class CarController {
         else {
             return ResponseEntity.ok().body(carsPage);
         }
-
     }
 
     @ApiOperation(value = "Find a car by ID")
@@ -62,7 +67,7 @@ public class CarController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/{carId}", produces = "application/json")
-    public ResponseEntity<Car> findCarById(@PathVariable Long carId) {
+    public ResponseEntity<Car> findCarById(@PathVariable @NotNull(message = "Car ID is mandatory") Long carId) {
         Car car = carService.getCarById(carId);
         return ResponseEntity.ok().body(car);
     }
@@ -74,11 +79,12 @@ public class CarController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/make/{make}", produces = "application/json")
-    public ResponseEntity<Page<Car>> findCarsByMake(@PathVariable String make,
-                                                    @RequestParam(value = "page", required = false,
-                                                    defaultValue = "0") int page,
-                                                    @RequestParam(value = "size", required = false,
-                                                    defaultValue = "10") int size) {
+    public ResponseEntity<Page<Car>> findCarsByMake(@PathVariable @NotBlank(message = "Make is mandatory")
+                                @Size(max = 30, message = "Make must have 30 characters or less") String make,
+                                @RequestParam(value = "page", required = false, defaultValue = "0")
+                                @Min(value = 0, message = "Page number must be greater than or equal to 0") int page,
+                                @RequestParam(value = "size", required = false, defaultValue = "10")
+                                @Min(value = 1, message = "Page size must be greater than or equal to 1") int size) {
 
         Page<Car> carsPage = carService.getCarsByMake(make, page, size);
         if(carsPage.isEmpty()) {
@@ -87,7 +93,6 @@ public class CarController {
         else {
             return ResponseEntity.ok().body(carsPage);
         }
-
     }
 
     @ApiOperation(value = "Find all cars by user")
@@ -97,9 +102,11 @@ public class CarController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/users/{userId}", produces = "application/json")
-    public ResponseEntity<Page<Car>> findCarsByUserId(@PathVariable Long userId,
-                                        @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                        @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+    public ResponseEntity<Page<Car>> findCarsByUserId(@PathVariable @NotNull(message = "User ID is mandatory") Long userId,
+                                  @RequestParam(value = "page", required = false, defaultValue = "0")
+                                  @Min(value = 0, message = "Page number must be greater than or equal to 0") int page,
+                                  @RequestParam(value = "size", required = false, defaultValue = "10")
+                                  @Min(value = 1, message = "Page size must be greater than or equal to 1") int size) {
 
         Page<Car> carsPage = carService.getCarsByUserId(userId, page, size);
         if(carsPage.isEmpty()) {
@@ -117,7 +124,8 @@ public class CarController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @PostMapping(value = "/{userId}", consumes = "application/json")
-    public ResponseEntity<Car> createCar(@PathVariable Long userId, @Valid @RequestBody Car car) {
+    public ResponseEntity<Car> createCar(@PathVariable @NotNull(message = "User ID is mandatory") Long userId,
+                                         @Valid @RequestBody Car car) {
 
         Car newCar = carService.createCar(car, userId);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/cars/{carId}").
@@ -131,7 +139,8 @@ public class CarController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @PutMapping(value = "/{carId}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Car> updateCar(@PathVariable Long carId, @Valid @RequestBody Car car) {
+    public ResponseEntity<Car> updateCar(@PathVariable @NotNull(message = "Car ID is mandatory") Long carId,
+                                         @Valid @RequestBody Car car) {
 
         Car updatedCar = carService.updateCar(car, carId);
         return ResponseEntity.ok().body(updatedCar);
@@ -143,7 +152,7 @@ public class CarController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @DeleteMapping(value = "/{carId}")
-    public ResponseEntity<Void> deleteCar(@PathVariable Long carId) {
+    public ResponseEntity<Void> deleteCar(@PathVariable @NotNull(message = "Car ID is mandatory") Long carId) {
 
         carService.deleteCar(carId);
         return ResponseEntity.noContent().build();
