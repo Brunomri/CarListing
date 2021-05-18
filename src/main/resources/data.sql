@@ -18,13 +18,13 @@ INSERT INTO user_roles (user_id, role_id) VALUES (4, 2);
 INSERT INTO user_roles (user_id, role_id) VALUES (5, 2);
 
 -- Cars
-INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Toyota', 'Corolla', '2020', 'SEG', 'Silver', 'AT', 'Gasoline', 1);
-INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Honda', 'Civic', '2018', 'EX', 'Black', 'AT', 'Gasoline', 1);
-INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Ford', 'F-150', '2017', 'Limited', 'Red', 'AT', 'Diesel', 1);
-INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Honda', 'Civic', '2009', 'SI', 'Red', 'MT', 'Gasoline', 1);
-INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('BMW', '320i', '2014', 'Sport GP', 'White', 'AT', 'Gasoline', 1);
-INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Chevrolet', 'Cruze', '2016', 'LT', 'Blue', 'AT', 'Gasoline', 1);
-INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Dodge', 'Challenger', '2019', 'SRT8', 'Yellow', 'AT', 'Gasoline', 1);
+INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Toyota', 'Corolla', 2020, 'SEG', 'Silver', 'AT', 'Gasoline', 1);
+INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Honda', 'Civic', 2018, 'EX', 'Black', 'AT', 'Gasoline', 1);
+INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Ford', 'F-150', 2017, 'Limited', 'Red', 'AT', 'Diesel', 1);
+INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Honda', 'Civic', 2009, 'SI', 'Red', 'MT', 'Gasoline', 1);
+INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('BMW', '320i', 2014, 'Sport GP', 'White', 'AT', 'Gasoline', 1);
+INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Chevrolet', 'Cruze', 2016, 'LT', 'Blue', 'AT', 'Gasoline', 1);
+INSERT INTO car (make, model, year, trim, color, transmission, fuel, user_id) VALUES ('Dodge', 'Challenger', 2019, 'SRT8', 'Yellow', 'AT', 'Gasoline', 1);
 
 -- Listings
 INSERT INTO listing (price, mileage, description, car_id, user_id) VALUES (35000, 0, 'Brand new car', 1, 1);
@@ -42,31 +42,31 @@ INSERT INTO country (country_name) VALUES ('Mexico');
 INSERT INTO country (country_name) VALUES ('Brazil');
 
 -- States
-INSERT INTO state (country_id, state_name) VALUES ('1', 'Illinois');
-INSERT INTO state (country_id, state_name) VALUES ('1', 'Indiana');
-INSERT INTO state (country_id, state_name) VALUES ('1', 'Wisconsin');
-INSERT INTO state (country_id, state_name) VALUES ('1', 'Michigan');
-INSERT INTO state (country_id, state_name) VALUES ('2', 'British Columbia');
-INSERT INTO state (country_id, state_name) VALUES ('4', 'Sao Paulo');
+INSERT INTO state (country_id, state_name) VALUES (1, 'Illinois');
+INSERT INTO state (country_id, state_name) VALUES (1, 'Indiana');
+INSERT INTO state (country_id, state_name) VALUES (1, 'Wisconsin');
+INSERT INTO state (country_id, state_name) VALUES (1, 'Michigan');
+INSERT INTO state (country_id, state_name) VALUES (2, 'British Columbia');
+INSERT INTO state (country_id, state_name) VALUES (4, 'Sao Paulo');
 
 
 -- Cities
-INSERT INTO city (state_id, city_name) VALUES ('1', 'Chicago');
-INSERT INTO city (state_id, city_name) VALUES ('1', 'Evanston');
-INSERT INTO city (state_id, city_name) VALUES ('1', 'Naperville');
-INSERT INTO city (state_id, city_name) VALUES ('1', 'Des Plaines');
-INSERT INTO city (state_id, city_name) VALUES ('2', 'Indianapolis');
-INSERT INTO city (state_id, city_name) VALUES ('3', 'Milwaukee');
-INSERT INTO city (state_id, city_name) VALUES ('4', 'Grand Rapids');
-INSERT INTO city (state_id, city_name) VALUES ('4', 'Detroit');
-INSERT INTO city (state_id, city_name) VALUES ('5', 'Victoria');
-INSERT INTO city (state_id, city_name) VALUES ('6', 'Sao Paulo');
+INSERT INTO city (state_id, city_name) VALUES (1, 'Chicago');
+INSERT INTO city (state_id, city_name) VALUES (1, 'Evanston');
+INSERT INTO city (state_id, city_name) VALUES (1, 'Naperville');
+INSERT INTO city (state_id, city_name) VALUES (1, 'Des Plaines');
+INSERT INTO city (state_id, city_name) VALUES (2, 'Indianapolis');
+INSERT INTO city (state_id, city_name) VALUES (3, 'Milwaukee');
+INSERT INTO city (state_id, city_name) VALUES (4, 'Grand Rapids');
+INSERT INTO city (state_id, city_name) VALUES (4, 'Detroit');
+INSERT INTO city (state_id, city_name) VALUES (5, 'Victoria');
+INSERT INTO city (state_id, city_name) VALUES (6, 'Sao Paulo');
 
 -- Locations
-INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES ('1', '1', '1', '1');
-INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES ('2', '1', '1', '2');
-INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES ('3', '1', '1', '3');
-INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES ('4', '2', '5', '9');
-INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES ('5', '2', '5', '9');
-INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES ('6', '4', '6', '10');
-INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES ('7', '4', '6', '10');
+INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES (1, 1, 1, 1);
+INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES (2, 1, 1, 2);
+INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES (3, 1, 1, 3);
+INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES (4, 2, 5, 9);
+INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES (5, 2, 5, 9);
+INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES (6, 4, 6, 10);
+INSERT INTO location (listing_id, country_id, state_id, city_id) VALUES (7, 4, 6, 10);
