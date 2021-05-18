@@ -20,6 +20,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,10 +61,10 @@ public class Car {
     @Size(max = 30, message = "Color must have 30 characters or less")
     private String color;
 
-//    @Pattern(regexp = "^(AT|MT)$")
+    @Pattern(regexp = "^(AT|MT)$")
     private String transmission;
 
-//    @Pattern(regexp = "^(Gasoline|Ethanol|Flex-Fuel|Electricity|Hybrid)$")
+    @Pattern(regexp = "^(Gasoline|Ethanol|Flex-Fuel|Electricity|Hybrid)$")
     private String fuel;
 
     @JsonIgnore
