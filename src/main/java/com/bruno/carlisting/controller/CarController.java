@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -48,8 +49,9 @@ public class CarController {
     @GetMapping(produces = "application/json")
     public ResponseEntity<Page<Car>> findAllCars(@RequestParam(value = "page", required = false, defaultValue = "0")
                                  @Min(value = 0, message = "Page number must be greater than or equal to 0") int page,
-                                 @RequestParam(value = "size", required = false, defaultValue = "10")
-                                 @Min(value = 1, message = "Page size must be greater than or equal to 1") int size) {
+                                 @RequestParam(value = "size", required = false, defaultValue = "1")
+                                 @Min(value = 1, message = "Page size must be greater than or equal to 1")
+                                 @Max(value = 10, message = "Page size must be less than or equal to 10") int size) {
 
         Page<Car> carsPage = carService.getAllCars(page, size);
         if(carsPage.isEmpty()) {
@@ -68,6 +70,7 @@ public class CarController {
     })
     @GetMapping(value = "/{carId}", produces = "application/json")
     public ResponseEntity<Car> findCarById(@PathVariable @NotNull(message = "Car ID is mandatory") Long carId) {
+
         Car car = carService.getCarById(carId);
         return ResponseEntity.ok().body(car);
     }
@@ -83,8 +86,9 @@ public class CarController {
                                 @Size(max = 30, message = "Make must have 30 characters or less") String make,
                                 @RequestParam(value = "page", required = false, defaultValue = "0")
                                 @Min(value = 0, message = "Page number must be greater than or equal to 0") int page,
-                                @RequestParam(value = "size", required = false, defaultValue = "10")
-                                @Min(value = 1, message = "Page size must be greater than or equal to 1") int size) {
+                                @RequestParam(value = "size", required = false, defaultValue = "1")
+                                @Min(value = 1, message = "Page size must be greater than or equal to 1")
+                                @Max(value = 10, message = "Page size must be less than or equal to 10") int size) {
 
         Page<Car> carsPage = carService.getCarsByMake(make, page, size);
         if(carsPage.isEmpty()) {
@@ -105,8 +109,9 @@ public class CarController {
     public ResponseEntity<Page<Car>> findCarsByUserId(@PathVariable @NotNull(message = "User ID is mandatory") Long userId,
                                   @RequestParam(value = "page", required = false, defaultValue = "0")
                                   @Min(value = 0, message = "Page number must be greater than or equal to 0") int page,
-                                  @RequestParam(value = "size", required = false, defaultValue = "10")
-                                  @Min(value = 1, message = "Page size must be greater than or equal to 1") int size) {
+                                  @RequestParam(value = "size", required = false, defaultValue = "1")
+                                  @Min(value = 1, message = "Page size must be greater than or equal to 1")
+                                  @Max(value = 10, message = "Page size must be less than or equal to 10") int size) {
 
         Page<Car> carsPage = carService.getCarsByUserId(userId, page, size);
         if(carsPage.isEmpty()) {
