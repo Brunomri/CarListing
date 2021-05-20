@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -51,6 +52,7 @@ public class Car {
 
     @NotNull(message = "Year is mandatory")
     @Min(value = 1900, message = "Year must be greater than or equal to 1900")
+    @Max(value = 9999, message = "Year must have 4 digits")
     private Integer year;
 
     @NotBlank(message = "Trim is mandatory")
