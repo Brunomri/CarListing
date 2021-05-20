@@ -20,7 +20,9 @@ public class ErrorHandlingControllerAdvice {
     ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
         ValidationErrorResponse error = new ValidationErrorResponse();
         for (ConstraintViolation violation : e.getConstraintViolations()) {
-            error.getViolations().add(new Violation(violation.getPropertyPath().toString(), violation.getMessage()));
+            error.getViolations().add(
+                    new Violation(violation.getRootBeanClass().getName(), violation.getPropertyPath().toString(),
+                    violation.getInvalidValue(), violation.getMessage()));
         }
         return error;
     }
@@ -31,7 +33,8 @@ public class ErrorHandlingControllerAdvice {
     ValidationErrorResponse onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         ValidationErrorResponse error = new ValidationErrorResponse();
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            error.getViolations().add(new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
+            error.getViolations().add(new Violation(fieldError.getObjectName(), fieldError.getField(),
+                    fieldError.getRejectedValue(), fieldError.getDefaultMessage()));
         }
         return error;
     }
