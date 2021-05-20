@@ -19,6 +19,7 @@ public class CarServiceImpl implements CarService {
     private final PagingService pagingService;
 
     public CarServiceImpl(CarRepository carRepository, UserService userService, PagingService pagingService) {
+
         this.carRepository = carRepository;
         this.userService = userService;
         this.pagingService = pagingService;
@@ -26,6 +27,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Page<Car> getAllCars(int page, int size) {
+
         Pageable pageRequest = PageRequest.of(page, size);
         Page<Car> carsPage = carRepository.findAll(pageRequest);
         pagingService.validatePage(carsPage);
@@ -34,6 +36,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car getCarById(Long carId) {
+
         Optional<Car> car = carRepository.findById(carId);
         return car.orElseThrow(() -> new ObjectNotFoundException("Car not found! Id: " + carId));
     }
@@ -42,18 +45,23 @@ public class CarServiceImpl implements CarService {
     public Page<Car> getCarsByMake(String searchMake, int page, int size) {
 
         Pageable pageRequest = PageRequest.of(page, size);
-        return carRepository.searchCarsByMake(searchMake, pageRequest);
+        Page<Car> carsPage = carRepository.searchCarsByMake(searchMake, pageRequest);
+        pagingService.validatePage(carsPage);
+        return carsPage;
     }
 
     @Override
     public Page<Car> getCarsByUserId(Long userId, int page, int size) {
 
         Pageable pageRequest = PageRequest.of(page, size);
-        return carRepository.findByUser_UserId(userId, pageRequest);
+        Page<Car> carsPage = carRepository.findByUser_UserId(userId, pageRequest);
+        pagingService.validatePage(carsPage);
+        return carsPage;
     }
 
     @Override
     public Car createCar(Car newCar, Long userId) {
+
         User user = userService.getUserById(userId);
         newCar.setUser(user);
         return carRepository.save(newCar);
@@ -61,6 +69,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car updateCar(Car updatedCar, Long carId) {
+
         Optional<Car> optionalCar = carRepository.findById(carId);
         optionalCar.orElseThrow(() -> new ObjectNotFoundException("Car not found! Id: " + carId));
         Car currentCar = optionalCar.get();
@@ -80,7 +89,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public void deleteCar(Long carId) {
 
-        carRepository.deleteById(carId);
-
+        Optional<Car> carToDelete = carRepository.findById(carId);
+        carRepository.delete(carToDelete.orElseThrow(() -> new ObjectNotFoundException("Car not found! Id: " + carId)));
     }
 }
