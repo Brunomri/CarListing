@@ -63,10 +63,12 @@ public class Car {
     @Size(max = 30, message = "Color must have 30 characters or less")
     private String color;
 
-    @Pattern(regexp = "^(AT|MT)$")
+    @Pattern(regexp = "^(AT|MT)$",
+            message = "Transmission must be either AT for automatic transmission or MT for manual transmission")
     private String transmission;
 
-    @Pattern(regexp = "^(Gasoline|Ethanol|Flex-Fuel|Electricity|Hybrid)$")
+    @Pattern(regexp = "^(Gasoline|Ethanol|Flex-Fuel|Electricity|Hybrid)$",
+            message = "Fuel must be one of the following: Gasoline, Ethanol, Flex-Fuel, Electricity or Hybrid")
     private String fuel;
 
     @JsonIgnore
