@@ -43,7 +43,7 @@ public class CarController {
     @ApiOperation(value = "Return all cars grouped in pages")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Return a page of cars"),
-            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Page content not found"),
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(produces = "application/json")
@@ -54,12 +54,7 @@ public class CarController {
                                  @Max(value = 10, message = "Page size must be less than or equal to 10") int size) {
 
         Page<Car> carsPage = carService.getAllCars(page, size);
-        if(carsPage.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        else {
-            return ResponseEntity.ok().body(carsPage);
-        }
+        return ResponseEntity.ok().body(carsPage);
     }
 
     @ApiOperation(value = "Find a car by ID")

@@ -16,16 +16,20 @@ public class CarServiceImpl implements CarService {
     
     private final CarRepository carRepository;
     private final UserService userService;
+    private final PagingService pagingService;
 
-    public CarServiceImpl(CarRepository carRepository, UserService userService) {
+    public CarServiceImpl(CarRepository carRepository, UserService userService, PagingService pagingService) {
         this.carRepository = carRepository;
         this.userService = userService;
+        this.pagingService = pagingService;
     }
 
     @Override
     public Page<Car> getAllCars(int page, int size) {
         Pageable pageRequest = PageRequest.of(page, size);
-        return carRepository.findAll(pageRequest);
+        Page<Car> carsPage = carRepository.findAll(pageRequest);
+        pagingService.validatePage(carsPage);
+        return carsPage;
     }
 
     @Override
