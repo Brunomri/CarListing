@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class Role {
     @Setter(AccessLevel.NONE)
     private Integer roleId;
 
+    @NotBlank(message = "Type is mandatory")
+    @Size(min = 3, max = 20, message = "Type must have between 3 and 20 characters")
     private String type;
 
     @JsonIgnore

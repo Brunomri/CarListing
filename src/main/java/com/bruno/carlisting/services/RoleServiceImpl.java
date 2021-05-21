@@ -16,34 +16,28 @@ import java.util.Optional;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
+    private final PagingService pagingService;
 
-    public RoleServiceImpl(RoleRepository roleRepository) {
+    public RoleServiceImpl(RoleRepository roleRepository, PagingService pagingService) {
 
         this.roleRepository = roleRepository;
-
+        this.pagingService = pagingService;
     }
 
     @Override
     public Page<Role> getAllRoles(int page, int size) {
 
         Pageable pageRequest = PageRequest.of(page, size);
-        return roleRepository.findAll(pageRequest);
-
-    }
-
-    @Override
-    public Role createRole(Role newRole) {
-
-        return roleRepository.save(newRole);
-
+        Page<Role> rolesPage = roleRepository.findAll(pageRequest);
+        pagingService.validatePage(rolesPage);
+        return rolesPage;
     }
 
     @Override
     public Role getRoleById(Integer roleId) {
 
         Optional<Role> role = roleRepository.findById(roleId);
-        return role.orElseThrow(() -> new ObjectNotFoundException("User not found! Id: " + roleId));
-
+        return role.orElseThrow(() -> new ObjectNotFoundException("Role not found! Id: " + roleId));
     }
 
     @Override
@@ -51,14 +45,22 @@ public class RoleServiceImpl implements RoleService {
 
         List<Role> userRoles = new ArrayList<>();
         userRoles.addAll(roleRepository.findByUsers_UserId(userId));
+        if (userRoles.isEmpty()) throw new
+                ObjectNotFoundException("There are no roles associated with this user! Id: " + userId);
         return userRoles;
+    }
 
+    @Override
+    public Role createRole(Role newRole) {
+
+        return roleRepository.save(newRole);
     }
 
     @Override
     public void deleteRoles(Integer roleId) {
 
-        roleRepository.deleteById(roleId);
-
+        Optional<Role> roleToDelete = roleRepository.findById(roleId);
+        roleRepository.delete(roleToDelete.orElseThrow(
+                () -> new ObjectNotFoundException("Role not found! Id: " + roleId)));
     }
 }
