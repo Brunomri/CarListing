@@ -34,11 +34,11 @@ import java.net.URI;
 @Validated
 public class CarController {
 
-    public static final String CAR_PAGE_DEFAULT_NUMBER = "0";
-    public static final String CAR_PAGE_DEFAULT_SIZE = "1";
-    public static final int CAR_PAGE_MIN_NUMBER = 0;
-    public static final int CAR_PAGE_MIN_SIZE = 1;
-    public static final int CAR_PAGE_MAX_SIZE = 10;
+    private static final String CAR_PAGE_DEFAULT_NUMBER = "0";
+    private static final String CAR_PAGE_DEFAULT_SIZE = "1";
+    private static final int CAR_PAGE_MIN_NUMBER = 0;
+    private static final int CAR_PAGE_MIN_SIZE = 1;
+    private static final int CAR_PAGE_MAX_SIZE = 10;
 
     private final CarService carService;
 
@@ -74,7 +74,7 @@ public class CarController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Return the car with corresponding ID"),
         @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Page content not found"),
+        @ApiResponse(code = 404, message = "Car not found"),
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/{carId}", produces = "application/json")
