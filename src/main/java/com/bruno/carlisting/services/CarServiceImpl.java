@@ -45,7 +45,7 @@ public class CarServiceImpl implements CarService {
     public Page<Car> getCarsByMake(String searchMake, int page, int size) {
 
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<Car> carsPage = carRepository.searchCarsByMake(searchMake, pageRequest);
+        Page<Car> carsPage = carRepository.findByMake(searchMake, pageRequest);
         pagingService.validatePage(carsPage);
         return carsPage;
     }

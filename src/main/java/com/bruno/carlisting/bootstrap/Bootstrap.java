@@ -29,7 +29,7 @@ public class Bootstrap implements CommandLineRunner {
 
     private void test() {
         Pageable pageRequest = PageRequest.of(0, 1);
-        Page<Car> carPages = carRepository.searchCarsByMake("Honda", pageRequest);
+        Page<Car> carPages = carRepository.findByMake("Honda", pageRequest);
         System.out.println(carPages.getContent().toString());
         Car car = carPages.getContent().get(0);
         System.out.println(car.getMake());
