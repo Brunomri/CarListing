@@ -2,6 +2,9 @@ package com.bruno.carlisting.controller;
 
 import com.bruno.carlisting.domain.User;
 import com.bruno.carlisting.services.UserService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
@@ -26,48 +33,94 @@ import java.util.List;
 @RequestMapping(value = "/users")
 public class UserController {
 
+    private static final String USER_PAGE_DEFAULT_NUMBER = "0";
+    private static final String USER_PAGE_DEFAULT_SIZE = "1";
+    private static final int USER_PAGE_MIN_NUMBER = 0;
+    private static final int USER_PAGE_MIN_SIZE = 1;
+    private static final int USER_PAGE_MAX_SIZE = 10;
+
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping
-    public ResponseEntity<Page<User>> findAllUsers(@RequestParam(value = "page",
-                                                   required = false,
-                                                   defaultValue = "0") int page,
-                                                   @RequestParam(value = "size",
-                                                   required = false,
-                                                   defaultValue = "10") int size) {
+    @ApiOperation(value = "Return all users grouped in pages")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Return a page of users"),
+        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "Page content not found"),
+        @ApiResponse(code = 500, message = "Server exception"),
+    })
+    @GetMapping(value = "/all", produces = "application/json")
+    public ResponseEntity<Page<User>> findAllUsers(
+
+            @RequestParam(value = "page", required = false, defaultValue = USER_PAGE_DEFAULT_NUMBER)
+            @Min(value = USER_PAGE_MIN_NUMBER,
+                message = "Page number must be greater than or equal to " + USER_PAGE_MIN_NUMBER) int page,
+
+            @RequestParam(value = "size", required = false, defaultValue = USER_PAGE_DEFAULT_SIZE)
+            @Min(value = USER_PAGE_MIN_SIZE,
+                message = "Page size must be greater than or equal to " + USER_PAGE_MIN_SIZE)
+            @Max(value = USER_PAGE_MAX_SIZE,
+                    message = "Page size must be less than or equal to " + USER_PAGE_MAX_SIZE) int size) {
 
         Page<User> usersPage = userService.getAllUsers(page, size);
 
-        if(usersPage.isEmpty()) {
+        /*if(usersPage.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         else {
             return ResponseEntity.ok().body(usersPage);
-        }
-
+        }*/
+        return ResponseEntity.ok().body(usersPage);
     }
 
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity<User> findUserById(@PathVariable Long userId) {
+    @ApiOperation(value = "Find a user by ID")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Return the user with corresponding ID"),
+        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "User not found"),
+        @ApiResponse(code = 500, message = "Server exception"),
+    })
+    @GetMapping(value = "/{userId}", produces = "application/json")
+    public ResponseEntity<User> findUserById(
+
+        @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
 
         User user = userService.getUserById(userId);
         return ResponseEntity.ok().body(user);
     }
 
-    @GetMapping(value = "/cars/{carId}")
-    public ResponseEntity<User> findUserByCarId(@PathVariable Long carId) {
+    @ApiOperation(value = "Find a user by a car ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return the user with associated to a car ID"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
+    })
+    @GetMapping(value = "/cars/{carId}", produces = "application/json")
+    public ResponseEntity<User> findUserByCarId(
+
+        @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
 
         User user = userService.getUserByCarId(carId);
         return ResponseEntity.ok().body(user);
 
     }
 
-    @PostMapping(value = "/{rolesIds}")
-    public ResponseEntity<User> createUser(@PathVariable List<Integer> rolesIds, @Valid @RequestBody User user) {
+//    todo: Create User DTO to avoid passing rolesIds in the query parameters
+    @ApiOperation(value = "Add a new user")
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "New user created"),
+        @ApiResponse(code = 500, message = "Server exception"),
+    })
+    @PostMapping(value = "/{rolesIds}", consumes = "application/json")
+    public ResponseEntity<User> createUser(
+
+        @PathVariable @NotEmpty(message = "User roles are mandatory") List<Integer> rolesIds,
+
+        @Valid @RequestBody User user) {
 
         User newUser = userService.createUser(user, rolesIds);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{userId}").
@@ -75,24 +128,49 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value = "/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable Long userId, @Valid @RequestBody User user) {
+    @ApiOperation(value = "Update an existing user")
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "User updated"),
+        @ApiResponse(code = 500, message = "Server exception"),
+    })
+    @PutMapping(value = "/{userId}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<User> updateUser(
+
+        @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
+
+        @Valid @RequestBody User user) {
 
         User updatedUser = userService.updateUser(user, userId);
         return ResponseEntity.ok().body(updatedUser);
 
     }
 
-    @PatchMapping(value = "/{userId}/displayName")
-    public ResponseEntity<User> updateUserDisplayName(@PathVariable Long userId, @Valid @RequestBody User user) {
+    @ApiOperation(value = "Update a user's display name")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "User's display name updated"),
+            @ApiResponse(code = 500, message = "Server exception"),
+    })
+    @PatchMapping(value = "/{userId}/displayName", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<User> updateUserDisplayName(
+
+        @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
+
+        @Valid @RequestBody User user) {
 
         User updatedUser = userService.updateUserDisplayName(user, userId);
         return ResponseEntity.ok().body(updatedUser);
 
     }
 
+    @ApiOperation(value = "Delete an existing user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "User deleted"),
+            @ApiResponse(code = 500, message = "Server exception"),
+    })
     @DeleteMapping(value = "/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<Void> deleteUser(
+
+        @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
 
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();

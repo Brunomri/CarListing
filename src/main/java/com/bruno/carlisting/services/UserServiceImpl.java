@@ -18,20 +18,26 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final PagingService pagingService;
 
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PagingService pagingService) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.pagingService = pagingService;
     }
 
     @Override
     public Page<User> getAllUsers(int page, int size) {
+
         Pageable pageRequest = PageRequest.of(page, size);
-        return userRepository.findAll(pageRequest);
+        Page<User> usersPage = userRepository.findAll(pageRequest);
+        pagingService.validatePage(usersPage);
+        return usersPage;
     }
 
     @Override
     public User getUserById(Long userId) {
+
         Optional<User> user = userRepository.findById(userId);
         return user.orElseThrow(() -> new ObjectNotFoundException("User not found! Id: " + userId));
     }
@@ -44,6 +50,7 @@ public class UserServiceImpl implements UserService {
                 user.get().getUserId() + "carId: " + carId));
     }
 
+//    todo: Create User DTO to avoid passing rolesIds parameter
     @Override
     public User createUser(User newUser, List<Integer> rolesIds) {
 
@@ -83,7 +90,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
 
-        userRepository.deleteById(userId);
-
+        Optional<User> userToDelete = userRepository.findById(userId);
+        userRepository.delete(userToDelete.orElseThrow(() ->
+                new ObjectNotFoundException("User not found! Id: " + userId)));
     }
 }
