@@ -53,7 +53,7 @@ public class User {
     @Size(min = 3, max = 30, message = "The display name must have between 3 and 30 characters")
     private String displayName;
 
-    @Pattern(regexp = "^[\\w.-]+@[\\w-]+.com$",
+    @Pattern(regexp = "^[\\w.-]+@[\\w-]+[.]com$",
             message = "Contact must be an e-mail address in format: localpart@domain.com")
     private String contact;
 
