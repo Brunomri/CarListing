@@ -14,5 +14,4 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     Page<Car> findByMake(String make, Pageable pageRequest);
 
     Page<Car> findByUser_UserId(Long userId, Pageable pageRequest);
-
 }
