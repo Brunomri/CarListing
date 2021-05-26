@@ -61,7 +61,7 @@ public class User {
     private List<Listing> userListings = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     private List<Car> cars = new ArrayList<>();
 
     @JsonIgnore
