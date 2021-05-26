@@ -1,32 +1,17 @@
 package com.bruno.carlisting.exceptions;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class Violation {
 
+    private final String timestamp;
+    private final Integer status;
+    private final String exception;
     private final String objectName;
     private final String fieldName;
     private final Object value;
     private final String message;
-
-    public Violation(String objectName, String fieldName, Object value, String message) {
-        this.objectName =  objectName;
-        this.fieldName = fieldName;
-        this.value = value;
-        this.message = message;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }
