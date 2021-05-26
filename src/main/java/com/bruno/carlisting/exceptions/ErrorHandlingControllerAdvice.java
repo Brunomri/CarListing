@@ -44,4 +44,13 @@ public class ErrorHandlingControllerAdvice {
         }
         return error;
     }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    StandardErrorResponse onObjectNotFoundException(ObjectNotFoundException e) {
+        StandardErrorResponse error = new StandardErrorResponse(formatter.format(LocalDateTime.now()),
+                HttpStatus.NOT_FOUND.value(), e.getClass().getName(), e.getMessage());
+        return error;
+    }
 }
