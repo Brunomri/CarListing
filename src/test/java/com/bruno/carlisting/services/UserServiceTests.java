@@ -76,7 +76,7 @@ public class UserServiceTests {
         Optional<User> user = Optional.of(new User());
 //        user.get().setUserId(123456L);
 
-        when(mockedUserRepository.searchUserByCarId(987654L)).thenReturn(123456L);
+        when(mockedUserRepository.searchUserByCarId(987654L)).thenReturn(Optional.of(123456L));
         when(mockedUserRepository.findById(123456L)).thenReturn(user);
 
         assertEquals(user.get(), userService.getUserByCarId(987654L));
