@@ -3,7 +3,9 @@ package com.bruno.carlisting.services;
 import com.bruno.carlisting.domain.Role;
 import com.bruno.carlisting.domain.User;
 import com.bruno.carlisting.exceptions.ObjectNotFoundException;
+import com.bruno.carlisting.exceptions.entityRelationshipIntegrityException;
 import com.bruno.carlisting.repositories.UserRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long userId) {
 
         Optional<User> user = userRepository.findById(userId);
-        return user.orElseThrow(() -> new ObjectNotFoundException("User not found! Id: " + userId));
+        return user.orElseThrow(() -> new ObjectNotFoundException(String.format("User ID %s not found", userId)));
     }
 
     @Override
@@ -80,7 +82,7 @@ public class UserServiceImpl implements UserService {
     public User updateUserDisplayName(User user, Long userId) {
 
         Optional<User> optionalUser = userRepository.findById(userId);
-        optionalUser.orElseThrow(() -> new ObjectNotFoundException("User not found! Id: " + userId));
+        optionalUser.orElseThrow(() -> new ObjectNotFoundException(String.format("User ID %s not found", userId)));
         User currentUser = optionalUser.get();
 
         currentUser.setDisplayName(user.getDisplayName());
@@ -90,8 +92,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
 
-        Optional<User> userToDelete = userRepository.findById(userId);
-        userRepository.delete(userToDelete.orElseThrow(() ->
-                new ObjectNotFoundException("User not found! Id: " + userId)));
+        User userToDelete = getUserById(userId);
+
+        try {
+            userRepository.delete(userToDelete);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(
+                    "User ID %s has cars associated therefore cannot be deleted", userId));
+        }
     }
 }
