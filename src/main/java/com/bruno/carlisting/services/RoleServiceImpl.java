@@ -19,7 +19,6 @@ public class RoleServiceImpl implements RoleService {
     private final PagingService pagingService;
 
     public RoleServiceImpl(RoleRepository roleRepository, PagingService pagingService) {
-
         this.roleRepository = roleRepository;
         this.pagingService = pagingService;
     }
@@ -37,7 +36,7 @@ public class RoleServiceImpl implements RoleService {
     public Role getRoleById(Integer roleId) {
 
         Optional<Role> role = roleRepository.findById(roleId);
-        return role.orElseThrow(() -> new ObjectNotFoundException("Role not found! Id: " + roleId));
+        return role.orElseThrow(() -> new ObjectNotFoundException(String.format("Role ID %s not found", roleId)));
     }
 
     @Override
@@ -59,8 +58,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRoles(Integer roleId) {
 
-        Optional<Role> roleToDelete = roleRepository.findById(roleId);
-        roleRepository.delete(roleToDelete.orElseThrow(
-                () -> new ObjectNotFoundException("Role not found! Id: " + roleId)));
+        Role roleToDelete = getRoleById(roleId);
+        roleRepository.delete(roleToDelete);
     }
 }
