@@ -47,9 +47,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByCarId(Long carId) {
 
-        Optional<User> user = userRepository.findById(userRepository.searchUserByCarId(carId));
-        return user.orElseThrow(() -> new ObjectNotFoundException("User did not create this car! userId: " +
-                user.get().getUserId() + "carId: " + carId));
+        Optional<User> user = userRepository.findById(userRepository.searchUserByCarId(carId).orElseThrow(
+                () -> new ObjectNotFoundException(String.format("Car ID %s not found", carId))));
+        return user.orElseThrow(() -> new ObjectNotFoundException(String.format(
+                "User ID %s did not create Car ID %s", user.get().getUserId(), carId)));
     }
 
 //    todo: Create User DTO to avoid passing rolesIds parameter
@@ -65,9 +66,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(User updatedUser, Long userId) {
 
-        Optional<User> optionalUser = userRepository.findById(userId);
-        optionalUser.orElseThrow(() -> new ObjectNotFoundException("User not found! Id: " + userId));
-        User currentUser = optionalUser.get();
+        User currentUser = getUserById(userId);
 
         currentUser.setUsername(updatedUser.getUsername());
         currentUser.setPassword(updatedUser.getPassword());
@@ -78,12 +77,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(currentUser);
     }
 
+//    todo: Create User DTO to avoid passing an entire User object
     @Override
     public User updateUserDisplayName(User user, Long userId) {
 
-        Optional<User> optionalUser = userRepository.findById(userId);
-        optionalUser.orElseThrow(() -> new ObjectNotFoundException(String.format("User ID %s not found", userId)));
-        User currentUser = optionalUser.get();
+        User currentUser = getUserById(userId);
 
         currentUser.setDisplayName(user.getDisplayName());
         return userRepository.save(currentUser);
