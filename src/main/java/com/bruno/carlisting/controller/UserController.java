@@ -66,13 +66,6 @@ public class UserController {
                     message = "Page size must be less than or equal to " + USER_PAGE_MAX_SIZE) int size) {
 
         Page<User> usersPage = userService.getAllUsers(page, size);
-
-        /*if(usersPage.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        else {
-            return ResponseEntity.ok().body(usersPage);
-        }*/
         return ResponseEntity.ok().body(usersPage);
     }
 
