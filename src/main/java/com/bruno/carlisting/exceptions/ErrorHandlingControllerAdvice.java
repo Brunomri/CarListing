@@ -53,4 +53,13 @@ public class ErrorHandlingControllerAdvice {
                 HttpStatus.NOT_FOUND.value(), e.getClass().getName(), e.getMessage());
         return error;
     }
+
+    @ExceptionHandler(entityRelationshipIntegrityException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    StandardErrorResponse entityRelationshipIntegrityException(entityRelationshipIntegrityException e) {
+        StandardErrorResponse error = new StandardErrorResponse(formatter.format(LocalDateTime.now()),
+                HttpStatus.BAD_REQUEST.value(), e.getClass().getName(), e.getMessage());
+        return error;
+    }
 }
