@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,8 @@ public class City {
     @Setter(AccessLevel.NONE)
     private Long cityId;
 
+    @NotBlank(message = "City name is mandatory")
+    @Size(min = 2, max = 255, message = "City name must have between 2 and 255 characters")
     private String cityName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")

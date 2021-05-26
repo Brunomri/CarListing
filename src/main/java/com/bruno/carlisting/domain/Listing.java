@@ -12,6 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Entity
 @Getter
@@ -24,10 +28,16 @@ public class Listing {
     @Setter(AccessLevel.NONE)
     private Long listingId;
 
+    @NotNull(message = "Price is mandatory")
+    @Positive(message = "Price must be a positive integer")
     private Integer price;
 
+    @NotNull(message = "Mileage is mandatory")
+    @Positive(message = "Mileage must be a positive integer")
     private Integer mileage;
 
+    @NotBlank(message = "Description is mandatory")
+    @Size(min = 10, max = 1000, message = "Description must have between 10 and 1000 characters")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

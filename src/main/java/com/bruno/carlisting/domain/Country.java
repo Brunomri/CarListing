@@ -6,11 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,9 @@ public class Country {
     @Setter(AccessLevel.NONE)
     private Integer countryId;
 
+    @NotBlank(message = "Country name is mandatory")
+    @Size(min = 2, max = 255, message = "Country name must have between 2 and 255 characters")
+    @Column(unique = true)
     private String countryName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "country")
