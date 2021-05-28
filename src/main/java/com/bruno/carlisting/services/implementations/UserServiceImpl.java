@@ -63,7 +63,13 @@ public class UserServiceImpl implements UserService {
         List<Role> userRoles = new ArrayList<>();
         rolesIds.forEach(roleId -> userRoles.add(roleService.getRoleById(roleId)));
         newUser.setRoles(userRoles);
-        return userRepository.save(newUser);
+
+        try {
+            return userRepository.save(newUser);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(
+                    "Username %s already exists", newUser.getUsername()));
+        }
     }
 
     @Override
