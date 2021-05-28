@@ -73,17 +73,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User updatedUser, Long userId) {
+    public User updateUser(User updatedUser, List<Integer> rolesIds, Long userId) {
 
         User currentUser = getUserById(userId);
+        List<Role> updatedUserRoles = new ArrayList<>();
+        rolesIds.forEach(roleId -> updatedUserRoles.add(roleService.getRoleById(roleId)));
+        updatedUser.setRoles(updatedUserRoles);
 
         currentUser.setUsername(updatedUser.getUsername());
         currentUser.setPassword(updatedUser.getPassword());
         currentUser.setDisplayName(updatedUser.getDisplayName());
         currentUser.setContact(updatedUser.getContact());
-        currentUser.setRoles(roleService.getRolesByUserId(userId));
+        currentUser.setRoles(updatedUser.getRoles());
 
-        return userRepository.save(currentUser);
+        try {
+            return userRepository.save(currentUser);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(
+                    "Username %s already exists", updatedUser.getUsername()));
+        }
     }
 
 //    todo: Create User DTO to avoid passing an entire User object

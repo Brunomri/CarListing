@@ -15,7 +15,7 @@ public interface UserService {
 
     User createUser(User newUser, List<Integer> rolesIds);
 
-    User updateUser(User user, Long userId);
+    User updateUser(User updatedUser, List<Integer> rolesIds, Long userId);
 
     User updateUserDisplayName(User user, Long userId);
 
