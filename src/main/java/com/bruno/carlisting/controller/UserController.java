@@ -125,14 +125,14 @@ public class UserController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @PutMapping(value = "/{userId}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<User> updateUser(
+    public ResponseEntity<UserResponseDTO> updateUser(
 
         @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
 
-        @Valid @RequestBody User user) {
+        @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
-        User updatedUser = userService.updateUser(user, userId);
-        return ResponseEntity.ok().body(updatedUser);
+        User updatedUser = userService.updateUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds(), userId);
+        return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
 
     }
 
