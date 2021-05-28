@@ -1,6 +1,8 @@
 package com.bruno.carlisting.controller;
 
 import com.bruno.carlisting.domain.User;
+import com.bruno.carlisting.dtos.request.UserRequestDTO;
+import com.bruno.carlisting.dtos.request.UserResponseDTO;
 import com.bruno.carlisting.services.interfaces.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -23,10 +25,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import java.net.URI;
-import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -108,17 +108,15 @@ public class UserController {
         @ApiResponse(code = 201, message = "New user created"),
         @ApiResponse(code = 500, message = "Server exception"),
     })
-    @PostMapping(value = "/{rolesIds}", consumes = "application/json")
-    public ResponseEntity<User> createUser(
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UserResponseDTO> createUser(
 
-        @PathVariable @NotEmpty(message = "User roles are mandatory") List<Integer> rolesIds,
+        @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
-        @Valid @RequestBody User user) {
-
-        User newUser = userService.createUser(user, rolesIds);
+        User newUser = userService.createUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds());
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{userId}").
                 buildAndExpand(newUser.getUserId()).toUri();
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(UserResponseDTO.toDTO(newUser));
     }
 
     @ApiOperation(value = "Update an existing user")
