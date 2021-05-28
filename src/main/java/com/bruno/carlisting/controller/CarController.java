@@ -142,6 +142,7 @@ public class CarController {
     @ApiOperation(value = "Add a new car")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "New car created"),
+        @ApiResponse(code = 400, message = "Invalid Car data provided"),
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @PostMapping(value = "/{userId}", consumes = "application/json")
@@ -160,6 +161,8 @@ public class CarController {
     @ApiOperation(value = "Update an existing car")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "Car updated"),
+        @ApiResponse(code = 400, message = "Invalid Car data provided"),
+        @ApiResponse(code = 404, message = "Car not found"),
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @PutMapping(value = "/{carId}", consumes = "application/json", produces = "application/json")

@@ -106,6 +106,7 @@ public class UserController {
     @ApiOperation(value = "Add a new user")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "New user created"),
+        @ApiResponse(code = 400, message = "Invalid User data provided"),
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @PostMapping(consumes = "application/json", produces = "application/json")
@@ -122,6 +123,8 @@ public class UserController {
     @ApiOperation(value = "Update an existing user")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "User updated"),
+        @ApiResponse(code = 400, message = "Invalid User data provided"),
+        @ApiResponse(code = 404, message = "User not found"),
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @PutMapping(value = "/{userId}", consumes = "application/json", produces = "application/json")
