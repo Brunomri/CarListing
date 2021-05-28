@@ -1,9 +1,9 @@
 -- Users
-INSERT INTO users (username, password, display_name, contact) VALUES ('JohnDoe', 'John123', 'John', 'john@email.com');
-INSERT INTO users (username, password, display_name, contact) VALUES ('Mary', 'Mary123', 'Mary', 'mary@email.com');
-INSERT INTO users (username, password, display_name, contact) VALUES ('Jose', 'Jose123', 'Jose', 'jose@email.com');
-INSERT INTO users (username, password, display_name, contact) VALUES ('Mike', 'Mike123', 'Mike', 'mike@email.com');
-INSERT INTO users (username, password, display_name, contact) VALUES ('Geralt', 'Geralt123', 'Geralt', 'geralt@email.com');
+INSERT INTO users (username, password, display_name, contact) VALUES ('JohnDoe', 'John123456789', 'John', 'john@email.com');
+INSERT INTO users (username, password, display_name, contact) VALUES ('Mary', 'Mary123456789', 'Mary', 'mary@email.com');
+INSERT INTO users (username, password, display_name, contact) VALUES ('Jose', 'Jose123456789', 'Jose', 'jose@email.com');
+INSERT INTO users (username, password, display_name, contact) VALUES ('Mike', 'Mike123456789', 'Mike', 'mike@email.com');
+INSERT INTO users (username, password, display_name, contact) VALUES ('Geralt', 'Geralt123456789', 'Geralt', 'geralt@email.com');
 
 -- Roles
 INSERT INTO role (type) VALUES ('user');
