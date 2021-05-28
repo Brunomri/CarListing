@@ -1,7 +1,7 @@
 package com.bruno.carlisting.controller;
 
 import com.bruno.carlisting.domain.Car;
-import com.bruno.carlisting.services.CarService;
+import com.bruno.carlisting.services.interfaces.CarService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;

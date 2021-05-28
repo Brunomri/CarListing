@@ -1,4 +1,4 @@
-package com.bruno.carlisting.services;
+package com.bruno.carlisting.services.interfaces;
 
 import org.springframework.data.domain.Page;
 

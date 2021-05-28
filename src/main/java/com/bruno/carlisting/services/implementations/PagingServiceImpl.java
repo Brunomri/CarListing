@@ -1,6 +1,7 @@
-package com.bruno.carlisting.services;
+package com.bruno.carlisting.services.implementations;
 
 import com.bruno.carlisting.exceptions.ObjectNotFoundException;
+import com.bruno.carlisting.services.interfaces.PagingService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 

@@ -2,7 +2,7 @@ package com.bruno.carlisting.bootstrap;
 
 import com.bruno.carlisting.domain.Car;
 import com.bruno.carlisting.repositories.CarRepository;
-import com.bruno.carlisting.services.CarService;
+import com.bruno.carlisting.services.interfaces.CarService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;

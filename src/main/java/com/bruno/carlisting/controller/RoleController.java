@@ -1,7 +1,7 @@
 package com.bruno.carlisting.controller;
 
 import com.bruno.carlisting.domain.Role;
-import com.bruno.carlisting.services.RoleService;
+import com.bruno.carlisting.services.interfaces.RoleService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
