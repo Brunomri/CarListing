@@ -1,4 +1,4 @@
-package com.bruno.carlisting.dtos.request;
+package com.bruno.carlisting.dtos.request.user;
 
 import com.bruno.carlisting.domain.User;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.bruno.carlisting.dtos.request;
+package com.bruno.carlisting.dtos.response.user;
 
 import com.bruno.carlisting.domain.Role;
 import com.bruno.carlisting.domain.User;
@@ -10,19 +10,20 @@ import java.util.List;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class UserResponseDTO {
+public class UserPrivateResponseDTO {
 
     private static final long serialVersionUID = 1L;
 
     private Long userId;
     private String username;
+    private String password;
     private String displayName;
     private String contact;
 
     private List<Role> roles;
 
-    public static UserResponseDTO toDTO(User user) {
-        return new UserResponseDTO(user.getUserId(), user.getUsername(), user.getDisplayName(),
-                user.getContact(), user.getRoles());
+    public static UserPrivateResponseDTO toDTO(User user) {
+        return new UserPrivateResponseDTO(user.getUserId(), user.getUsername(), user.getPassword(),
+                user.getDisplayName(), user.getContact(), user.getRoles());
     }
 }

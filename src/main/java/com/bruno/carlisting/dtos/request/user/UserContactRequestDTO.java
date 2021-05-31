@@ -1,4 +1,4 @@
-package com.bruno.carlisting.dtos.request;
+package com.bruno.carlisting.dtos.request.user;
 
 import lombok.Getter;
 
