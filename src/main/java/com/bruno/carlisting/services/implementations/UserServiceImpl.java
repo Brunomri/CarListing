@@ -94,7 +94,15 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-//    todo: Create User DTO to avoid passing an entire User object
+    @Override
+    public User updateUserPassword(String password, Long userId) {
+
+        User currentUser = getUserById(userId);
+
+        currentUser.setPassword(password);
+        return userRepository.save(currentUser);
+    }
+
     @Override
     public User updateUserDisplayName(String displayName, Long userId) {
 

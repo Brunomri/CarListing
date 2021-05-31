@@ -2,6 +2,7 @@ package com.bruno.carlisting.controller;
 
 import com.bruno.carlisting.domain.User;
 import com.bruno.carlisting.dtos.request.UserDisplayNameRequestDTO;
+import com.bruno.carlisting.dtos.request.UserPasswordRequestDTO;
 import com.bruno.carlisting.dtos.request.UserRequestDTO;
 import com.bruno.carlisting.dtos.request.UserResponseDTO;
 import com.bruno.carlisting.services.interfaces.UserService;
@@ -135,6 +136,23 @@ public class UserController {
         @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
         User updatedUser = userService.updateUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds(), userId);
+        return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
+    }
+
+    @ApiOperation(value = "Update a user's password")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "User's password updated"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
+    })
+    @PatchMapping(value = "/{userId}/password", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UserResponseDTO> updateUserPassword(
+
+            @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
+
+            @Valid @RequestBody UserPasswordRequestDTO userPasswordRequestDTO) {
+
+        User updatedUser = userService.updateUserPassword(userPasswordRequestDTO.getPassword(), userId);
         return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
     }
 
