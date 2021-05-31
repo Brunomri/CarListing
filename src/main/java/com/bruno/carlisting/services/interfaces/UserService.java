@@ -17,7 +17,7 @@ public interface UserService {
 
     User updateUser(User updatedUser, List<Integer> rolesIds, Long userId);
 
-    User updateUserDisplayName(User user, Long userId);
+    User updateUserDisplayName(String displayName, Long userId);
 
     void deleteUser(Long userId);
 

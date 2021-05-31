@@ -1,6 +1,7 @@
 package com.bruno.carlisting.controller;
 
 import com.bruno.carlisting.domain.User;
+import com.bruno.carlisting.dtos.request.UserDisplayNameRequestDTO;
 import com.bruno.carlisting.dtos.request.UserRequestDTO;
 import com.bruno.carlisting.dtos.request.UserResponseDTO;
 import com.bruno.carlisting.services.interfaces.UserService;
@@ -99,7 +100,6 @@ public class UserController {
 
         User user = userService.getUserByCarId(carId);
         return ResponseEntity.ok().body(user);
-
     }
 
 //    todo: Create User DTO to avoid passing rolesIds in the query parameters
@@ -136,24 +136,23 @@ public class UserController {
 
         User updatedUser = userService.updateUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds(), userId);
         return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
-
     }
 
     @ApiOperation(value = "Update a user's display name")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "User's display name updated"),
+            @ApiResponse(code = 404, message = "User not found"),
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @PatchMapping(value = "/{userId}/displayName", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<User> updateUserDisplayName(
+    public ResponseEntity<UserResponseDTO> updateUserDisplayName(
 
         @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
 
-        @Valid @RequestBody User user) {
+        @Valid @RequestBody UserDisplayNameRequestDTO userDisplayNameRequestDTO) {
 
-        User updatedUser = userService.updateUserDisplayName(user, userId);
-        return ResponseEntity.ok().body(updatedUser);
-
+        User updatedUser = userService.updateUserDisplayName(userDisplayNameRequestDTO.getDisplayName(), userId);
+        return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
     }
 
     @ApiOperation(value = "Delete an existing user")
@@ -168,6 +167,5 @@ public class UserController {
 
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
-
     }
 }

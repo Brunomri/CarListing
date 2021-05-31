@@ -96,11 +96,11 @@ public class UserServiceImpl implements UserService {
 
 //    todo: Create User DTO to avoid passing an entire User object
     @Override
-    public User updateUserDisplayName(User user, Long userId) {
+    public User updateUserDisplayName(String displayName, Long userId) {
 
         User currentUser = getUserById(userId);
 
-        currentUser.setDisplayName(user.getDisplayName());
+        currentUser.setDisplayName(displayName);
         return userRepository.save(currentUser);
     }
 
