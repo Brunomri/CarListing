@@ -1,12 +1,13 @@
 package com.bruno.carlisting.controller;
 
 import com.bruno.carlisting.domain.User;
-import com.bruno.carlisting.dtos.request.UserContactRequestDTO;
-import com.bruno.carlisting.dtos.request.UserDisplayNameRequestDTO;
-import com.bruno.carlisting.dtos.request.UserPasswordRequestDTO;
-import com.bruno.carlisting.dtos.request.UserRequestDTO;
-import com.bruno.carlisting.dtos.request.UserResponseDTO;
-import com.bruno.carlisting.dtos.request.UserRolesRequestDTO;
+import com.bruno.carlisting.dtos.request.user.UserContactRequestDTO;
+import com.bruno.carlisting.dtos.request.user.UserDisplayNameRequestDTO;
+import com.bruno.carlisting.dtos.request.user.UserPasswordRequestDTO;
+import com.bruno.carlisting.dtos.request.user.UserRequestDTO;
+import com.bruno.carlisting.dtos.request.user.UserRolesRequestDTO;
+import com.bruno.carlisting.dtos.response.user.UserPrivateResponseDTO;
+import com.bruno.carlisting.dtos.response.user.UserPublicResponseDTO;
 import com.bruno.carlisting.services.interfaces.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -57,20 +58,21 @@ public class UserController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/all", produces = "application/json")
-    public ResponseEntity<Page<User>> findAllUsers(
+    public ResponseEntity<Page<UserPublicResponseDTO>> findAllUsers(
 
-            @RequestParam(value = "page", required = false, defaultValue = USER_PAGE_DEFAULT_NUMBER)
-            @Min(value = USER_PAGE_MIN_NUMBER,
-                message = "Page number must be greater than or equal to " + USER_PAGE_MIN_NUMBER) int page,
+        @RequestParam(value = "page", required = false, defaultValue = USER_PAGE_DEFAULT_NUMBER)
+        @Min(value = USER_PAGE_MIN_NUMBER,
+            message = "Page number must be greater than or equal to " + USER_PAGE_MIN_NUMBER) int page,
 
-            @RequestParam(value = "size", required = false, defaultValue = USER_PAGE_DEFAULT_SIZE)
-            @Min(value = USER_PAGE_MIN_SIZE,
-                message = "Page size must be greater than or equal to " + USER_PAGE_MIN_SIZE)
-            @Max(value = USER_PAGE_MAX_SIZE,
-                    message = "Page size must be less than or equal to " + USER_PAGE_MAX_SIZE) int size) {
+        @RequestParam(value = "size", required = false, defaultValue = USER_PAGE_DEFAULT_SIZE)
+        @Min(value = USER_PAGE_MIN_SIZE,
+            message = "Page size must be greater than or equal to " + USER_PAGE_MIN_SIZE)
+        @Max(value = USER_PAGE_MAX_SIZE,
+                message = "Page size must be less than or equal to " + USER_PAGE_MAX_SIZE) int size) {
 
-        Page<User> usersPage = userService.getAllUsers(page, size);
-        return ResponseEntity.ok().body(usersPage);
+        Page<UserPublicResponseDTO> usersPageDTO = UserPublicResponseDTO.toUsersPageDTO(
+                userService.getAllUsers(page, size));
+        return ResponseEntity.ok().body(usersPageDTO);
     }
 
     @ApiOperation(value = "Find a user by ID")
@@ -113,14 +115,14 @@ public class UserController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserResponseDTO> createUser(
+    public ResponseEntity<UserPrivateResponseDTO> createUser(
 
         @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
         User newUser = userService.createUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds());
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{userId}").
                 buildAndExpand(newUser.getUserId()).toUri();
-        return ResponseEntity.created(uri).body(UserResponseDTO.toDTO(newUser));
+        return ResponseEntity.created(uri).body(UserPrivateResponseDTO.toDTO(newUser));
     }
 
     @ApiOperation(value = "Update an existing user")
@@ -131,14 +133,14 @@ public class UserController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @PutMapping(value = "/{userId}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserResponseDTO> updateUser(
+    public ResponseEntity<UserPrivateResponseDTO> updateUser(
 
         @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
 
         @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
         User updatedUser = userService.updateUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds(), userId);
-        return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
+        return ResponseEntity.ok().body(UserPrivateResponseDTO.toDTO(updatedUser));
     }
 
     @ApiOperation(value = "Update a user's password")
@@ -148,14 +150,14 @@ public class UserController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @PatchMapping(value = "/{userId}/password", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserResponseDTO> updateUserPassword(
+    public ResponseEntity<UserPrivateResponseDTO> updateUserPassword(
 
             @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
 
             @Valid @RequestBody UserPasswordRequestDTO userPasswordRequestDTO) {
 
         User updatedUser = userService.updateUserPassword(userPasswordRequestDTO.getPassword(), userId);
-        return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
+        return ResponseEntity.ok().body(UserPrivateResponseDTO.toDTO(updatedUser));
     }
 
     @ApiOperation(value = "Update a user's display name")
@@ -165,14 +167,14 @@ public class UserController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @PatchMapping(value = "/{userId}/displayName", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserResponseDTO> updateUserDisplayName(
+    public ResponseEntity<UserPrivateResponseDTO> updateUserDisplayName(
 
         @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
 
         @Valid @RequestBody UserDisplayNameRequestDTO userDisplayNameRequestDTO) {
 
         User updatedUser = userService.updateUserDisplayName(userDisplayNameRequestDTO.getDisplayName(), userId);
-        return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
+        return ResponseEntity.ok().body(UserPrivateResponseDTO.toDTO(updatedUser));
     }
 
     @ApiOperation(value = "Update a user's contact")
@@ -182,14 +184,14 @@ public class UserController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @PatchMapping(value = "/{userId}/contact", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserResponseDTO> updateUserContact(
+    public ResponseEntity<UserPrivateResponseDTO> updateUserContact(
 
             @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
 
             @Valid @RequestBody UserContactRequestDTO userContactRequestDTO) {
 
         User updatedUser = userService.updateUserContact(userContactRequestDTO.getContact(), userId);
-        return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
+        return ResponseEntity.ok().body(UserPrivateResponseDTO.toDTO(updatedUser));
     }
 
     @ApiOperation(value = "Update a user's roles")
@@ -199,14 +201,14 @@ public class UserController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @PatchMapping(value = "/{userId}/roles", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserResponseDTO> updateUserRoles(
+    public ResponseEntity<UserPrivateResponseDTO> updateUserRoles(
 
             @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
 
             @Valid @RequestBody UserRolesRequestDTO userRolesRequestDTO) {
 
         User updatedUser = userService.updateUserRoles(userRolesRequestDTO.getRolesIds(), userId);
-        return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
+        return ResponseEntity.ok().body(UserPrivateResponseDTO.toDTO(updatedUser));
     }
 
     @ApiOperation(value = "Delete an existing user")
