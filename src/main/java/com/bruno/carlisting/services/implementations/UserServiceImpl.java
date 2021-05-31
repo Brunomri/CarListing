@@ -113,6 +113,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User updateUserContact(String contact, Long userId) {
+
+        User currentUser = getUserById(userId);
+
+        currentUser.setContact(contact);
+        return userRepository.save(currentUser);
+    }
+
+    @Override
     public void deleteUser(Long userId) {
 
         User userToDelete = getUserById(userId);

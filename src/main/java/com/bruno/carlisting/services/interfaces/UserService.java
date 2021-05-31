@@ -21,6 +21,7 @@ public interface UserService {
 
     User updateUserDisplayName(String displayName, Long userId);
 
-    void deleteUser(Long userId);
+    User updateUserContact(String contact, Long userId);
 
+    void deleteUser(Long userId);
 }
