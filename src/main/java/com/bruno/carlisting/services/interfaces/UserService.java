@@ -23,5 +23,7 @@ public interface UserService {
 
     User updateUserContact(String contact, Long userId);
 
+    User updateUserRoles(List<Integer> rolesIds, Long userId);
+
     void deleteUser(Long userId);
 }

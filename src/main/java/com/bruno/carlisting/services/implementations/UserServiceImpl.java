@@ -122,6 +122,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User updateUserRoles(List<Integer> rolesIds, Long userId) {
+
+        User currentUser = getUserById(userId);
+        List<Role> updatedUserRoles = new ArrayList<>();
+        rolesIds.forEach(roleId -> updatedUserRoles.add(roleService.getRoleById(roleId)));
+        currentUser.setRoles(updatedUserRoles);
+        return userRepository.save(currentUser);
+    }
+
+    @Override
     public void deleteUser(Long userId) {
 
         User userToDelete = getUserById(userId);

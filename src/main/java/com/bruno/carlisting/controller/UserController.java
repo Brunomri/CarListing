@@ -6,6 +6,7 @@ import com.bruno.carlisting.dtos.request.UserDisplayNameRequestDTO;
 import com.bruno.carlisting.dtos.request.UserPasswordRequestDTO;
 import com.bruno.carlisting.dtos.request.UserRequestDTO;
 import com.bruno.carlisting.dtos.request.UserResponseDTO;
+import com.bruno.carlisting.dtos.request.UserRolesRequestDTO;
 import com.bruno.carlisting.services.interfaces.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -188,6 +189,23 @@ public class UserController {
             @Valid @RequestBody UserContactRequestDTO userContactRequestDTO) {
 
         User updatedUser = userService.updateUserContact(userContactRequestDTO.getContact(), userId);
+        return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
+    }
+
+    @ApiOperation(value = "Update a user's roles")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "User's roles updated"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
+    })
+    @PatchMapping(value = "/{userId}/roles", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UserResponseDTO> updateUserRoles(
+
+            @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
+
+            @Valid @RequestBody UserRolesRequestDTO userRolesRequestDTO) {
+
+        User updatedUser = userService.updateUserRoles(userRolesRequestDTO.getRolesIds(), userId);
         return ResponseEntity.ok().body(UserResponseDTO.toDTO(updatedUser));
     }
 
