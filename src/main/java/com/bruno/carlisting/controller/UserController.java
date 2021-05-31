@@ -70,7 +70,7 @@ public class UserController {
         @Max(value = USER_PAGE_MAX_SIZE,
                 message = "Page size must be less than or equal to " + USER_PAGE_MAX_SIZE) int size) {
 
-        Page<UserPublicResponseDTO> usersPageDTO = UserPublicResponseDTO.toUsersPageDTO(
+        Page<UserPublicResponseDTO> usersPageDTO = UserPublicResponseDTO.toUsersPagePublicDTO(
                 userService.getAllUsers(page, size));
         return ResponseEntity.ok().body(usersPageDTO);
     }
@@ -83,12 +83,12 @@ public class UserController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/{userId}", produces = "application/json")
-    public ResponseEntity<User> findUserById(
+    public ResponseEntity<UserPublicResponseDTO> findUserById(
 
         @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
 
         User user = userService.getUserById(userId);
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok().body(UserPublicResponseDTO.toUserPublicDTO(user));
     }
 
     @ApiOperation(value = "Find a user by a car ID")
@@ -99,12 +99,12 @@ public class UserController {
             @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/cars/{carId}", produces = "application/json")
-    public ResponseEntity<User> findUserByCarId(
+    public ResponseEntity<UserPublicResponseDTO> findUserByCarId(
 
         @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
 
         User user = userService.getUserByCarId(carId);
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok().body(UserPublicResponseDTO.toUserPublicDTO(user));
     }
 
 //    todo: Create User DTO to avoid passing rolesIds in the query parameters
@@ -122,7 +122,7 @@ public class UserController {
         User newUser = userService.createUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds());
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{userId}").
                 buildAndExpand(newUser.getUserId()).toUri();
-        return ResponseEntity.created(uri).body(UserPrivateResponseDTO.toDTO(newUser));
+        return ResponseEntity.created(uri).body(UserPrivateResponseDTO.toUserPrivateDTO(newUser));
     }
 
     @ApiOperation(value = "Update an existing user")
@@ -140,7 +140,7 @@ public class UserController {
         @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
         User updatedUser = userService.updateUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds(), userId);
-        return ResponseEntity.ok().body(UserPrivateResponseDTO.toDTO(updatedUser));
+        return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }
 
     @ApiOperation(value = "Update a user's password")
@@ -157,7 +157,7 @@ public class UserController {
             @Valid @RequestBody UserPasswordRequestDTO userPasswordRequestDTO) {
 
         User updatedUser = userService.updateUserPassword(userPasswordRequestDTO.getPassword(), userId);
-        return ResponseEntity.ok().body(UserPrivateResponseDTO.toDTO(updatedUser));
+        return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }
 
     @ApiOperation(value = "Update a user's display name")
@@ -174,7 +174,7 @@ public class UserController {
         @Valid @RequestBody UserDisplayNameRequestDTO userDisplayNameRequestDTO) {
 
         User updatedUser = userService.updateUserDisplayName(userDisplayNameRequestDTO.getDisplayName(), userId);
-        return ResponseEntity.ok().body(UserPrivateResponseDTO.toDTO(updatedUser));
+        return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }
 
     @ApiOperation(value = "Update a user's contact")
@@ -191,7 +191,7 @@ public class UserController {
             @Valid @RequestBody UserContactRequestDTO userContactRequestDTO) {
 
         User updatedUser = userService.updateUserContact(userContactRequestDTO.getContact(), userId);
-        return ResponseEntity.ok().body(UserPrivateResponseDTO.toDTO(updatedUser));
+        return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }
 
     @ApiOperation(value = "Update a user's roles")
@@ -208,7 +208,7 @@ public class UserController {
             @Valid @RequestBody UserRolesRequestDTO userRolesRequestDTO) {
 
         User updatedUser = userService.updateUserRoles(userRolesRequestDTO.getRolesIds(), userId);
-        return ResponseEntity.ok().body(UserPrivateResponseDTO.toDTO(updatedUser));
+        return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }
 
     @ApiOperation(value = "Delete an existing user")
