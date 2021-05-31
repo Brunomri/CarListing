@@ -1,17 +1,19 @@
 package com.bruno.carlisting.exceptions;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
-public class Violation {
+public class Violation extends StandardErrorResponse {
 
-    private final String timestamp;
-    private final Integer status;
-    private final String exception;
     private final String objectName;
     private final String fieldName;
     private final Object value;
-    private final String message;
+
+    public Violation(String timestamp, Integer status, String exception, String objectName, String fieldName,
+                     Object value, String message) {
+        super(timestamp, status, exception, message);
+        this.objectName = objectName;
+        this.fieldName = fieldName;
+        this.value = value;
+    }
 }
