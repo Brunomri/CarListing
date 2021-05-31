@@ -23,11 +23,11 @@ public class UserPublicResponseDTO {
 
     private List<Role> roles;
 
-    public static UserPublicResponseDTO toUserDTO(User user) {
+    public static UserPublicResponseDTO toUserPublicDTO(User user) {
         return new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(), user.getContact(), user.getRoles());
     }
 
-    public static Page<UserPublicResponseDTO> toUsersPageDTO(Page<User> usersPage) {
+    public static Page<UserPublicResponseDTO> toUsersPagePublicDTO(Page<User> usersPage) {
         List<UserPublicResponseDTO> usersListDTO = new ArrayList<>();
         usersPage.forEach(user -> {
             UserPublicResponseDTO userDTO = new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(),

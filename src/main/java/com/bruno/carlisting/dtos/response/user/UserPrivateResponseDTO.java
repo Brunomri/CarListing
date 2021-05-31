@@ -22,7 +22,7 @@ public class UserPrivateResponseDTO {
 
     private List<Role> roles;
 
-    public static UserPrivateResponseDTO toDTO(User user) {
+    public static UserPrivateResponseDTO toUserPrivateDTO(User user) {
         return new UserPrivateResponseDTO(user.getUserId(), user.getUsername(), user.getPassword(),
                 user.getDisplayName(), user.getContact(), user.getRoles());
     }

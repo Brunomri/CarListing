@@ -20,7 +20,7 @@ public class UserAdminResponseDTO {
 
     private List<Role> roles;
 
-    public static UserAdminResponseDTO toDTO(User user) {
+    public static UserAdminResponseDTO toUserAdminDTO(User user) {
         return new UserAdminResponseDTO(user.getUserId(), user.getUsername(),
                 user.getDisplayName(), user.getContact(), user.getRoles());
     }
