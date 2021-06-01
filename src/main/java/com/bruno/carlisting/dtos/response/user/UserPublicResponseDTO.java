@@ -1,5 +1,6 @@
 package com.bruno.carlisting.dtos.response.user;
 
+import com.bruno.carlisting.domain.Listing;
 import com.bruno.carlisting.domain.Role;
 import com.bruno.carlisting.domain.User;
 import lombok.AccessLevel;
@@ -21,17 +22,20 @@ public class UserPublicResponseDTO {
     private String displayName;
     private String contact;
 
+//    todo: create listing DTO to avoid displaying id
+    private List<Listing> userListings;
     private List<Role> roles;
 
     public static UserPublicResponseDTO toUserPublicDTO(User user) {
-        return new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(), user.getContact(), user.getRoles());
+        return new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(), user.getContact(),
+                user.getUserListings(), user.getRoles());
     }
 
     public static Page<UserPublicResponseDTO> toUsersPagePublicDTO(Page<User> usersPage) {
         List<UserPublicResponseDTO> usersListDTO = new ArrayList<>();
         usersPage.forEach(user -> {
             UserPublicResponseDTO userDTO = new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(),
-                    user.getContact(), user.getRoles());
+                    user.getContact(), user.getUserListings(), user.getRoles());
             usersListDTO.add(userDTO);
         });
         final Page<UserPublicResponseDTO> usersPageDTO = new PageImpl<>(usersListDTO, usersPage.getPageable(),
