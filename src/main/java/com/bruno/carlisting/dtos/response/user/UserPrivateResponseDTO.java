@@ -1,5 +1,6 @@
 package com.bruno.carlisting.dtos.response.user;
 
+import com.bruno.carlisting.domain.Listing;
 import com.bruno.carlisting.domain.Role;
 import com.bruno.carlisting.domain.User;
 import lombok.AccessLevel;
@@ -20,10 +21,11 @@ public class UserPrivateResponseDTO {
     private String displayName;
     private String contact;
 
+    private List<Listing> userListings;
     private List<Role> roles;
 
     public static UserPrivateResponseDTO toUserPrivateDTO(User user) {
         return new UserPrivateResponseDTO(user.getUserId(), user.getUsername(), user.getPassword(),
-                user.getDisplayName(), user.getContact(), user.getRoles());
+                user.getDisplayName(), user.getContact(), user.getUserListings(), user.getRoles());
     }
 }
