@@ -43,11 +43,13 @@ public class Listing {
     @Size(min = 10, max = 1000, message = "Description must have between 10 and 1000 characters")
     private String description;
 
+//    todo: A DTO for a listing response might avoid the @JsonIgnore
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
     @ManyToOne/*(fetch = FetchType.LAZY)*/
     @JoinColumn(name = "car_id")
     private Car car;
