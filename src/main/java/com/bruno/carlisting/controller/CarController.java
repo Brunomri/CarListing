@@ -166,14 +166,14 @@ public class CarController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @PutMapping(value = "/{carId}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Car> updateCar(
+    public ResponseEntity<CarPrivateResponseDTO> updateCar(
 
         @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
 
-        @Valid @RequestBody Car car) {
+        @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
-        Car updatedCar = carService.updateCar(car, carId);
-        return ResponseEntity.ok().body(updatedCar);
+        Car updatedCar = carService.updateCar(carRequestDTO.toCar(), carRequestDTO.getUserId(), carId);
+        return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
     @ApiOperation(value = "Delete an existing car")
