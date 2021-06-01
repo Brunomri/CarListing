@@ -82,7 +82,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car updateCar(Car updatedCar, Long carId) {
+    public Car updateCar(Car updatedCar, Long userId, Long carId) {
 
         Optional<Car> optionalCar = carRepository.findById(carId);
         optionalCar.orElseThrow(() -> new ObjectNotFoundException("Car not found! Id: " + carId));
@@ -95,9 +95,18 @@ public class CarServiceImpl implements CarService {
         currentCar.setColor(updatedCar.getColor());
         currentCar.setTransmission(updatedCar.getTransmission());
         currentCar.setFuel(updatedCar.getFuel());
-        currentCar.setUser(userService.getUserByCarId(carId));
+        currentCar.setUser(userService.getUserById(userId));
 
-        return carRepository.save(currentCar);
+        try {
+            return carRepository.save(currentCar);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(
+                    "This car already exists:" +
+                            " Make: %s -" +
+                            " Model: %s -" +
+                            " Year: %s -" +
+                            " Trim: %s", currentCar.getMake(), currentCar.getModel(), currentCar.getYear(), currentCar.getTrim()));
+        }
     }
 
     @Override
