@@ -1,6 +1,8 @@
 package com.bruno.carlisting.controller;
 
 import com.bruno.carlisting.domain.Car;
+import com.bruno.carlisting.dtos.request.car.CarRequestDTO;
+import com.bruno.carlisting.dtos.response.car.CarPrivateResponseDTO;
 import com.bruno.carlisting.services.interfaces.CarService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -145,17 +147,15 @@ public class CarController {
         @ApiResponse(code = 400, message = "Invalid Car data provided"),
         @ApiResponse(code = 500, message = "Server exception"),
     })
-    @PostMapping(value = "/{userId}", consumes = "application/json")
-    public ResponseEntity<Car> createCar(
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CarPrivateResponseDTO> createCar(
 
-        @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
+        @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
-        @Valid @RequestBody Car car) {
-
-        Car newCar = carService.createCar(car, userId);
+        Car newCar = carService.createCar(carRequestDTO.toCar(), carRequestDTO.getUserId());
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/cars/{carId}").
                 buildAndExpand(newCar.getCarId()).toUri();
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(CarPrivateResponseDTO.toCarPrivateDTO(newCar));
     }
 
     @ApiOperation(value = "Update an existing car")
