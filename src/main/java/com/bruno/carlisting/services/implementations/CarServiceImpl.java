@@ -3,10 +3,12 @@ package com.bruno.carlisting.services.implementations;
 import com.bruno.carlisting.domain.Car;
 import com.bruno.carlisting.domain.User;
 import com.bruno.carlisting.exceptions.ObjectNotFoundException;
+import com.bruno.carlisting.exceptions.entityRelationshipIntegrityException;
 import com.bruno.carlisting.repositories.CarRepository;
 import com.bruno.carlisting.services.interfaces.CarService;
 import com.bruno.carlisting.services.interfaces.PagingService;
 import com.bruno.carlisting.services.interfaces.UserService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -67,7 +69,16 @@ public class CarServiceImpl implements CarService {
 
         User user = userService.getUserById(userId);
         newCar.setUser(user);
-        return carRepository.save(newCar);
+        try {
+            return carRepository.save(newCar);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(
+                    "This car already exists:" +
+                            " Make: %s -" +
+                            " Model: %s -" +
+                            " Year: %s -" +
+                            " Trim: %s", newCar.getMake(), newCar.getModel(), newCar.getYear(), newCar.getTrim()));
+        }
     }
 
     @Override
