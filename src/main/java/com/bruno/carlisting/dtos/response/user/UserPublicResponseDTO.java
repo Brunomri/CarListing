@@ -34,12 +34,10 @@ public class UserPublicResponseDTO {
     public static Page<UserPublicResponseDTO> toUsersPagePublicDTO(Page<User> usersPage) {
         List<UserPublicResponseDTO> usersListDTO = new ArrayList<>();
         usersPage.forEach(user -> {
-            UserPublicResponseDTO userDTO = new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(),
+            var userDTO = new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(),
                     user.getContact(), user.getUserListings(), user.getRoles());
             usersListDTO.add(userDTO);
         });
-        final Page<UserPublicResponseDTO> usersPageDTO = new PageImpl<>(usersListDTO, usersPage.getPageable(),
-                usersPage.getTotalElements());
-        return usersPageDTO;
+        return new PageImpl<>(usersListDTO, usersPage.getPageable(), usersPage.getTotalElements());
     }
 }
