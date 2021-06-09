@@ -17,6 +17,21 @@ public interface CarService {
 
     Car updateCar(Car updatedCar, Long userId, Long carId);
 
-    void deleteCar(Long carId);
+    Car updateCarMake(String make, Long carId);
 
+    Car updateCarModel(String model, Long carId);
+
+    Car updateCarYear(Integer year, Long carId);
+
+    Car updateCarTrim(String trim, Long carId);
+
+    Car updateCarColor(String color, Long carId);
+
+    Car updateCarTransmission(String transmission, Long carId);
+
+    Car updateCarFuel(String fuel, Long carId);
+
+    Car updateCarUser(Long userId, Long carId);
+
+    void deleteCar(Long carId);
 }

@@ -1,7 +1,6 @@
 package com.bruno.carlisting.services.implementations;
 
 import com.bruno.carlisting.domain.Car;
-import com.bruno.carlisting.domain.User;
 import com.bruno.carlisting.exceptions.ObjectNotFoundException;
 import com.bruno.carlisting.exceptions.entityRelationshipIntegrityException;
 import com.bruno.carlisting.repositories.CarRepository;
@@ -18,7 +17,9 @@ import java.util.Optional;
 
 @Service
 public class CarServiceImpl implements CarService {
-    
+
+    public static final String CAR_ID_NOT_FOUND = "Car ID %s not found";
+
     private final CarRepository carRepository;
     private final UserService userService;
     private final PagingService pagingService;
@@ -43,7 +44,7 @@ public class CarServiceImpl implements CarService {
     public Car getCarById(Long carId) {
 
         Optional<Car> car = carRepository.findById(carId);
-        return car.orElseThrow(() -> new ObjectNotFoundException("Car not found! Id: " + carId));
+        return car.orElseThrow(() -> new ObjectNotFoundException(String.format(CAR_ID_NOT_FOUND, carId)));
     }
 
     @Override
@@ -67,7 +68,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car createCar(Car newCar, Long userId) {
 
-        User user = userService.getUserById(userId);
+        var user = userService.getUserById(userId);
         newCar.setUser(user);
         try {
             return carRepository.save(newCar);
@@ -85,8 +86,8 @@ public class CarServiceImpl implements CarService {
     public Car updateCar(Car updatedCar, Long userId, Long carId) {
 
         Optional<Car> optionalCar = carRepository.findById(carId);
-        optionalCar.orElseThrow(() -> new ObjectNotFoundException("Car not found! Id: " + carId));
-        Car currentCar = optionalCar.get();
+        var currentCar = optionalCar.orElseThrow(() -> new ObjectNotFoundException(
+                String.format(CAR_ID_NOT_FOUND, carId)));
 
         currentCar.setMake(updatedCar.getMake());
         currentCar.setModel(updatedCar.getModel());
@@ -105,14 +106,88 @@ public class CarServiceImpl implements CarService {
                             " Make: %s -" +
                             " Model: %s -" +
                             " Year: %s -" +
-                            " Trim: %s", currentCar.getMake(), currentCar.getModel(), currentCar.getYear(), currentCar.getTrim()));
+                            " Trim: %s", currentCar.getMake(), currentCar.getModel(),
+                    currentCar.getYear(), currentCar.getTrim()));
         }
+    }
+
+    @Override
+    public Car updateCarMake(String make, Long carId) {
+
+        var currentCar = getCarById(carId);
+
+        currentCar.setMake(make);
+        return carRepository.save(currentCar);
+    }
+
+    @Override
+    public Car updateCarModel(String model, Long carId) {
+
+        var currentCar = getCarById(carId);
+
+        currentCar.setModel(model);
+        return carRepository.save(currentCar);
+    }
+
+    @Override
+    public Car updateCarYear(Integer year, Long carId) {
+
+        var currentCar = getCarById(carId);
+
+        currentCar.setYear(year);
+        return carRepository.save(currentCar);
+    }
+
+    @Override
+    public Car updateCarTrim(String trim, Long carId) {
+
+        var currentCar = getCarById(carId);
+
+        currentCar.setTrim(trim);
+        return carRepository.save(currentCar);
+    }
+
+    @Override
+    public Car updateCarColor(String color, Long carId) {
+
+        var currentCar = getCarById(carId);
+
+        currentCar.setColor(color);
+        return carRepository.save(currentCar);
+    }
+
+    @Override
+    public Car updateCarTransmission(String transmission, Long carId) {
+
+        var currentCar = getCarById(carId);
+
+        currentCar.setTransmission(transmission);
+        return carRepository.save(currentCar);
+    }
+
+    @Override
+    public Car updateCarFuel(String fuel, Long carId) {
+
+        var currentCar = getCarById(carId);
+
+        currentCar.setFuel(fuel);
+        return carRepository.save(currentCar);
+    }
+
+    @Override
+    public Car updateCarUser(Long userId, Long carId) {
+
+        var currentCar = getCarById(carId);
+
+        currentCar.setUser(userService.getUserById(userId));
+        return carRepository.save(currentCar);
     }
 
     @Override
     public void deleteCar(Long carId) {
 
         Optional<Car> carToDelete = carRepository.findById(carId);
-        carRepository.delete(carToDelete.orElseThrow(() -> new ObjectNotFoundException("Car not found! Id: " + carId)));
+        carRepository.delete(carToDelete.orElseThrow(() -> new ObjectNotFoundException(
+                String.format(CAR_ID_NOT_FOUND, carId))));
     }
 }

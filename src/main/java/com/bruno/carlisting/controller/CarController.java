@@ -1,7 +1,15 @@
 package com.bruno.carlisting.controller;
 
 import com.bruno.carlisting.domain.Car;
+import com.bruno.carlisting.dtos.request.car.CarColorRequestDTO;
+import com.bruno.carlisting.dtos.request.car.CarFuelRequestDTO;
+import com.bruno.carlisting.dtos.request.car.CarMakeRequestDTO;
+import com.bruno.carlisting.dtos.request.car.CarModelRequestDTO;
 import com.bruno.carlisting.dtos.request.car.CarRequestDTO;
+import com.bruno.carlisting.dtos.request.car.CarTransmissionRequestDTO;
+import com.bruno.carlisting.dtos.request.car.CarTrimRequestDTO;
+import com.bruno.carlisting.dtos.request.car.CarUserRequestDTO;
+import com.bruno.carlisting.dtos.request.car.CarYearRequestDTO;
 import com.bruno.carlisting.dtos.response.car.CarPrivateResponseDTO;
 import com.bruno.carlisting.services.interfaces.CarService;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,7 +37,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.net.URI;
 
 @CrossOrigin("*")
 @RestController
@@ -84,7 +92,7 @@ public class CarController {
 
         @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
 
-        Car car = carService.getCarById(carId);
+        var car = carService.getCarById(carId);
         return ResponseEntity.ok().body(car);
     }
 
@@ -152,8 +160,8 @@ public class CarController {
 
         @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
-        Car newCar = carService.createCar(carRequestDTO.toCar(), carRequestDTO.getUserId());
-        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/cars/{carId}").
+        var newCar = carService.createCar(carRequestDTO.toCar(), carRequestDTO.getUserId());
+        var uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/cars/{carId}").
                 buildAndExpand(newCar.getCarId()).toUri();
         return ResponseEntity.created(uri).body(CarPrivateResponseDTO.toCarPrivateDTO(newCar));
     }
@@ -172,7 +180,135 @@ public class CarController {
 
         @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
-        Car updatedCar = carService.updateCar(carRequestDTO.toCar(), carRequestDTO.getUserId(), carId);
+        var updatedCar = carService.updateCar(carRequestDTO.toCar(), carRequestDTO.getUserId(), carId);
+        return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
+    }
+
+    @ApiOperation(value = "Update a car's make")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Car's make updated"),
+            @ApiResponse(code = 404, message = "Car not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
+    })
+    @PatchMapping(value = "/{carId}/make", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CarPrivateResponseDTO> updateCarMake(
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
+
+            @Valid @RequestBody CarMakeRequestDTO carMakeRequestDTO) {
+
+        var updatedCar = carService.updateCarMake(carMakeRequestDTO.getMake(), carId);
+        return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
+    }
+
+    @ApiOperation(value = "Update a car's model")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Car's model updated"),
+            @ApiResponse(code = 404, message = "Car not found"),
+            @ApiResponse(code = 500, message = "Server exception")
+    })
+    @PatchMapping(value = "/{carId}/model", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CarPrivateResponseDTO> updateCarModel(
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
+
+            @Valid @RequestBody CarModelRequestDTO carModelRequestDTO) {
+
+        var updatedCar = carService.updateCarModel(carModelRequestDTO.getModel(), carId);
+        return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
+    }
+
+    @ApiOperation(value = "Update a car's year")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Car's year updated"),
+            @ApiResponse(code = 404, message = "Car not found"),
+            @ApiResponse(code = 500, message = "Server exception")
+    })
+    @PatchMapping(value = "/{carId}/year", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CarPrivateResponseDTO> updateCarYear(
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
+
+            @Valid @RequestBody CarYearRequestDTO carYearRequestDTO) {
+
+        var updatedCar = carService.updateCarYear(carYearRequestDTO.getYear(), carId);
+        return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
+    }
+
+    @ApiOperation(value = "Update a car's trim")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Car's trim updated"),
+            @ApiResponse(code = 404, message = "Car not found"),
+            @ApiResponse(code = 500, message = "Server exception")
+    })
+    @PatchMapping(value = "/{carId}/trim", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CarPrivateResponseDTO> updateCarTrim(
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
+
+            @Valid @RequestBody CarTrimRequestDTO carTrimRequestDTO) {
+
+        var updatedCar = carService.updateCarTrim(carTrimRequestDTO.getTrim(), carId);
+        return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
+    }
+
+    @ApiOperation(value = "Update a car's color")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Car's color updated"),
+            @ApiResponse(code = 404, message = "Car not found"),
+            @ApiResponse(code = 500, message = "Server exception")
+    })
+    @PatchMapping(value = "/{carId}/color", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CarPrivateResponseDTO> updateCarColor(
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
+
+            @Valid @RequestBody CarColorRequestDTO carColorRequestDTO) {
+
+        var updatedCar = carService.updateCarColor(carColorRequestDTO.getColor(), carId);
+        return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
+    }
+
+    @ApiOperation(value = "Update a car's transmission")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Car's transmission updated"),
+            @ApiResponse(code = 404, message = "Car not found"),
+            @ApiResponse(code = 500, message = "Server exception")
+    })
+    @PatchMapping(value = "/{carId}/transmission", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CarPrivateResponseDTO> updateCarTransmission(
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
+
+            @Valid @RequestBody CarTransmissionRequestDTO carTransmissionRequestDTO) {
+
+        var updatedCar = carService.updateCarTransmission(carTransmissionRequestDTO.getTransmission(), carId);
+        return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
+    }
+
+    @ApiOperation(value = "Update a car's fuel")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Car's fuel updated"),
+            @ApiResponse(code = 404, message = "Car not found"),
+            @ApiResponse(code = 500, message = "Server exception")
+    })
+    @PatchMapping(value = "/{carId}/fuel", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CarPrivateResponseDTO> updateCarFuel(
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
+
+            @Valid @RequestBody CarFuelRequestDTO carFuelRequestDTO) {
+
+        var updatedCar = carService.updateCarFuel(carFuelRequestDTO.getFuel(), carId);
+        return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
+    }
+
+    @ApiOperation(value = "Update a car's responsible User")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Car's responsible User updated"),
+            @ApiResponse(code = 404, message = "Car not found"),
+            @ApiResponse(code = 500, message = "Server exception")
+    })
+    @PatchMapping(value = "/{carId}/user", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CarPrivateResponseDTO> updateCarUser(
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
+
+            @Valid @RequestBody CarUserRequestDTO carUserRequestDTO) {
+
+        var updatedCar = carService.updateCarUser(carUserRequestDTO.getUserId(), carId);
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
