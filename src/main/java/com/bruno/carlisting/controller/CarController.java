@@ -11,6 +11,7 @@ import com.bruno.carlisting.dtos.request.car.CarTrimRequestDTO;
 import com.bruno.carlisting.dtos.request.car.CarUserRequestDTO;
 import com.bruno.carlisting.dtos.request.car.CarYearRequestDTO;
 import com.bruno.carlisting.dtos.response.car.CarPrivateResponseDTO;
+import com.bruno.carlisting.dtos.response.car.CarPublicResponseDTO;
 import com.bruno.carlisting.services.interfaces.CarService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -64,7 +65,7 @@ public class CarController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/all", produces = "application/json")
-    public ResponseEntity<Page<Car>> findAllCars(
+    public ResponseEntity<Page<CarPublicResponseDTO>> findAllCars(
 
         @RequestParam(value = "page", required = false, defaultValue = CAR_PAGE_DEFAULT_NUMBER)
         @Min(value = CAR_PAGE_MIN_NUMBER,
@@ -76,8 +77,9 @@ public class CarController {
         @Max(value = CAR_PAGE_MAX_SIZE,
             message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
-        Page<Car> carsPage = carService.getAllCars(page, size);
-        return ResponseEntity.ok().body(carsPage);
+        var carsPageDTO = CarPublicResponseDTO.toCarsPagePublicDTO(
+                carService.getAllCars(page, size));
+        return ResponseEntity.ok().body(carsPageDTO);
     }
 
     @ApiOperation(value = "Find a car by ID")
@@ -104,7 +106,7 @@ public class CarController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/make/{make}", produces = "application/json")
-    public ResponseEntity<Page<Car>> findCarsByMake(
+    public ResponseEntity<Page<CarPublicResponseDTO>> findCarsByMake(
 
         @PathVariable @NotBlank(message = "Make is mandatory")
         @Size(max = 30, message = "Make must have 30 characters or less") String make,
@@ -119,8 +121,9 @@ public class CarController {
         @Max(value = CAR_PAGE_MAX_SIZE,
                 message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
-        Page<Car> carsPage = carService.getCarsByMake(make, page, size);
-        return ResponseEntity.ok().body(carsPage);
+        var carsPageDTO = CarPublicResponseDTO.toCarsPagePublicDTO(
+                carService.getCarsByMake(make, page, size));
+        return ResponseEntity.ok().body(carsPageDTO);
     }
 
     @ApiOperation(value = "Find all cars by user")
@@ -131,7 +134,7 @@ public class CarController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/users/{userId}", produces = "application/json")
-    public ResponseEntity<Page<Car>> findCarsByUserId(
+    public ResponseEntity<Page<CarPublicResponseDTO>> findCarsByUserId(
 
             @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
 
@@ -145,8 +148,9 @@ public class CarController {
             @Max(value = CAR_PAGE_MAX_SIZE,
                     message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
-        Page<Car> carsPage = carService.getCarsByUserId(userId, page, size);
-        return ResponseEntity.ok().body(carsPage);
+        var carsPageDTO = CarPublicResponseDTO.toCarsPagePublicDTO(
+                carService.getCarsByUserId(userId, page, size));
+        return ResponseEntity.ok().body(carsPageDTO);
     }
 
     @ApiOperation(value = "Add a new car")
