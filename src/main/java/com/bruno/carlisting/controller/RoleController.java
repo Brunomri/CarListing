@@ -67,7 +67,7 @@ public class RoleController {
         @Max(value = ROLE_PAGE_MAX_SIZE,
             message = "Page size must be less than or equal to " + ROLE_PAGE_MAX_SIZE) int size) {
 
-        var rolesPageDTO = RolePublicResponseDTO.toRolesPagePublicDTO(roleService.getAllRoles(page, size));
+        var rolesPageDTO = RolePublicResponseDTO.toRolePublicResponseDTO(roleService.getAllRoles(page, size));
         return ResponseEntity.ok().body(rolesPageDTO);
     }
 
@@ -79,12 +79,12 @@ public class RoleController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/{roleId}", produces = "application/json")
-    public ResponseEntity<Role> findRoleById(
+    public ResponseEntity<RolePublicResponseDTO> findRoleById(
 
         @PathVariable @Positive(message = "Role ID must be a positive integer") Integer roleId) {
 
         var role = roleService.getRoleById(roleId);
-        return ResponseEntity.ok().body(role);
+        return ResponseEntity.ok().body(RolePublicResponseDTO.toRolePublicResponseDTO(role));
     }
 
     @ApiOperation(value = "Find all roles for a user ID")
@@ -95,28 +95,29 @@ public class RoleController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/users/{userId}", produces = "application/json")
-    public ResponseEntity<List<Role>> findRolesByUserId(
+    public ResponseEntity<List<RolePublicResponseDTO>> findRolesByUserId(
 
         @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
 
         List<Role> userRoles = roleService.getRolesByUserId(userId);
-        return ResponseEntity.ok().body(userRoles);
+        return ResponseEntity.ok().body(RolePublicResponseDTO.toRolePublicResponseDTO(userRoles));
     }
 
     @ApiOperation(value = "Add a new role")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "New role created"),
+        @ApiResponse(code = 400, message = "Invalid Role data provided"),
         @ApiResponse(code = 500, message = "Server exception"),
     })
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<Role> createRole(
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<RolePrivateResponseDTO> createRole(
 
         @Valid @RequestBody RoleRequestDTO roleRequestDTO) {
 
         var newRole = roleService.createRole(roleRequestDTO.toRole());
         var uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/roles/{roleId}").
                 buildAndExpand(newRole.getRoleId()).toUri();
-        return ResponseEntity.created(uri).body(newRole);
+        return ResponseEntity.created(uri).body(RolePrivateResponseDTO.toRolePrivateResponseDTO(newRole));
     }
 
     @ApiOperation(value = "Update an existing role")
