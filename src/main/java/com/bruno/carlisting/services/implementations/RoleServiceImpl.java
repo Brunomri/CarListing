@@ -2,9 +2,11 @@ package com.bruno.carlisting.services.implementations;
 
 import com.bruno.carlisting.domain.Role;
 import com.bruno.carlisting.exceptions.ObjectNotFoundException;
+import com.bruno.carlisting.exceptions.entityRelationshipIntegrityException;
 import com.bruno.carlisting.repositories.RoleRepository;
 import com.bruno.carlisting.services.interfaces.PagingService;
 import com.bruno.carlisting.services.interfaces.RoleService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @Service
 public class RoleServiceImpl implements RoleService {
 
+    public static final String ROLE_ID_NOT_FOUND = "Role ID %s not found";
     private final RoleRepository roleRepository;
     private final PagingService pagingService;
 
@@ -38,7 +41,7 @@ public class RoleServiceImpl implements RoleService {
     public Role getRoleById(Integer roleId) {
 
         Optional<Role> role = roleRepository.findById(roleId);
-        return role.orElseThrow(() -> new ObjectNotFoundException(String.format("Role ID %s not found", roleId)));
+        return role.orElseThrow(() -> new ObjectNotFoundException(String.format(ROLE_ID_NOT_FOUND, roleId)));
     }
 
     @Override
@@ -58,9 +61,28 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public Role updateRole(Role updatedRole, Integer roleId) {
+
+        var optionalRole = roleRepository.findById(roleId);
+        var currentRole = optionalRole.orElseThrow(() -> new ObjectNotFoundException(
+                String.format(ROLE_ID_NOT_FOUND, roleId)));
+
+        currentRole.setType(updatedRole.getType());
+
+        try {
+            return roleRepository.save(currentRole);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(
+                    "This role already exists:" +
+                    " Type: %s", currentRole.getType()
+            ));
+        }
+    }
+
+    @Override
     public void deleteRoles(Integer roleId) {
 
-        Role roleToDelete = getRoleById(roleId);
+        var roleToDelete = getRoleById(roleId);
         roleRepository.delete(roleToDelete);
     }
 }
