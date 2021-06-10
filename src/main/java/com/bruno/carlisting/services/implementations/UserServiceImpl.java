@@ -21,6 +21,12 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
+    public static final String USER_ID_NOT_FOUND = "User ID %s not found";
+    public static final String CAR_ID_NOT_FOUND = "Car ID %s not found";
+    public static final String USER_DID_NOT_CREATE_CAR = "User ID %s did not create Car ID %s";
+    public static final String USER_ALREADY_EXISTS = "Username %s already exists";
+    public static final String USER_IS_ASSOCIATED_TO_CARS = "User ID %s has cars associated therefore cannot be deleted";
+
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PagingService pagingService;
@@ -44,16 +50,16 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long userId) {
 
         Optional<User> user = userRepository.findById(userId);
-        return user.orElseThrow(() -> new ObjectNotFoundException(String.format("User ID %s not found", userId)));
+        return user.orElseThrow(() -> new ObjectNotFoundException(String.format(USER_ID_NOT_FOUND, userId)));
     }
 
     @Override
     public User getUserByCarId(Long carId) {
 
         Optional<User> user = userRepository.findById(userRepository.searchUserByCarId(carId).orElseThrow(
-                () -> new ObjectNotFoundException(String.format("Car ID %s not found", carId))));
+                () -> new ObjectNotFoundException(String.format(CAR_ID_NOT_FOUND, carId))));
         return user.orElseThrow(() -> new ObjectNotFoundException(String.format(
-                "User ID %s did not create Car ID %s", user.get().getUserId(), carId)));
+                USER_DID_NOT_CREATE_CAR, user.get().getUserId(), carId)));
     }
 
 //    todo: Create User DTO to avoid passing rolesIds parameter
@@ -68,7 +74,7 @@ public class UserServiceImpl implements UserService {
             return userRepository.save(newUser);
         } catch (DataIntegrityViolationException e) {
             throw new entityRelationshipIntegrityException(String.format(
-                    "Username %s already exists", newUser.getUsername()));
+                    USER_ALREADY_EXISTS, newUser.getUsername()));
         }
     }
 
@@ -90,7 +96,7 @@ public class UserServiceImpl implements UserService {
             return userRepository.save(currentUser);
         } catch (DataIntegrityViolationException e) {
             throw new entityRelationshipIntegrityException(String.format(
-                    "Username %s already exists", updatedUser.getUsername()));
+                    USER_ALREADY_EXISTS, updatedUser.getUsername()));
         }
     }
 
@@ -140,7 +146,7 @@ public class UserServiceImpl implements UserService {
             userRepository.delete(userToDelete);
         } catch (DataIntegrityViolationException e) {
             throw new entityRelationshipIntegrityException(String.format(
-                    "User ID %s has cars associated therefore cannot be deleted", userId));
+                    USER_IS_ASSOCIATED_TO_CARS, userId));
         }
     }
 }
