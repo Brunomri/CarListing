@@ -1,6 +1,5 @@
 package com.bruno.carlisting.controller;
 
-import com.bruno.carlisting.domain.User;
 import com.bruno.carlisting.dtos.request.user.UserContactRequestDTO;
 import com.bruno.carlisting.dtos.request.user.UserDisplayNameRequestDTO;
 import com.bruno.carlisting.dtos.request.user.UserPasswordRequestDTO;
@@ -32,7 +31,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
-import java.net.URI;
 
 @CrossOrigin("*")
 @RestController
@@ -72,7 +70,7 @@ public class UserController {
         @Max(value = USER_PAGE_MAX_SIZE,
                 message = "Page size must be less than or equal to " + USER_PAGE_MAX_SIZE) int size) {
 
-        Page<UserPublicResponseDTO> usersPageDTO = UserPublicResponseDTO.toUsersPagePublicDTO(
+        var usersPageDTO = UserPublicResponseDTO.toUsersPagePublicDTO(
                 userService.getAllUsers(page, size));
         return ResponseEntity.ok().body(usersPageDTO);
     }
@@ -89,7 +87,7 @@ public class UserController {
 
         @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
 
-        User user = userService.getUserById(userId);
+        var user = userService.getUserById(userId);
         return ResponseEntity.ok().body(UserPublicResponseDTO.toUserPublicDTO(user));
     }
 
@@ -105,7 +103,7 @@ public class UserController {
 
         @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
 
-        User user = userService.getUserByCarId(carId);
+        var user = userService.getUserByCarId(carId);
         return ResponseEntity.ok().body(UserPublicResponseDTO.toUserPublicDTO(user));
     }
 
@@ -121,8 +119,8 @@ public class UserController {
 
         @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
-        User newUser = userService.createUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds());
-        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{userId}").
+        var newUser = userService.createUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds());
+        var uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{userId}").
                 buildAndExpand(newUser.getUserId()).toUri();
         return ResponseEntity.created(uri).body(UserPrivateResponseDTO.toUserPrivateDTO(newUser));
     }
@@ -141,7 +139,7 @@ public class UserController {
 
         @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
-        User updatedUser = userService.updateUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds(), userId);
+        var updatedUser = userService.updateUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds(), userId);
         return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }
 
@@ -158,7 +156,7 @@ public class UserController {
 
             @Valid @RequestBody UserPasswordRequestDTO userPasswordRequestDTO) {
 
-        User updatedUser = userService.updateUserPassword(userPasswordRequestDTO.getPassword(), userId);
+        var updatedUser = userService.updateUserPassword(userPasswordRequestDTO.getPassword(), userId);
         return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }
 
@@ -175,7 +173,7 @@ public class UserController {
 
         @Valid @RequestBody UserDisplayNameRequestDTO userDisplayNameRequestDTO) {
 
-        User updatedUser = userService.updateUserDisplayName(userDisplayNameRequestDTO.getDisplayName(), userId);
+        var updatedUser = userService.updateUserDisplayName(userDisplayNameRequestDTO.getDisplayName(), userId);
         return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }
 
@@ -192,7 +190,7 @@ public class UserController {
 
             @Valid @RequestBody UserContactRequestDTO userContactRequestDTO) {
 
-        User updatedUser = userService.updateUserContact(userContactRequestDTO.getContact(), userId);
+        var updatedUser = userService.updateUserContact(userContactRequestDTO.getContact(), userId);
         return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }
 
@@ -209,7 +207,7 @@ public class UserController {
 
             @Valid @RequestBody UserRolesRequestDTO userRolesRequestDTO) {
 
-        User updatedUser = userService.updateUserRoles(userRolesRequestDTO.getRolesIds(), userId);
+        var updatedUser = userService.updateUserRoles(userRolesRequestDTO.getRolesIds(), userId);
         return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }
 
