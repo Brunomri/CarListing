@@ -1,11 +1,11 @@
 package com.bruno.carlisting.dtos.response.role;
 
 import com.bruno.carlisting.domain.Role;
-import com.bruno.carlisting.domain.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,9 +16,11 @@ public class RolePrivateResponseDTO {
 
     private Integer roleId;
     private String type;
-    private List<User> users;
+    private List<Long> usersIds;
 
     public static RolePrivateResponseDTO toRolePrivateResponseDTO(Role role) {
-        return new RolePrivateResponseDTO(role.getRoleId(), role.getType(), role.getUsers());
+        List<Long> usersIds = new ArrayList<>();
+        role.getUsers().forEach(user -> usersIds.add(user.getUserId()));
+        return new RolePrivateResponseDTO(role.getRoleId(), role.getType(), usersIds);
     }
 }

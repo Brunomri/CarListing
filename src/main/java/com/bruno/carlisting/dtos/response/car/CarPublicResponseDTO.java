@@ -1,7 +1,6 @@
 package com.bruno.carlisting.dtos.response.car;
 
 import com.bruno.carlisting.domain.Car;
-import com.bruno.carlisting.domain.Listing;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +16,7 @@ public class CarPublicResponseDTO {
 
     private static final long serialVersionUID = 1L;
 
+    private Long carId;
     private String make;
     private String model;
     private Integer year;
@@ -25,18 +25,22 @@ public class CarPublicResponseDTO {
     private String transmission;
     private String fuel;
 
-    private List<Listing> carListings;
+    private List<Long> carListingsIds;
 
-    public CarPublicResponseDTO toCarPublicDTO(Car car) {
-        return new CarPublicResponseDTO(car.getMake(), car.getModel(), car.getYear(), car.getTrim(), car.getColor(),
-                car.getTransmission(), car.getFuel(), car.getCarListings());
+    public static CarPublicResponseDTO toCarPublicDTO(Car car) {
+        List<Long> carListingsIds = new ArrayList<>();
+        car.getCarListings().forEach(listing -> carListingsIds.add(listing.getListingId()));
+        return new CarPublicResponseDTO(car.getCarId(), car.getMake(), car.getModel(), car.getYear(), car.getTrim(), car.getColor(),
+                car.getTransmission(), car.getFuel(), carListingsIds);
     }
 
     public static Page<CarPublicResponseDTO> toCarsPagePublicDTO(Page<Car> carsPage) {
         List<CarPublicResponseDTO> carsListDTO = new ArrayList<>();
         carsPage.forEach(car -> {
-            var carDTO = new CarPublicResponseDTO(car.getMake(), car.getModel(), car.getYear(),
-                    car.getTrim(), car.getColor(), car.getTransmission(), car.getFuel(), car.getCarListings());
+            List<Long> carListingsIds = new ArrayList<>();
+            car.getCarListings().forEach(listing -> carListingsIds.add(listing.getListingId()));
+            var carDTO = new CarPublicResponseDTO(car.getCarId(), car.getMake(), car.getModel(), car.getYear(),
+                    car.getTrim(), car.getColor(), car.getTransmission(), car.getFuel(), carListingsIds);
             carsListDTO.add(carDTO);
         });
         return new PageImpl<>(carsListDTO, carsPage.getPageable(), carsPage.getTotalElements());

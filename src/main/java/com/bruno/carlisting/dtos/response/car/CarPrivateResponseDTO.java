@@ -1,11 +1,11 @@
 package com.bruno.carlisting.dtos.response.car;
 
 import com.bruno.carlisting.domain.Car;
-import com.bruno.carlisting.domain.Listing;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -24,10 +24,12 @@ public class CarPrivateResponseDTO {
     private String fuel;
 
     private Long userId;
-    private List<Listing> carListings;
+    private List<Long> carListingsIds;
 
     public static CarPrivateResponseDTO toCarPrivateDTO(Car car) {
+        List<Long> carListingsIds = new ArrayList<>();
+        car.getCarListings().forEach(listing -> carListingsIds.add(listing.getListingId()));
         return new CarPrivateResponseDTO(car.getCarId(), car.getMake(), car.getModel(), car.getYear(), car.getTrim(),
-                car.getColor(), car.getTransmission(), car.getFuel(), car.getUser().getUserId(), car.getCarListings());
+                car.getColor(), car.getTransmission(), car.getFuel(), car.getUser().getUserId(), carListingsIds);
     }
 }

@@ -1,7 +1,5 @@
 package com.bruno.carlisting.dtos.response.user;
 
-import com.bruno.carlisting.domain.Listing;
-import com.bruno.carlisting.domain.Role;
 import com.bruno.carlisting.domain.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,19 +21,27 @@ public class UserPublicResponseDTO {
     private String contact;
 
 //    todo: create listing DTO to avoid displaying id
-    private List<Listing> userListings;
-    private List<Role> roles;
+    private List<Long> userListingsIds;
+    private List<Integer> rolesIds;
 
     public static UserPublicResponseDTO toUserPublicDTO(User user) {
+        List<Long> userListingsIds = new ArrayList<>();
+        List<Integer> rolesIds = new ArrayList<>();
+        user.getUserListings().forEach(userListing -> userListingsIds.add(userListing.getListingId()));
+        user.getRoles().forEach(role -> rolesIds.add(role.getRoleId()));
         return new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(), user.getContact(),
-                user.getUserListings(), user.getRoles());
+                userListingsIds, rolesIds);
     }
 
     public static Page<UserPublicResponseDTO> toUsersPagePublicDTO(Page<User> usersPage) {
         List<UserPublicResponseDTO> usersListDTO = new ArrayList<>();
         usersPage.forEach(user -> {
+            List<Long> userListingsIds = new ArrayList<>();
+            List<Integer> rolesIds = new ArrayList<>();
+            user.getUserListings().forEach(userListing -> userListingsIds.add(userListing.getListingId()));
+            user.getRoles().forEach(role -> rolesIds.add(role.getRoleId()));
             var userDTO = new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(),
-                    user.getContact(), user.getUserListings(), user.getRoles());
+                    user.getContact(), userListingsIds, rolesIds);
             usersListDTO.add(userDTO);
         });
         return new PageImpl<>(usersListDTO, usersPage.getPageable(), usersPage.getTotalElements());

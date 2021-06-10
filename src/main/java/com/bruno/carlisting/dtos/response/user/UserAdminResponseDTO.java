@@ -1,10 +1,10 @@
 package com.bruno.carlisting.dtos.response.user;
 
-import com.bruno.carlisting.domain.Role;
 import com.bruno.carlisting.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,10 +18,12 @@ public class UserAdminResponseDTO {
     private String displayName;
     private String contact;
 
-    private List<Role> roles;
+    private List<Integer> rolesIds;
 
     public static UserAdminResponseDTO toUserAdminDTO(User user) {
+        List<Integer> rolesIds = new ArrayList<>();
+        user.getRoles().forEach(role -> rolesIds.add(role.getRoleId()));
         return new UserAdminResponseDTO(user.getUserId(), user.getUsername(),
-                user.getDisplayName(), user.getContact(), user.getRoles());
+                user.getDisplayName(), user.getContact(), rolesIds);
     }
 }
