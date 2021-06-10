@@ -20,6 +20,9 @@ import java.util.Optional;
 public class RoleServiceImpl implements RoleService {
 
     public static final String ROLE_ID_NOT_FOUND = "Role ID %s not found";
+    public static final String ROLE_ALREADY_EXISTS = "Role %s already exists";
+    public static final String NO_ROLES_ASSOCIATED_TO_USER = "There are no roles associated to user ID %s";
+
     private final RoleRepository roleRepository;
     private final PagingService pagingService;
 
@@ -50,14 +53,19 @@ public class RoleServiceImpl implements RoleService {
         List<Role> userRoles = new ArrayList<>();
         userRoles.addAll(roleRepository.findByUsers_UserId(userId));
         if (userRoles.isEmpty()) throw new
-                ObjectNotFoundException("There are no roles associated with this user! Id: " + userId);
+                ObjectNotFoundException(String.format(NO_ROLES_ASSOCIATED_TO_USER, userId));
         return userRoles;
     }
 
     @Override
     public Role createRole(Role newRole) {
 
-        return roleRepository.save(newRole);
+        try {
+            return roleRepository.save(newRole);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(
+                    ROLE_ALREADY_EXISTS, newRole.getType()));
+        }
     }
 
     @Override
@@ -73,8 +81,7 @@ public class RoleServiceImpl implements RoleService {
             return roleRepository.save(currentRole);
         } catch (DataIntegrityViolationException e) {
             throw new entityRelationshipIntegrityException(String.format(
-                    "This role already exists:" +
-                    " Type: %s", currentRole.getType()
+                    ROLE_ALREADY_EXISTS, currentRole.getType()
             ));
         }
     }
@@ -82,7 +89,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRoles(Integer roleId) {
 
-        var roleToDelete = getRoleById(roleId);
-        roleRepository.delete(roleToDelete);
+        Optional<Role> roleToDelete = roleRepository.findById(roleId);
+        roleRepository.delete(roleToDelete.orElseThrow(() -> new ObjectNotFoundException(
+                String.format(ROLE_ID_NOT_FOUND, roleId))));
     }
 }
