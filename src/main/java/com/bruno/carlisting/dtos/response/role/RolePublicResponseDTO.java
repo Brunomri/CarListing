@@ -22,12 +22,21 @@ public class RolePublicResponseDTO {
         return new RolePublicResponseDTO(role.getType());
     }
 
-    public static Page<RolePublicResponseDTO> toRolesPagePublicDTO(Page<Role> rolesPage) {
+    public static Page<RolePublicResponseDTO> toRolePublicResponseDTO(Page<Role> rolesPage) {
         List<RolePublicResponseDTO> rolesListDTO = new ArrayList<>();
         rolesPage.forEach(role -> {
             var roleDTO = new RolePublicResponseDTO(role.getType());
             rolesListDTO.add(roleDTO);
         });
         return new PageImpl<>(rolesListDTO, rolesPage.getPageable(), rolesPage.getTotalElements());
+    }
+
+    public static List<RolePublicResponseDTO> toRolePublicResponseDTO(List<Role> rolesList) {
+        List<RolePublicResponseDTO> rolesListDTO = new ArrayList<>();
+        rolesList.forEach(role -> {
+            var rolePublicResponseDTO = new RolePublicResponseDTO(role.getType());
+            rolesListDTO.add(rolePublicResponseDTO);
+        });
+        return rolesListDTO;
     }
 }
