@@ -1,6 +1,5 @@
 package com.bruno.carlisting.controller;
 
-import com.bruno.carlisting.domain.Car;
 import com.bruno.carlisting.dtos.request.car.CarColorRequestDTO;
 import com.bruno.carlisting.dtos.request.car.CarFuelRequestDTO;
 import com.bruno.carlisting.dtos.request.car.CarMakeRequestDTO;
@@ -90,12 +89,12 @@ public class CarController {
         @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/{carId}", produces = "application/json")
-    public ResponseEntity<Car> findCarById(
+    public ResponseEntity<CarPublicResponseDTO> findCarById(
 
         @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
 
         var car = carService.getCarById(carId);
-        return ResponseEntity.ok().body(car);
+        return ResponseEntity.ok().body(CarPublicResponseDTO.toCarPublicDTO(car));
     }
 
     @ApiOperation(value = "Find all cars by make")
