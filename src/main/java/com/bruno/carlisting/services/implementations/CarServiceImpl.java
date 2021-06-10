@@ -85,7 +85,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car updateCar(Car updatedCar, Long userId, Long carId) {
 
-        Optional<Car> optionalCar = carRepository.findById(carId);
+        var optionalCar = carRepository.findById(carId);
         var currentCar = optionalCar.orElseThrow(() -> new ObjectNotFoundException(
                 String.format(CAR_ID_NOT_FOUND, carId)));
 
