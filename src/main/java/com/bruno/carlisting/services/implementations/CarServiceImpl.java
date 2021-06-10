@@ -19,6 +19,11 @@ import java.util.Optional;
 public class CarServiceImpl implements CarService {
 
     public static final String CAR_ID_NOT_FOUND = "Car ID %s not found";
+    public static final String CAR_ALREADY_EXISTS = "This car already exists:" +
+            " Make = %s -" +
+            " Model = %s -" +
+            " Year = %s -" +
+            " Trim = %s";
 
     private final CarRepository carRepository;
     private final UserService userService;
@@ -74,11 +79,7 @@ public class CarServiceImpl implements CarService {
             return carRepository.save(newCar);
         } catch (DataIntegrityViolationException e) {
             throw new entityRelationshipIntegrityException(String.format(
-                    "This car already exists:" +
-                            " Make: %s -" +
-                            " Model: %s -" +
-                            " Year: %s -" +
-                            " Trim: %s", newCar.getMake(), newCar.getModel(), newCar.getYear(), newCar.getTrim()));
+                    CAR_ALREADY_EXISTS, newCar.getMake(), newCar.getModel(), newCar.getYear(), newCar.getTrim()));
         }
     }
 
@@ -102,11 +103,7 @@ public class CarServiceImpl implements CarService {
             return carRepository.save(currentCar);
         } catch (DataIntegrityViolationException e) {
             throw new entityRelationshipIntegrityException(String.format(
-                    "This car already exists:" +
-                            " Make: %s -" +
-                            " Model: %s -" +
-                            " Year: %s -" +
-                            " Trim: %s", currentCar.getMake(), currentCar.getModel(),
+                    CAR_ALREADY_EXISTS, currentCar.getMake(), currentCar.getModel(),
                     currentCar.getYear(), currentCar.getTrim()));
         }
     }
@@ -117,7 +114,12 @@ public class CarServiceImpl implements CarService {
         var currentCar = getCarById(carId);
 
         currentCar.setMake(make);
-        return carRepository.save(currentCar);
+        try {
+            return carRepository.save(currentCar);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(CAR_ALREADY_EXISTS, currentCar.getMake(),
+                    currentCar.getModel(), currentCar.getYear(), currentCar.getTrim()));
+        }
     }
 
     @Override
@@ -126,7 +128,12 @@ public class CarServiceImpl implements CarService {
         var currentCar = getCarById(carId);
 
         currentCar.setModel(model);
-        return carRepository.save(currentCar);
+        try {
+            return carRepository.save(currentCar);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(CAR_ALREADY_EXISTS, currentCar.getMake(),
+                    currentCar.getModel(), currentCar.getYear(), currentCar.getTrim()));
+        }
     }
 
     @Override
@@ -135,7 +142,12 @@ public class CarServiceImpl implements CarService {
         var currentCar = getCarById(carId);
 
         currentCar.setYear(year);
-        return carRepository.save(currentCar);
+        try {
+            return carRepository.save(currentCar);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(CAR_ALREADY_EXISTS, currentCar.getMake(),
+                    currentCar.getModel(), currentCar.getYear(), currentCar.getTrim()));
+        }
     }
 
     @Override
@@ -144,7 +156,12 @@ public class CarServiceImpl implements CarService {
         var currentCar = getCarById(carId);
 
         currentCar.setTrim(trim);
-        return carRepository.save(currentCar);
+        try {
+            return carRepository.save(currentCar);
+        } catch (DataIntegrityViolationException e) {
+            throw new entityRelationshipIntegrityException(String.format(CAR_ALREADY_EXISTS, currentCar.getMake(),
+                    currentCar.getModel(), currentCar.getYear(), currentCar.getTrim()));
+        }
     }
 
     @Override
