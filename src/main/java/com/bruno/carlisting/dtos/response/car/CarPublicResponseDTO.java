@@ -30,19 +30,23 @@ public class CarPublicResponseDTO {
     public static CarPublicResponseDTO toCarPublicDTO(Car car) {
         List<Long> carListingsIds = new ArrayList<>();
         car.getCarListings().forEach(listing -> carListingsIds.add(listing.getListingId()));
-        return new CarPublicResponseDTO(car.getCarId(), car.getMake(), car.getModel(), car.getYear(), car.getTrim(), car.getColor(),
-                car.getTransmission(), car.getFuel(), carListingsIds);
+        return new CarPublicResponseDTO(car.getCarId(), car.getMake(), car.getModel(), car.getYear(),
+                car.getTrim(), car.getColor(), car.getTransmission(), car.getFuel(), carListingsIds);
     }
 
     public static Page<CarPublicResponseDTO> toCarPublicDTO(Page<Car> carsPage) {
         List<CarPublicResponseDTO> carsListDTO = new ArrayList<>();
         carsPage.forEach(car -> {
-            List<Long> carListingsIds = new ArrayList<>();
-            car.getCarListings().forEach(listing -> carListingsIds.add(listing.getListingId()));
             var carDTO = new CarPublicResponseDTO(car.getCarId(), car.getMake(), car.getModel(), car.getYear(),
-                    car.getTrim(), car.getColor(), car.getTransmission(), car.getFuel(), carListingsIds);
+                    car.getTrim(), car.getColor(), car.getTransmission(), car.getFuel(), getCarListingsIds(car));
             carsListDTO.add(carDTO);
         });
         return new PageImpl<>(carsListDTO, carsPage.getPageable(), carsPage.getTotalElements());
+    }
+
+    protected static List<Long> getCarListingsIds(Car car) {
+        List<Long> carListingsIds = new ArrayList<>();
+        car.getCarListings().forEach(listing -> carListingsIds.add(listing.getListingId()));
+        return carListingsIds;
     }
 }

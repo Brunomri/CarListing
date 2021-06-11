@@ -3,7 +3,6 @@ package com.bruno.carlisting.dtos.response.car;
 import com.bruno.carlisting.domain.Car;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,9 +17,7 @@ public class CarPrivateResponseDTO extends CarPublicResponseDTO {
     }
 
     public static CarPrivateResponseDTO toCarPrivateDTO(Car car) {
-        List<Long> carListingsIds = new ArrayList<>();
-        car.getCarListings().forEach(listing -> carListingsIds.add(listing.getListingId()));
         return new CarPrivateResponseDTO(car.getCarId(), car.getMake(), car.getModel(), car.getYear(), car.getTrim(),
-                car.getColor(), car.getTransmission(), car.getFuel(), carListingsIds, car.getUser().getUserId());
+                car.getColor(), car.getTransmission(), car.getFuel(), getCarListingsIds(car), car.getUser().getUserId());
     }
 }

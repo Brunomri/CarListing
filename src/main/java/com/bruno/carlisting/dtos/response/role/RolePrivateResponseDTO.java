@@ -12,7 +12,7 @@ public class RolePrivateResponseDTO extends RolePublicResponseDTO {
     private Integer roleId;
     private List<Long> usersIds;
 
-    public RolePrivateResponseDTO(String type, Integer roleId, List<Long> usersIds) {
+    private RolePrivateResponseDTO(String type, Integer roleId, List<Long> usersIds) {
         super(type);
         this.roleId = roleId;
         this.usersIds = usersIds;

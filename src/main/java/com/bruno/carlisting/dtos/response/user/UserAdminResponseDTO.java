@@ -10,7 +10,7 @@ public class UserAdminResponseDTO extends UserPublicResponseDTO {
 
     private Long userId;
 
-    public UserAdminResponseDTO(String username, String displayName, String contact, List<Long> userListingsIds,
+    private UserAdminResponseDTO(String username, String displayName, String contact, List<Long> userListingsIds,
                                 List<Integer> rolesIds, Long userId) {
         super(username, displayName, contact, userListingsIds, rolesIds);
         this.userId = userId;

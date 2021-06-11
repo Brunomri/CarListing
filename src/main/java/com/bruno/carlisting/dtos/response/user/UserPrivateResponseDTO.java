@@ -11,7 +11,7 @@ public class UserPrivateResponseDTO extends UserPublicResponseDTO {
     private Long userId;
     private String password;
 
-    public UserPrivateResponseDTO(Long userId, String username, String password, String displayName, String contact,
+    private UserPrivateResponseDTO(Long userId, String username, String password, String displayName, String contact,
                                   List<Long> userListingsIds, List<Integer> rolesIds) {
         super(username, displayName, contact, userListingsIds, rolesIds);
         this.userId = userId;
