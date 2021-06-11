@@ -76,7 +76,7 @@ public class CarController {
         @Max(value = CAR_PAGE_MAX_SIZE,
             message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
-        var carsPageDTO = CarPublicResponseDTO.toCarsPagePublicDTO(
+        var carsPageDTO = CarPublicResponseDTO.toCarPublicDTO(
                 carService.getAllCars(page, size));
         return ResponseEntity.ok().body(carsPageDTO);
     }
@@ -120,7 +120,7 @@ public class CarController {
         @Max(value = CAR_PAGE_MAX_SIZE,
                 message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
-        var carsPageDTO = CarPublicResponseDTO.toCarsPagePublicDTO(
+        var carsPageDTO = CarPublicResponseDTO.toCarPublicDTO(
                 carService.getCarsByMake(make, page, size));
         return ResponseEntity.ok().body(carsPageDTO);
     }
@@ -147,7 +147,7 @@ public class CarController {
             @Max(value = CAR_PAGE_MAX_SIZE,
                     message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
-        var carsPageDTO = CarPublicResponseDTO.toCarsPagePublicDTO(
+        var carsPageDTO = CarPublicResponseDTO.toCarPublicDTO(
                 carService.getCarsByUserId(userId, page, size));
         return ResponseEntity.ok().body(carsPageDTO);
     }

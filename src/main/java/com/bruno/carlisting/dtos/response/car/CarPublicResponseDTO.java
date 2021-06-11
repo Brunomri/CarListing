@@ -34,7 +34,7 @@ public class CarPublicResponseDTO {
                 car.getTransmission(), car.getFuel(), carListingsIds);
     }
 
-    public static Page<CarPublicResponseDTO> toCarsPagePublicDTO(Page<Car> carsPage) {
+    public static Page<CarPublicResponseDTO> toCarPublicDTO(Page<Car> carsPage) {
         List<CarPublicResponseDTO> carsListDTO = new ArrayList<>();
         carsPage.forEach(car -> {
             List<Long> carListingsIds = new ArrayList<>();
