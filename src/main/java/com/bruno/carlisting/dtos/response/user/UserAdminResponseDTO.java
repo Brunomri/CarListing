@@ -4,7 +4,6 @@ import com.bruno.carlisting.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,8 +20,7 @@ public class UserAdminResponseDTO {
     private List<Integer> rolesIds;
 
     public static UserAdminResponseDTO toUserAdminDTO(User user) {
-        List<Integer> rolesIds = new ArrayList<>();
-        user.getRoles().forEach(role -> rolesIds.add(role.getRoleId()));
+        List<Integer> rolesIds = UserPublicResponseDTO.getUserRolesIds(user);
         return new UserAdminResponseDTO(user.getUserId(), user.getUsername(),
                 user.getDisplayName(), user.getContact(), rolesIds);
     }
