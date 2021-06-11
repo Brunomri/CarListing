@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -24,10 +23,8 @@ public class UserPrivateResponseDTO {
     private List<Integer> rolesIds;
 
     public static UserPrivateResponseDTO toUserPrivateDTO(User user) {
-        List<Long> userListingsIds = new ArrayList<>();
-        List<Integer> rolesIds = new ArrayList<>();
-        user.getUserListings().forEach(userListing -> userListingsIds.add(userListing.getListingId()));
-        user.getRoles().forEach(role -> rolesIds.add(role.getRoleId()));
+        List<Long> userListingsIds = UserPublicResponseDTO.getUserListingsIds(user);
+        List<Integer> rolesIds = UserPublicResponseDTO.getUserRolesIds(user);
         return new UserPrivateResponseDTO(user.getUserId(), user.getUsername(), user.getPassword(),
                 user.getDisplayName(), user.getContact(), userListingsIds, rolesIds);
     }
