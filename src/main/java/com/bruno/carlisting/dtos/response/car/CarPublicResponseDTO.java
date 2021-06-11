@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
 public class CarPublicResponseDTO {
 
