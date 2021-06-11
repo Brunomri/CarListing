@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
 public class UserPublicResponseDTO {
 
@@ -25,19 +25,15 @@ public class UserPublicResponseDTO {
     private List<Integer> rolesIds;
 
     public static UserPublicResponseDTO toUserPublicDTO(User user) {
-        List<Long> userListingsIds = getUserListingsIds(user);
-        List<Integer> rolesIds = getUserRolesIds(user);
         return new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(), user.getContact(),
-                userListingsIds, rolesIds);
+                getUserListingsIds(user), getUserRolesIds(user));
     }
 
     public static Page<UserPublicResponseDTO> toUsersPagePublicDTO(Page<User> usersPage) {
         List<UserPublicResponseDTO> usersListDTO = new ArrayList<>();
         usersPage.forEach(user -> {
-            List<Long> userListingsIds = getUserListingsIds(user);
-            List<Integer> rolesIds = getUserRolesIds(user);
             var userDTO = new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(),
-                    user.getContact(), userListingsIds, rolesIds);
+                    user.getContact(), getUserListingsIds(user), getUserRolesIds(user));
             usersListDTO.add(userDTO);
         });
         return new PageImpl<>(usersListDTO, usersPage.getPageable(), usersPage.getTotalElements());
