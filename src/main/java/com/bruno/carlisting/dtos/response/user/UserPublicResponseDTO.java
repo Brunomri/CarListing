@@ -25,10 +25,8 @@ public class UserPublicResponseDTO {
     private List<Integer> rolesIds;
 
     public static UserPublicResponseDTO toUserPublicDTO(User user) {
-        List<Long> userListingsIds = new ArrayList<>();
-        List<Integer> rolesIds = new ArrayList<>();
-        user.getUserListings().forEach(userListing -> userListingsIds.add(userListing.getListingId()));
-        user.getRoles().forEach(role -> rolesIds.add(role.getRoleId()));
+        List<Long> userListingsIds = getUserListingsIds(user);
+        List<Integer> rolesIds = getUserRolesIds(user);
         return new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(), user.getContact(),
                 userListingsIds, rolesIds);
     }
@@ -36,14 +34,24 @@ public class UserPublicResponseDTO {
     public static Page<UserPublicResponseDTO> toUsersPagePublicDTO(Page<User> usersPage) {
         List<UserPublicResponseDTO> usersListDTO = new ArrayList<>();
         usersPage.forEach(user -> {
-            List<Long> userListingsIds = new ArrayList<>();
-            List<Integer> rolesIds = new ArrayList<>();
-            user.getUserListings().forEach(userListing -> userListingsIds.add(userListing.getListingId()));
-            user.getRoles().forEach(role -> rolesIds.add(role.getRoleId()));
+            List<Long> userListingsIds = getUserListingsIds(user);
+            List<Integer> rolesIds = getUserRolesIds(user);
             var userDTO = new UserPublicResponseDTO(user.getUsername(), user.getDisplayName(),
                     user.getContact(), userListingsIds, rolesIds);
             usersListDTO.add(userDTO);
         });
         return new PageImpl<>(usersListDTO, usersPage.getPageable(), usersPage.getTotalElements());
+    }
+
+    protected static List<Long> getUserListingsIds(User user) {
+        List<Long> userListingsIds = new ArrayList<>();
+        user.getUserListings().forEach(userListing -> userListingsIds.add(userListing.getListingId()));
+        return userListingsIds;
+    }
+
+    protected static List<Integer> getUserRolesIds(User user) {
+        List<Integer> rolesIds = new ArrayList<>();
+        user.getRoles().forEach(role -> rolesIds.add(role.getRoleId()));
+        return rolesIds;
     }
 }
