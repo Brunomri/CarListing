@@ -3,6 +3,7 @@ package com.bruno.carlisting.bootstrap;
 import com.bruno.carlisting.domain.Car;
 import com.bruno.carlisting.repositories.CarRepository;
 import com.bruno.carlisting.services.interfaces.CarService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Profile("test")
+@Slf4j
 public class Bootstrap implements CommandLineRunner {
 
     private final CarRepository carRepository;
@@ -30,19 +32,19 @@ public class Bootstrap implements CommandLineRunner {
     private void test() {
         Pageable pageRequest = PageRequest.of(0, 1);
         Page<Car> carPages = carRepository.findByMake("Honda", pageRequest);
-        System.out.println(carPages.getContent().toString());
-        Car car = carPages.getContent().get(0);
-        System.out.println(car.getMake());
+        log.info(carPages.getContent().toString());
+        var car = carPages.getContent().get(0);
+        log.info(car.getMake());
 
         carPages = carService.getCarsByMake("Honda", 0, 2);
         car = carPages.getContent().get(0);
-        System.out.println(car.getMake());
+        log.info(car.getMake());
 
         carPages = carService.getAllCars(0, 2);
         car = carPages.getContent().get(0);
-        System.out.println(car.getMake());
+        log.info(car.getMake());
         car = carPages.getContent().get(1);
-        System.out.println(car.getMake());
+        log.info(car.getMake());
     }
 
 }
