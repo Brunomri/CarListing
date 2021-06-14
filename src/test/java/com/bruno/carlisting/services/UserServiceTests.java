@@ -28,7 +28,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTests {
+class UserServiceTests {
 
 //    todo: mock User to set id
 
@@ -45,7 +45,7 @@ public class UserServiceTests {
     private UserServiceImpl userService;
 
     @Test
-    public void retrieveAllExistingUsers() {
+    void retrieveAllExistingUsers() {
         List<User> newUsers = new ArrayList<>();
         User user1 = new User();
         User user2 = new User();
@@ -64,7 +64,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void findExistingUserById() {
+    void findExistingUserById() {
         Optional<User> user = Optional.of(new User());
 //        user.get().setUserId(123456L);
         when(mockedUserRepository.findById(123456L)).thenReturn(user);
@@ -75,7 +75,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void findExistingUserByCarId() {
+    void findExistingUserByCarId() {
         Optional<User> user = Optional.of(new User());
 //        user.get().setUserId(123456L);
 
@@ -89,7 +89,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void createUser() {
+    void createUser() {
         User user = new User();
 //        user.setUserId(1L);
 //        ReflectionTestUtils.setField(user, "userId", 1L);
