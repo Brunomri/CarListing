@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(User updatedUser, List<Integer> rolesIds, Long userId) {
 
-        User currentUser = getUserById(userId);
+        var currentUser = getUserById(userId);
         List<Role> updatedUserRoles = new ArrayList<>();
         rolesIds.forEach(roleId -> updatedUserRoles.add(roleService.getRoleById(roleId)));
         updatedUser.setRoles(updatedUserRoles);
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserPassword(String password, Long userId) {
 
-        User currentUser = getUserById(userId);
+        var currentUser = getUserById(userId);
 
         currentUser.setPassword(password);
         return userRepository.save(currentUser);
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserDisplayName(String displayName, Long userId) {
 
-        User currentUser = getUserById(userId);
+        var currentUser = getUserById(userId);
 
         currentUser.setDisplayName(displayName);
         return userRepository.save(currentUser);
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserContact(String contact, Long userId) {
 
-        User currentUser = getUserById(userId);
+        var currentUser = getUserById(userId);
 
         currentUser.setContact(contact);
         return userRepository.save(currentUser);
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserRoles(List<Integer> rolesIds, Long userId) {
 
-        User currentUser = getUserById(userId);
+        var currentUser = getUserById(userId);
         List<Role> updatedUserRoles = new ArrayList<>();
         rolesIds.forEach(roleId -> updatedUserRoles.add(roleService.getRoleById(roleId)));
         currentUser.setRoles(updatedUserRoles);
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
 
-        User userToDelete = getUserById(userId);
+        var userToDelete = getUserById(userId);
 
         try {
             userRepository.delete(userToDelete);
