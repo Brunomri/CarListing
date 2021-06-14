@@ -22,8 +22,8 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
-        ValidationErrorResponse error = new ValidationErrorResponse();
-        for (ConstraintViolation violation : e.getConstraintViolations()) {
+        var error = new ValidationErrorResponse();
+        for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
             error.getViolations().add(
                     new Violation(formatter.format(LocalDateTime.now()), HttpStatus.BAD_REQUEST.value(),
                         violation.getClass().getName(), violation.getRootBeanClass().getName(),
@@ -36,7 +36,7 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     ValidationErrorResponse onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        ValidationErrorResponse error = new ValidationErrorResponse();
+        var error = new ValidationErrorResponse();
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
             error.getViolations().add(new Violation(formatter.format(LocalDateTime.now()),
                     HttpStatus.BAD_REQUEST.value(), fieldError.getClass().getName(), fieldError.getObjectName(),
@@ -49,17 +49,15 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     StandardErrorResponse onObjectNotFoundException(ObjectNotFoundException e) {
-        StandardErrorResponse error = new StandardErrorResponse(formatter.format(LocalDateTime.now()),
+        return new StandardErrorResponse(formatter.format(LocalDateTime.now()),
                 HttpStatus.NOT_FOUND.value(), e.getClass().getName(), e.getMessage());
-        return error;
     }
 
     @ExceptionHandler(entityRelationshipIntegrityException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     StandardErrorResponse entityRelationshipIntegrityException(entityRelationshipIntegrityException e) {
-        StandardErrorResponse error = new StandardErrorResponse(formatter.format(LocalDateTime.now()),
+        return new StandardErrorResponse(formatter.format(LocalDateTime.now()),
                 HttpStatus.BAD_REQUEST.value(), e.getClass().getName(), e.getMessage());
-        return error;
     }
 }
