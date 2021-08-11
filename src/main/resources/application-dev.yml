@@ -1,0 +1,25 @@
+spring:
+  # Set up PostgreSQL database
+  datasource:
+    data: classpath:data.sql
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: always
+    platform: postgres
+    # Environment variables for database URL, username and password
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PWD}
+
+  jpa:
+    database: POSTGRESQL
+    hibernate:
+      # For API testing purposes, every run initializes the database with data.sql content
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    show-sql: true
