@@ -8,6 +8,7 @@ import com.bruno.carlisting.services.interfaces.RoleService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +34,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/roles")
 @Validated
+@Slf4j
 public class RoleController {
 
     private static final String ROLE_PAGE_DEFAULT_NUMBER = "0";
@@ -67,7 +69,14 @@ public class RoleController {
         @Max(value = ROLE_PAGE_MAX_SIZE,
             message = "Page size must be less than or equal to " + ROLE_PAGE_MAX_SIZE) int size) {
 
-        var rolesPageDTO = RolePublicResponseDTO.toRolePublicResponseDTO(roleService.getAllRoles(page, size));
+        log.info("Finding all roles on page {} with maximum size {}", page, size);
+
+        var rolesPageDTO = RolePublicResponseDTO.toRolePublicResponseDTO(
+                roleService.getAllRoles(page, size));
+
+        log.info("Returning {} roles on page {}",
+                rolesPageDTO.getContent().size(), rolesPageDTO.getPageable().getPageNumber());
+
         return ResponseEntity.ok().body(rolesPageDTO);
     }
 
@@ -83,7 +92,12 @@ public class RoleController {
 
         @PathVariable @Positive(message = "Role ID must be a positive integer") Integer roleId) {
 
+        log.info("Finding role by ID = {}", roleId);
+
         var role = roleService.getRoleById(roleId);
+
+        log.info("Returning role of ID = {}", roleId);
+
         return ResponseEntity.ok().body(RolePublicResponseDTO.toRolePublicResponseDTO(role));
     }
 
@@ -99,7 +113,12 @@ public class RoleController {
 
         @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
 
+        log.info("Finding all roles assigned to user ID = {}", userId);
+
         List<Role> userRoles = roleService.getRolesByUserId(userId);
+
+        log.info("Returning all roles assigned to user ID = {}", userId);
+
         return ResponseEntity.ok().body(RolePublicResponseDTO.toRolePublicResponseDTO(userRoles));
     }
 
@@ -114,9 +133,14 @@ public class RoleController {
 
         @Valid @RequestBody RoleRequestDTO roleRequestDTO) {
 
+        log.info("Creating role: type = {}", roleRequestDTO.getType());
+
         var newRole = roleService.createRole(roleRequestDTO.toRole());
         var uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/roles/{roleId}").
                 buildAndExpand(newRole.getRoleId()).toUri();
+
+        log.info("Returning created role: roleId = {}, type = {}", newRole.getRoleId(), newRole.getType());
+
         return ResponseEntity.created(uri).body(RolePrivateResponseDTO.toRolePrivateResponseDTO(newRole));
     }
 
@@ -134,7 +158,12 @@ public class RoleController {
 
             @Valid @RequestBody RoleRequestDTO roleRequestDTO) {
 
+        log.info("Updating role: type = {}", roleRequestDTO.getType());
+
         var updatedRole = roleService.updateRole(roleRequestDTO.toRole(), roleId);
+
+        log.info("Returning updated role: roleId = {}, type = {}", updatedRole.getRoleId(), updatedRole.getType());
+
         return ResponseEntity.ok().body(RolePrivateResponseDTO.toRolePrivateResponseDTO(updatedRole));
     }
 
@@ -148,7 +177,12 @@ public class RoleController {
 
         @PathVariable @Positive(message = "Role ID must be a positive integer") Integer roleId) {
 
+        log.info("Deleting role ID = {}", roleId);
+
         roleService.deleteRoles(roleId);
+
+        log.info("Deleted role ID = {}", roleId);
+
         return ResponseEntity.noContent().build();
     }
 }
