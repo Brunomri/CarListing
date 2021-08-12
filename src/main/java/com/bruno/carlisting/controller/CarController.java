@@ -15,6 +15,7 @@ import com.bruno.carlisting.services.interfaces.CarService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -42,6 +43,7 @@ import javax.validation.constraints.Size;
 @RestController
 @RequestMapping(value = "/cars")
 @Validated
+@Slf4j
 public class CarController {
 
     private static final String CAR_PAGE_DEFAULT_NUMBER = "0";
@@ -76,8 +78,14 @@ public class CarController {
         @Max(value = CAR_PAGE_MAX_SIZE,
             message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
+        log.info("Finding all cars on page {} with maximum size {}", page, size);
+
         var carsPageDTO = CarPublicResponseDTO.toCarPublicDTO(
                 carService.getAllCars(page, size));
+
+        log.info("Returning {} cars on page {}",
+                carsPageDTO.getContent().size(), carsPageDTO.getPageable().getPageNumber());
+
         return ResponseEntity.ok().body(carsPageDTO);
     }
 
@@ -93,7 +101,12 @@ public class CarController {
 
         @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
 
+        log.info("Finding car by ID = {}", carId);
+
         var car = carService.getCarById(carId);
+
+        log.info("Returning car of ID = {}", car.getCarId());
+
         return ResponseEntity.ok().body(CarPublicResponseDTO.toCarPublicDTO(car));
     }
 
@@ -120,8 +133,16 @@ public class CarController {
         @Max(value = CAR_PAGE_MAX_SIZE,
                 message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
+        log.info("Finding all cars of make {} on page {} with maximum size {}", make, page, size);
+
         var carsPageDTO = CarPublicResponseDTO.toCarPublicDTO(
                 carService.getCarsByMake(make, page, size));
+
+        log.info("Returning {} cars by {} on page {}",
+                carsPageDTO.getContent().size(),
+                carsPageDTO.getContent().get(0).getMake(),
+                carsPageDTO.getPageable().getPageNumber());
+
         return ResponseEntity.ok().body(carsPageDTO);
     }
 
@@ -147,8 +168,14 @@ public class CarController {
             @Max(value = CAR_PAGE_MAX_SIZE,
                     message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
+        log.info("Finding all cars by user ID = {} on page {} with maximum size {}", userId, page, size);
+
         var carsPageDTO = CarPublicResponseDTO.toCarPublicDTO(
                 carService.getCarsByUserId(userId, page, size));
+
+        log.info("Returning {} cars listed by {} on page {}",
+                carsPageDTO.getContent().size(), userId, carsPageDTO.getPageable().getPageNumber());
+
         return ResponseEntity.ok().body(carsPageDTO);
     }
 
@@ -163,9 +190,21 @@ public class CarController {
 
         @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
+        log.info("Creating car: make = {}, model = {}, year = {}, " +
+                "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
+                carRequestDTO.getMake(), carRequestDTO.getModel(), carRequestDTO.getYear(), carRequestDTO.getTrim(),
+                carRequestDTO.getColor(), carRequestDTO.getTransmission(), carRequestDTO.getFuel(), carRequestDTO.getUserId());
+
         var newCar = carService.createCar(carRequestDTO.toCar(), carRequestDTO.getUserId());
         var uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/cars/{carId}").
                 buildAndExpand(newCar.getCarId()).toUri();
+
+        log.info("Returning created car: carId = {}, make = {}, model = {}, year = {}, " +
+                "trim = {}, color = {}, transmission = {}, fuel = {}",
+                newCar.getCarId(), newCar.getMake(), newCar.getModel(),
+                newCar.getYear(), newCar.getTrim(), newCar.getColor(),
+                newCar.getTransmission(), newCar.getFuel());
+
         return ResponseEntity.created(uri).body(CarPrivateResponseDTO.toCarPrivateDTO(newCar));
     }
 
@@ -183,7 +222,19 @@ public class CarController {
 
         @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
+        log.info("Updating car: make = {}, model = {}, year = {}, " +
+                        "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
+                carRequestDTO.getMake(), carRequestDTO.getModel(), carRequestDTO.getYear(), carRequestDTO.getTrim(),
+                carRequestDTO.getColor(), carRequestDTO.getTransmission(), carRequestDTO.getFuel(), carRequestDTO.getUserId());
+
         var updatedCar = carService.updateCar(carRequestDTO.toCar(), carRequestDTO.getUserId(), carId);
+
+        log.info("Returning updated car: carId = {}, make = {}, model = {}, year = {}, " +
+                        "trim = {}, color = {}, transmission = {}, fuel = {}",
+                updatedCar.getCarId(), updatedCar.getMake(), updatedCar.getModel(),
+                updatedCar.getYear(), updatedCar.getTrim(), updatedCar.getColor(),
+                updatedCar.getTransmission(), updatedCar.getFuel());
+
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
@@ -199,7 +250,12 @@ public class CarController {
 
             @Valid @RequestBody CarMakeRequestDTO carMakeRequestDTO) {
 
+        log.info("Updating car ID = {} make to {}", carId, carMakeRequestDTO.getMake());
+
         var updatedCar = carService.updateCarMake(carMakeRequestDTO.getMake(), carId);
+
+        log.info("Returning updated car ID = {} make to {}", updatedCar.getCarId(), updatedCar.getMake());
+
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
@@ -215,7 +271,12 @@ public class CarController {
 
             @Valid @RequestBody CarModelRequestDTO carModelRequestDTO) {
 
+        log.info("Updating car ID = {} model to {}", carId, carModelRequestDTO.getModel());
+
         var updatedCar = carService.updateCarModel(carModelRequestDTO.getModel(), carId);
+
+        log.info("Returning updated car ID = {} model to {}", updatedCar.getCarId(), updatedCar.getModel());
+
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
@@ -231,7 +292,12 @@ public class CarController {
 
             @Valid @RequestBody CarYearRequestDTO carYearRequestDTO) {
 
+        log.info("Updating car ID = {} year to {}", carId, carYearRequestDTO.getYear());
+
         var updatedCar = carService.updateCarYear(carYearRequestDTO.getYear(), carId);
+
+        log.info("Returning updated car ID = {} year to {}", updatedCar.getCarId(), updatedCar.getYear());
+
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
@@ -247,7 +313,12 @@ public class CarController {
 
             @Valid @RequestBody CarTrimRequestDTO carTrimRequestDTO) {
 
+        log.info("Updating car ID = {} trim to {}", carId, carTrimRequestDTO.getTrim());
+
         var updatedCar = carService.updateCarTrim(carTrimRequestDTO.getTrim(), carId);
+
+        log.info("Returning updated car ID = {} trim to {}", updatedCar.getCarId(), updatedCar.getTrim());
+
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
@@ -263,7 +334,12 @@ public class CarController {
 
             @Valid @RequestBody CarColorRequestDTO carColorRequestDTO) {
 
+        log.info("Updating car ID = {} color to {}", carId, carColorRequestDTO.getColor());
+
         var updatedCar = carService.updateCarColor(carColorRequestDTO.getColor(), carId);
+
+        log.info("Returning updated car ID = {} color to {}", updatedCar.getCarId(), updatedCar.getColor());
+
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
@@ -279,7 +355,12 @@ public class CarController {
 
             @Valid @RequestBody CarTransmissionRequestDTO carTransmissionRequestDTO) {
 
+        log.info("Updating car ID = {} transmission to {}", carId, carTransmissionRequestDTO.getTransmission());
+
         var updatedCar = carService.updateCarTransmission(carTransmissionRequestDTO.getTransmission(), carId);
+
+        log.info("Returning updated car ID = {} transmission to {}", updatedCar.getCarId(), updatedCar.getTransmission());
+
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
@@ -295,7 +376,12 @@ public class CarController {
 
             @Valid @RequestBody CarFuelRequestDTO carFuelRequestDTO) {
 
+        log.info("Updating car ID = {} fuel to {}", carId, carFuelRequestDTO.getFuel());
+
         var updatedCar = carService.updateCarFuel(carFuelRequestDTO.getFuel(), carId);
+
+        log.info("Returning updated car ID = {} fuel to {}", updatedCar.getCarId(), updatedCar.getFuel());
+
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
@@ -311,7 +397,12 @@ public class CarController {
 
             @Valid @RequestBody CarUserRequestDTO carUserRequestDTO) {
 
+        log.info("Updating car ID = {} responsible user to user ID = {}", carId, carUserRequestDTO.getUserId());
+
         var updatedCar = carService.updateCarUser(carUserRequestDTO.getUserId(), carId);
+
+        log.info("Returning updated car ID = {} responsible user to user ID = {}", carId, updatedCar.getUser().getUserId());
+
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
 
@@ -325,7 +416,12 @@ public class CarController {
 
         @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
 
+        log.info("Deleting car ID = {}", carId);
+
         carService.deleteCar(carId);
+
+        log.info("Deleted car ID = {}", carId);
+
         return ResponseEntity.noContent().build();
     }
 }

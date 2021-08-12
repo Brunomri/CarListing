@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/* Swagger API documentation available at: http://localhost:8080/swagger-ui.html */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {

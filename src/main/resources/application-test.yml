@@ -1,5 +1,6 @@
 spring:
   # Define H2 Console settings
+  # http://localhost:8080/h2-console
   datasource:
     driver-class-name: org.h2.Driver
     password: ''
