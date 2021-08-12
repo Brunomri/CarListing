@@ -54,23 +54,23 @@ public class UserController {
 
     @ApiOperation(value = "Return all users grouped in pages")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Return a page of users"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Page content not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 200, message = "Return a page of users"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Page content not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/all", produces = "application/json")
     public ResponseEntity<Page<UserPublicResponseDTO>> findAllUsers(
 
-        @RequestParam(value = "page", required = false, defaultValue = USER_PAGE_DEFAULT_NUMBER)
-        @Min(value = USER_PAGE_MIN_NUMBER,
-            message = "Page number must be greater than or equal to " + USER_PAGE_MIN_NUMBER) int page,
+            @RequestParam(value = "page", required = false, defaultValue = USER_PAGE_DEFAULT_NUMBER)
+            @Min(value = USER_PAGE_MIN_NUMBER,
+                    message = "Page number must be greater than or equal to " + USER_PAGE_MIN_NUMBER) int page,
 
-        @RequestParam(value = "size", required = false, defaultValue = USER_PAGE_DEFAULT_SIZE)
-        @Min(value = USER_PAGE_MIN_SIZE,
-            message = "Page size must be greater than or equal to " + USER_PAGE_MIN_SIZE)
-        @Max(value = USER_PAGE_MAX_SIZE,
-                message = "Page size must be less than or equal to " + USER_PAGE_MAX_SIZE) int size) {
+            @RequestParam(value = "size", required = false, defaultValue = USER_PAGE_DEFAULT_SIZE)
+            @Min(value = USER_PAGE_MIN_SIZE,
+                    message = "Page size must be greater than or equal to " + USER_PAGE_MIN_SIZE)
+            @Max(value = USER_PAGE_MAX_SIZE,
+                    message = "Page size must be less than or equal to " + USER_PAGE_MAX_SIZE) int size) {
 
         log.info("Finding all users on page {} with maximum size {}", page, size);
 
@@ -85,15 +85,15 @@ public class UserController {
 
     @ApiOperation(value = "Find a user by ID")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Return the user with corresponding ID"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "User not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 200, message = "Return the user with corresponding ID"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/{userId}", produces = "application/json")
     public ResponseEntity<UserPublicResponseDTO> findUserById(
 
-        @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
+            @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
 
         log.info("Finding user by ID = {}", userId);
 
@@ -114,7 +114,7 @@ public class UserController {
     @GetMapping(value = "/cars/{carId}", produces = "application/json")
     public ResponseEntity<UserPublicResponseDTO> findUserByCarId(
 
-        @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
 
         log.info("Finding user responsible for car ID = {}", carId);
 
@@ -127,14 +127,14 @@ public class UserController {
 
     @ApiOperation(value = "Add a new user")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "New user created"),
-        @ApiResponse(code = 400, message = "Invalid User data provided"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 201, message = "New user created"),
+            @ApiResponse(code = 400, message = "Invalid User data provided"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserPrivateResponseDTO> createUser(
 
-        @Valid @RequestBody UserRequestDTO userRequestDTO) {
+            @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
         log.info("Creating user: username = {}, displayName = {}, contact = {}, rolesIds = {}",
                 userRequestDTO.getUsername(), userRequestDTO.getDisplayName(),
@@ -153,17 +153,17 @@ public class UserController {
 
     @ApiOperation(value = "Update an existing user")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "User updated"),
-        @ApiResponse(code = 400, message = "Invalid User data provided"),
-        @ApiResponse(code = 404, message = "User not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 201, message = "User updated"),
+            @ApiResponse(code = 400, message = "Invalid User data provided"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @PutMapping(value = "/{userId}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserPrivateResponseDTO> updateUser(
 
-        @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
+            @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
 
-        @Valid @RequestBody UserRequestDTO userRequestDTO) {
+            @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
         log.info("Updating user: username = {}, displayName = {}, contact = {}, rolesIds = {}",
                 userRequestDTO.getUsername(), userRequestDTO.getDisplayName(),
@@ -209,9 +209,9 @@ public class UserController {
     @PatchMapping(value = "/{userId}/displayName", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserPrivateResponseDTO> updateUserDisplayName(
 
-        @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
+            @PathVariable @Positive(message = "User ID must be a positive integer") Long userId,
 
-        @Valid @RequestBody UserDisplayNameRequestDTO userDisplayNameRequestDTO) {
+            @Valid @RequestBody UserDisplayNameRequestDTO userDisplayNameRequestDTO) {
 
         log.info("Updating user ID = {} display name to {}", userId, userDisplayNameRequestDTO.getDisplayName());
 
@@ -274,7 +274,7 @@ public class UserController {
     @DeleteMapping(value = "/{userId}")
     public ResponseEntity<Void> deleteUser(
 
-        @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
+            @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
 
         log.info("Deleting user ID = {}", userId);
 

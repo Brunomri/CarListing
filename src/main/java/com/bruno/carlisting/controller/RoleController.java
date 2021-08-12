@@ -51,23 +51,23 @@ public class RoleController {
 
     @ApiOperation(value = "Return all roles grouped in pages")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Return a page of roles"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Page content not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 200, message = "Return a page of roles"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Page content not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/all", produces = "application/json")
     public ResponseEntity<Page<RolePublicResponseDTO>> findAllRoles(
 
-        @RequestParam(value = "page", required = false, defaultValue = ROLE_PAGE_DEFAULT_NUMBER)
-        @Min(value = ROLE_PAGE_MIN_NUMBER,
-            message = "Page number must be greater than or equal to " + ROLE_PAGE_MIN_NUMBER) int page,
+            @RequestParam(value = "page", required = false, defaultValue = ROLE_PAGE_DEFAULT_NUMBER)
+            @Min(value = ROLE_PAGE_MIN_NUMBER,
+                    message = "Page number must be greater than or equal to " + ROLE_PAGE_MIN_NUMBER) int page,
 
-        @RequestParam(value = "size", required = false, defaultValue = ROLE_PAGE_DEFAULT_SIZE)
-        @Min(value = ROLE_PAGE_MIN_SIZE,
-            message = "Page size must be greater than or equal to " + ROLE_PAGE_MIN_SIZE)
-        @Max(value = ROLE_PAGE_MAX_SIZE,
-            message = "Page size must be less than or equal to " + ROLE_PAGE_MAX_SIZE) int size) {
+            @RequestParam(value = "size", required = false, defaultValue = ROLE_PAGE_DEFAULT_SIZE)
+            @Min(value = ROLE_PAGE_MIN_SIZE,
+                    message = "Page size must be greater than or equal to " + ROLE_PAGE_MIN_SIZE)
+            @Max(value = ROLE_PAGE_MAX_SIZE,
+                    message = "Page size must be less than or equal to " + ROLE_PAGE_MAX_SIZE) int size) {
 
         log.info("Finding all roles on page {} with maximum size {}", page, size);
 
@@ -82,15 +82,15 @@ public class RoleController {
 
     @ApiOperation(value = "Find a role by ID")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Return the role with corresponding ID"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Role not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 200, message = "Return the role with corresponding ID"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Role not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/{roleId}", produces = "application/json")
     public ResponseEntity<RolePublicResponseDTO> findRoleById(
 
-        @PathVariable @Positive(message = "Role ID must be a positive integer") Integer roleId) {
+            @PathVariable @Positive(message = "Role ID must be a positive integer") Integer roleId) {
 
         log.info("Finding role by ID = {}", roleId);
 
@@ -103,15 +103,15 @@ public class RoleController {
 
     @ApiOperation(value = "Find all roles for a user ID")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Return the role with corresponding ID"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Role not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 200, message = "Return the role with corresponding ID"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Role not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/users/{userId}", produces = "application/json")
     public ResponseEntity<List<RolePublicResponseDTO>> findRolesByUserId(
 
-        @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
+            @PathVariable @Positive(message = "User ID must be a positive integer") Long userId) {
 
         log.info("Finding all roles assigned to user ID = {}", userId);
 
@@ -124,14 +124,14 @@ public class RoleController {
 
     @ApiOperation(value = "Add a new role")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "New role created"),
-        @ApiResponse(code = 400, message = "Invalid Role data provided"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 201, message = "New role created"),
+            @ApiResponse(code = 400, message = "Invalid Role data provided"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<RolePrivateResponseDTO> createRole(
 
-        @Valid @RequestBody RoleRequestDTO roleRequestDTO) {
+            @Valid @RequestBody RoleRequestDTO roleRequestDTO) {
 
         log.info("Creating role: type = {}", roleRequestDTO.getType());
 
@@ -146,10 +146,10 @@ public class RoleController {
 
     @ApiOperation(value = "Update an existing role")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "Role updated"),
-        @ApiResponse(code = 400, message = "Invalid Role data provided"),
-        @ApiResponse(code = 404, message = "Role not found"),
-        @ApiResponse(code = 500, message = "Server exception")
+            @ApiResponse(code = 201, message = "Role updated"),
+            @ApiResponse(code = 400, message = "Invalid Role data provided"),
+            @ApiResponse(code = 404, message = "Role not found"),
+            @ApiResponse(code = 500, message = "Server exception")
     })
     @PutMapping(value = "/{roleId}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<RolePrivateResponseDTO> updateRole(
@@ -169,13 +169,13 @@ public class RoleController {
 
     @ApiOperation(value = "Delete an existing role")
     @ApiResponses(value = {
-        @ApiResponse(code = 204, message = "Role deleted"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 204, message = "Role deleted"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @DeleteMapping(value = "/{roleId}")
     public ResponseEntity<Void> deleteRole(
 
-        @PathVariable @Positive(message = "Role ID must be a positive integer") Integer roleId) {
+            @PathVariable @Positive(message = "Role ID must be a positive integer") Integer roleId) {
 
         log.info("Deleting role ID = {}", roleId);
 

@@ -60,23 +60,23 @@ public class CarController {
 
     @ApiOperation(value = "Return all cars grouped in pages")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Return a page of cars"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Page content not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 200, message = "Return a page of cars"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Page content not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/all", produces = "application/json")
     public ResponseEntity<Page<CarPublicResponseDTO>> findAllCars(
 
-        @RequestParam(value = "page", required = false, defaultValue = CAR_PAGE_DEFAULT_NUMBER)
-        @Min(value = CAR_PAGE_MIN_NUMBER,
-            message = "Page number must be greater than or equal to " + CAR_PAGE_MIN_NUMBER) int page,
+            @RequestParam(value = "page", required = false, defaultValue = CAR_PAGE_DEFAULT_NUMBER)
+            @Min(value = CAR_PAGE_MIN_NUMBER,
+                    message = "Page number must be greater than or equal to " + CAR_PAGE_MIN_NUMBER) int page,
 
-        @RequestParam(value = "size", required = false, defaultValue = CAR_PAGE_DEFAULT_SIZE)
-        @Min(value = CAR_PAGE_MIN_SIZE,
-            message = "Page size must be greater than or equal to " + CAR_PAGE_MIN_SIZE)
-        @Max(value = CAR_PAGE_MAX_SIZE,
-            message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
+            @RequestParam(value = "size", required = false, defaultValue = CAR_PAGE_DEFAULT_SIZE)
+            @Min(value = CAR_PAGE_MIN_SIZE,
+                    message = "Page size must be greater than or equal to " + CAR_PAGE_MIN_SIZE)
+            @Max(value = CAR_PAGE_MAX_SIZE,
+                    message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
         log.info("Finding all cars on page {} with maximum size {}", page, size);
 
@@ -91,15 +91,15 @@ public class CarController {
 
     @ApiOperation(value = "Find a car by ID")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Return the car with corresponding ID"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Car not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 200, message = "Return the car with corresponding ID"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Car not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/{carId}", produces = "application/json")
     public ResponseEntity<CarPublicResponseDTO> findCarById(
 
-        @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
 
         log.info("Finding car by ID = {}", carId);
 
@@ -112,26 +112,26 @@ public class CarController {
 
     @ApiOperation(value = "Find all cars by make")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Return a page of cars from the corresponding make"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Page content not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 200, message = "Return a page of cars from the corresponding make"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Page content not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/make/{make}", produces = "application/json")
     public ResponseEntity<Page<CarPublicResponseDTO>> findCarsByMake(
 
-        @PathVariable @NotBlank(message = "Make is mandatory")
-        @Size(max = 30, message = "Make must have 30 characters or less") String make,
+            @PathVariable @NotBlank(message = "Make is mandatory")
+            @Size(max = 30, message = "Make must have 30 characters or less") String make,
 
-        @RequestParam(value = "page", required = false, defaultValue = CAR_PAGE_DEFAULT_NUMBER)
-        @Min(value = CAR_PAGE_MIN_NUMBER,
-                message = "Page number must be greater than or equal to " + CAR_PAGE_MIN_NUMBER) int page,
+            @RequestParam(value = "page", required = false, defaultValue = CAR_PAGE_DEFAULT_NUMBER)
+            @Min(value = CAR_PAGE_MIN_NUMBER,
+                    message = "Page number must be greater than or equal to " + CAR_PAGE_MIN_NUMBER) int page,
 
-        @RequestParam(value = "size", required = false, defaultValue = CAR_PAGE_DEFAULT_SIZE)
-        @Min(value = CAR_PAGE_MIN_SIZE,
-                message = "Page size must be greater than or equal to " + CAR_PAGE_MIN_SIZE)
-        @Max(value = CAR_PAGE_MAX_SIZE,
-                message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
+            @RequestParam(value = "size", required = false, defaultValue = CAR_PAGE_DEFAULT_SIZE)
+            @Min(value = CAR_PAGE_MIN_SIZE,
+                    message = "Page size must be greater than or equal to " + CAR_PAGE_MIN_SIZE)
+            @Max(value = CAR_PAGE_MAX_SIZE,
+                    message = "Page size must be less than or equal to " + CAR_PAGE_MAX_SIZE) int size) {
 
         log.info("Finding all cars of make {} on page {} with maximum size {}", make, page, size);
 
@@ -148,10 +148,10 @@ public class CarController {
 
     @ApiOperation(value = "Find all cars by user")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Return a page of cars added by a certain user"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Page content not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 200, message = "Return a page of cars added by a certain user"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Page content not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @GetMapping(value = "/users/{userId}", produces = "application/json")
     public ResponseEntity<Page<CarPublicResponseDTO>> findCarsByUserId(
@@ -181,17 +181,17 @@ public class CarController {
 
     @ApiOperation(value = "Add a new car")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "New car created"),
-        @ApiResponse(code = 400, message = "Invalid Car data provided"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 201, message = "New car created"),
+            @ApiResponse(code = 400, message = "Invalid Car data provided"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<CarPrivateResponseDTO> createCar(
 
-        @Valid @RequestBody CarRequestDTO carRequestDTO) {
+            @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
         log.info("Creating car: make = {}, model = {}, year = {}, " +
-                "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
+                        "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
                 carRequestDTO.getMake(), carRequestDTO.getModel(), carRequestDTO.getYear(), carRequestDTO.getTrim(),
                 carRequestDTO.getColor(), carRequestDTO.getTransmission(), carRequestDTO.getFuel(), carRequestDTO.getUserId());
 
@@ -200,7 +200,7 @@ public class CarController {
                 buildAndExpand(newCar.getCarId()).toUri();
 
         log.info("Returning created car: carId = {}, make = {}, model = {}, year = {}, " +
-                "trim = {}, color = {}, transmission = {}, fuel = {}",
+                        "trim = {}, color = {}, transmission = {}, fuel = {}",
                 newCar.getCarId(), newCar.getMake(), newCar.getModel(),
                 newCar.getYear(), newCar.getTrim(), newCar.getColor(),
                 newCar.getTransmission(), newCar.getFuel());
@@ -210,17 +210,17 @@ public class CarController {
 
     @ApiOperation(value = "Update an existing car")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "Car updated"),
-        @ApiResponse(code = 400, message = "Invalid Car data provided"),
-        @ApiResponse(code = 404, message = "Car not found"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 201, message = "Car updated"),
+            @ApiResponse(code = 400, message = "Invalid Car data provided"),
+            @ApiResponse(code = 404, message = "Car not found"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @PutMapping(value = "/{carId}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<CarPrivateResponseDTO> updateCar(
 
-        @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId,
 
-        @Valid @RequestBody CarRequestDTO carRequestDTO) {
+            @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
         log.info("Updating car: make = {}, model = {}, year = {}, " +
                         "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
@@ -408,13 +408,13 @@ public class CarController {
 
     @ApiOperation(value = "Delete an existing car")
     @ApiResponses(value = {
-        @ApiResponse(code = 204, message = "Car deleted"),
-        @ApiResponse(code = 500, message = "Server exception"),
+            @ApiResponse(code = 204, message = "Car deleted"),
+            @ApiResponse(code = 500, message = "Server exception"),
     })
     @DeleteMapping(value = "/{carId}")
     public ResponseEntity<Void> deleteCar(
 
-        @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
+            @PathVariable @Positive(message = "Car ID must be a positive integer") Long carId) {
 
         log.info("Deleting car ID = {}", carId);
 
