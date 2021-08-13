@@ -190,7 +190,7 @@ public class CarController {
 
             @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
-        log.info("Creating car: make = {}, model = {}, year = {}, " +
+        log.info("Creating car according to request: make = {}, model = {}, year = {}, " +
                         "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
                 carRequestDTO.getMake(), carRequestDTO.getModel(), carRequestDTO.getYear(), carRequestDTO.getTrim(),
                 carRequestDTO.getColor(), carRequestDTO.getTransmission(), carRequestDTO.getFuel(), carRequestDTO.getUserId());
@@ -200,10 +200,10 @@ public class CarController {
                 buildAndExpand(newCar.getCarId()).toUri();
 
         log.info("Returning created car: carId = {}, make = {}, model = {}, year = {}, " +
-                        "trim = {}, color = {}, transmission = {}, fuel = {}",
+                        "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
                 newCar.getCarId(), newCar.getMake(), newCar.getModel(),
                 newCar.getYear(), newCar.getTrim(), newCar.getColor(),
-                newCar.getTransmission(), newCar.getFuel());
+                newCar.getTransmission(), newCar.getFuel(), newCar.getUser().getUserId());
 
         return ResponseEntity.created(uri).body(CarPrivateResponseDTO.toCarPrivateDTO(newCar));
     }
@@ -222,7 +222,7 @@ public class CarController {
 
             @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
-        log.info("Updating car: make = {}, model = {}, year = {}, " +
+        log.info("Updating car according to request: make = {}, model = {}, year = {}, " +
                         "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
                 carRequestDTO.getMake(), carRequestDTO.getModel(), carRequestDTO.getYear(), carRequestDTO.getTrim(),
                 carRequestDTO.getColor(), carRequestDTO.getTransmission(), carRequestDTO.getFuel(), carRequestDTO.getUserId());
@@ -230,10 +230,10 @@ public class CarController {
         var updatedCar = carService.updateCar(carRequestDTO.toCar(), carRequestDTO.getUserId(), carId);
 
         log.info("Returning updated car: carId = {}, make = {}, model = {}, year = {}, " +
-                        "trim = {}, color = {}, transmission = {}, fuel = {}",
+                        "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
                 updatedCar.getCarId(), updatedCar.getMake(), updatedCar.getModel(),
                 updatedCar.getYear(), updatedCar.getTrim(), updatedCar.getColor(),
-                updatedCar.getTransmission(), updatedCar.getFuel());
+                updatedCar.getTransmission(), updatedCar.getFuel(), updatedCar.getUser().getUserId());
 
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }
