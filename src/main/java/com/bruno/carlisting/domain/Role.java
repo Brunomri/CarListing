@@ -48,4 +48,12 @@ public class Role {
     public Role(String type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "\nroleId = %s\n" +
+                "type = %s\n",
+                this.getRoleId(), this.getType());
+    }
 }

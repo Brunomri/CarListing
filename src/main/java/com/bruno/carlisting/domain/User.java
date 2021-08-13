@@ -78,4 +78,14 @@ public class User {
         this.displayName = displayName;
         this.contact = contact;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "\nuserId = %s\n" +
+                "username = %s\n" +
+                "displayName = %s\n" +
+                "contact = %s\n",
+                this.getUserId(), this.getUsername(), this.getDisplayName(), this.getContact());
+    }
 }

@@ -90,4 +90,19 @@ public class Car {
         this.transmission = transmission;
         this.fuel = fuel;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "\ncarId = %s\n" +
+                "make = %s\n" +
+                "model = %s\n" +
+                "year = %s\n" +
+                "trim = %s\n" +
+                "color = %s\n" +
+                "transmission = %s\n" +
+                "fuel = %s\n",
+                this.getCarId(), this.getMake(), this.getModel(), this.getYear(), this.getTrim(),
+                this.getColor(), this.getTransmission(), this.getFuel());
+    }
 }
