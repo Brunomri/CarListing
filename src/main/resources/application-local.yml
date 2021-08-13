@@ -25,4 +25,4 @@ spring:
 
 logging:
   level:
-    carlisting: trace
+    com.bruno.carlisting: trace
