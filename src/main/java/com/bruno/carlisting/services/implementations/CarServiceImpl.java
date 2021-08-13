@@ -7,18 +7,20 @@ import com.bruno.carlisting.repositories.CarRepository;
 import com.bruno.carlisting.services.interfaces.CarService;
 import com.bruno.carlisting.services.interfaces.PagingService;
 import com.bruno.carlisting.services.interfaces.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
+@Slf4j
 public class CarServiceImpl implements CarService {
 
     public static final String CAR_ID_NOT_FOUND = "Car ID %s not found";
+    public static final String PAGE_HAS_NO_CARS = "Page %s has no cars";
+    public static final String CARS_OF_MAKE_NOT_FOUND = "No cars of make %s were found on page %s";
+    public static final String CARS_NOT_FOUND_FOR_USER_ID = "Cars not found for user ID = %s on page %s";
     public static final String CAR_ALREADY_EXISTS = "This car already exists:" +
             " Make = %s -" +
             " Model = %s -" +
@@ -39,34 +41,54 @@ public class CarServiceImpl implements CarService {
     @Override
     public Page<Car> getAllCars(int page, int size) {
 
-        Pageable pageRequest = PageRequest.of(page, size);
-        Page<Car> carsPage = carRepository.findAll(pageRequest);
-        pagingService.validatePage(carsPage);
+        var pageRequest = PageRequest.of(page, size);
+        var carsPage = carRepository.findAll(pageRequest);
+
+        log.debug("method = getAllCars, page number = {}, page size = {}, carsPage = {}",
+                carsPage.getPageable().getPageNumber(), carsPage.getPageable().getPageSize(), carsPage.getContent());
+
+        pagingService.validatePage(carsPage, String.format(PAGE_HAS_NO_CARS, page));
+
         return carsPage;
     }
 
     @Override
     public Car getCarById(Long carId) {
 
-        Optional<Car> car = carRepository.findById(carId);
+        var car = carRepository.findById(carId);
+
+        log.debug("method = getCarById, car = {}", car);
+
         return car.orElseThrow(() -> new ObjectNotFoundException(String.format(CAR_ID_NOT_FOUND, carId)));
     }
 
     @Override
     public Page<Car> getCarsByMake(String searchMake, int page, int size) {
 
-        Pageable pageRequest = PageRequest.of(page, size);
-        Page<Car> carsPage = carRepository.findByMake(searchMake, pageRequest);
-        pagingService.validatePage(carsPage);
+        var pageRequest = PageRequest.of(page, size);
+        var carsPage = carRepository.findByMake(searchMake, pageRequest);
+
+        log.debug("method = getCarsByMake, make = {}, page number = {}, page size = {}, carsPage = {}",
+                searchMake, carsPage.getPageable().getPageNumber(),
+                carsPage.getPageable().getPageSize(), carsPage.getContent());
+
+        pagingService.validatePage(carsPage, String.format(CARS_OF_MAKE_NOT_FOUND, searchMake, page));
+
         return carsPage;
     }
 
     @Override
     public Page<Car> getCarsByUserId(Long userId, int page, int size) {
 
-        Pageable pageRequest = PageRequest.of(page, size);
-        Page<Car> carsPage = carRepository.findByUser_UserId(userId, pageRequest);
-        pagingService.validatePage(carsPage);
+        var pageRequest = PageRequest.of(page, size);
+        var carsPage = carRepository.findByUser_UserId(userId, pageRequest);
+
+        log.debug("method = getCarsByUserId, userId = {}, page number = {}, page size = {}, carsPage = {}",
+                userId, carsPage.getPageable().getPageNumber(),
+                carsPage.getPageable().getPageSize(), carsPage.getContent());
+
+        pagingService.validatePage(carsPage, String.format(CARS_NOT_FOUND_FOR_USER_ID, userId, page));
+
         return carsPage;
     }
 
@@ -76,8 +98,14 @@ public class CarServiceImpl implements CarService {
         var user = userService.getUserById(userId);
         newCar.setUser(user);
         try {
+
+            log.debug("method = createCar, newCar = {}, userId = {}", newCar, userId);
+
             return carRepository.save(newCar);
         } catch (DataIntegrityViolationException e) {
+
+            log.warn("Data integrity violation exception occurred:", e);
+
             throw new entityRelationshipIntegrityException(String.format(
                     CAR_ALREADY_EXISTS, newCar.getMake(), newCar.getModel(), newCar.getYear(), newCar.getTrim()));
         }
@@ -90,6 +118,8 @@ public class CarServiceImpl implements CarService {
         var currentCar = optionalCar.orElseThrow(() -> new ObjectNotFoundException(
                 String.format(CAR_ID_NOT_FOUND, carId)));
 
+        log.debug("method = updateCar, currentCar = {}", currentCar);
+
         currentCar.setMake(updatedCar.getMake());
         currentCar.setModel(updatedCar.getModel());
         currentCar.setYear(updatedCar.getYear());
@@ -99,9 +129,14 @@ public class CarServiceImpl implements CarService {
         currentCar.setFuel(updatedCar.getFuel());
         currentCar.setUser(userService.getUserById(userId));
 
+        log.debug("method = updateCar, updatedCar = {}", currentCar);
+
         try {
             return carRepository.save(currentCar);
         } catch (DataIntegrityViolationException e) {
+
+            log.warn("Entity relationship integrity exception occurred:", e);
+
             throw new entityRelationshipIntegrityException(String.format(
                     CAR_ALREADY_EXISTS, currentCar.getMake(), currentCar.getModel(),
                     currentCar.getYear(), currentCar.getTrim()));
@@ -112,6 +147,8 @@ public class CarServiceImpl implements CarService {
     public Car updateCarMake(String make, Long carId) {
 
         var currentCar = getCarById(carId);
+
+        log.debug("method = updateCarMake, currentCar: {}", currentCar);
 
         currentCar.setMake(make);
         try {
@@ -203,7 +240,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public void deleteCar(Long carId) {
 
-        Optional<Car> carToDelete = carRepository.findById(carId);
+        var carToDelete = carRepository.findById(carId);
         carRepository.delete(carToDelete.orElseThrow(() -> new ObjectNotFoundException(
                 String.format(CAR_ID_NOT_FOUND, carId))));
     }
