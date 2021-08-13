@@ -1,5 +1,6 @@
 package com.bruno.carlisting.exceptions;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @ControllerAdvice
+@Slf4j
 public class ErrorHandlingControllerAdvice {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -29,6 +31,7 @@ public class ErrorHandlingControllerAdvice {
                         violation.getClass().getName(), violation.getRootBeanClass().getName(),
                         violation.getPropertyPath().toString(), violation.getInvalidValue(), violation.getMessage()));
         }
+        log.warn("Constraint validation exception occurred:", e);
         return error;
     }
 
@@ -42,6 +45,7 @@ public class ErrorHandlingControllerAdvice {
                     HttpStatus.BAD_REQUEST.value(), fieldError.getClass().getName(), fieldError.getObjectName(),
                     fieldError.getField(), fieldError.getRejectedValue(), fieldError.getDefaultMessage()));
         }
+        log.warn("Method argument not valid exception occurred:", e);
         return error;
     }
 
@@ -49,6 +53,7 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     StandardErrorResponse onObjectNotFoundException(ObjectNotFoundException e) {
+        log.warn("Object not found exception occurred:", e);
         return new StandardErrorResponse(formatter.format(LocalDateTime.now()),
                 HttpStatus.NOT_FOUND.value(), e.getClass().getName(), e.getMessage());
     }
@@ -57,6 +62,7 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     StandardErrorResponse entityRelationshipIntegrityException(entityRelationshipIntegrityException e) {
+        log.warn("Entity relationship integrity exception occurred:", e);
         return new StandardErrorResponse(formatter.format(LocalDateTime.now()),
                 HttpStatus.BAD_REQUEST.value(), e.getClass().getName(), e.getMessage());
     }
