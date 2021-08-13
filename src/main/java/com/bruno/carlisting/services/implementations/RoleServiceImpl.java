@@ -20,6 +20,7 @@ import java.util.Optional;
 public class RoleServiceImpl implements RoleService {
 
     public static final String ROLE_ID_NOT_FOUND = "Role ID %s not found";
+    public static final String PAGE_HAS_NO_ROLES = "Page %s has no roles";
     public static final String ROLE_ALREADY_EXISTS = "Role %s already exists";
     public static final String NO_ROLES_ASSOCIATED_TO_USER = "There are no roles associated to user ID %s";
 
@@ -36,7 +37,7 @@ public class RoleServiceImpl implements RoleService {
 
         Pageable pageRequest = PageRequest.of(page, size);
         Page<Role> rolesPage = roleRepository.findAll(pageRequest);
-        pagingService.validatePage(rolesPage);
+        pagingService.validatePage(rolesPage, String.format(PAGE_HAS_NO_ROLES, page));
         return rolesPage;
     }
 

@@ -22,6 +22,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     public static final String USER_ID_NOT_FOUND = "User ID %s not found";
+    public static final String PAGE_HAS_NO_USERS = "Page %s has no users";
     public static final String CAR_ID_NOT_FOUND = "Car ID %s not found";
     public static final String USER_DID_NOT_CREATE_CAR = "User ID %s did not create Car ID %s";
     public static final String USER_ALREADY_EXISTS = "Username %s already exists";
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
         Pageable pageRequest = PageRequest.of(page, size);
         Page<User> usersPage = userRepository.findAll(pageRequest);
-        pagingService.validatePage(usersPage);
+        pagingService.validatePage(usersPage, String.format(PAGE_HAS_NO_USERS, page));
         return usersPage;
     }
 
@@ -62,7 +63,6 @@ public class UserServiceImpl implements UserService {
                 USER_DID_NOT_CREATE_CAR, user.get().getUserId(), carId)));
     }
 
-//    todo: Create User DTO to avoid passing rolesIds parameter
     @Override
     public User createUser(User newUser, List<Integer> rolesIds) {
 
