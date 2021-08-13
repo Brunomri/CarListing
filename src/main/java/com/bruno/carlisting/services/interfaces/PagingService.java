@@ -4,5 +4,5 @@ import org.springframework.data.domain.Page;
 
 public interface PagingService {
 
-    void validatePage(Page<?> page);
+    void validatePage(Page<?> page, String message);
 }

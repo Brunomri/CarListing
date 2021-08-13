@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 public class PagingServiceImpl implements PagingService {
 
     @Override
-    public void validatePage(Page<?> page) {
-        if (page.getTotalElements() == 0) throw new ObjectNotFoundException("This query returned no entries");
-        else if (!page.hasContent()) throw new ObjectNotFoundException("There is no content in this page");
+    public void validatePage(Page<?> page, String message) {
+        if (page.getTotalElements() == 0) throw new ObjectNotFoundException(
+                String.format("%s, and no entries were found in the database", message));
+        else if (!page.hasContent()) throw new ObjectNotFoundException(
+                String.format("%s, however there are %s entries up to page %s",
+                        message, page.getTotalElements(), page.getTotalPages() - 1));
     }
 }
