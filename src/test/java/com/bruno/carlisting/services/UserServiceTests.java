@@ -25,7 +25,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTests {
@@ -60,7 +65,7 @@ class UserServiceTests {
 
         assertEquals(3, userService.getAllUsers(0, 3).getTotalElements());
         verify(mockedUserRepository, times(1)).findAll(any(Pageable.class));
-        verify(mockedPagingService, times(1)).validatePage(any(Page.class));
+        verify(mockedPagingService, times(1)).validatePage(any(Page.class), anyString());
     }
 
     @Test
