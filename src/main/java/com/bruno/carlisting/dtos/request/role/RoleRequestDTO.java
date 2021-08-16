@@ -18,4 +18,11 @@ public class RoleRequestDTO {
     public Role toRole() {
         return new Role(type);
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "\ntype = %s\n",
+                this.getType());
+    }
 }

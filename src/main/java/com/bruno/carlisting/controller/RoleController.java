@@ -133,13 +133,13 @@ public class RoleController {
 
             @Valid @RequestBody RoleRequestDTO roleRequestDTO) {
 
-        log.info("Creating role: type = {}", roleRequestDTO.getType());
+        log.info("Creating role according to request: {}", roleRequestDTO);
 
         var newRole = roleService.createRole(roleRequestDTO.toRole());
         var uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/roles/{roleId}").
                 buildAndExpand(newRole.getRoleId()).toUri();
 
-        log.info("Returning created role: roleId = {}, type = {}", newRole.getRoleId(), newRole.getType());
+        log.info("Returning created role: {}", newRole);
 
         return ResponseEntity.created(uri).body(RolePrivateResponseDTO.toRolePrivateResponseDTO(newRole));
     }
@@ -158,11 +158,11 @@ public class RoleController {
 
             @Valid @RequestBody RoleRequestDTO roleRequestDTO) {
 
-        log.info("Updating role: type = {}", roleRequestDTO.getType());
+        log.info("Updating role according to request: {}", roleRequestDTO);
 
         var updatedRole = roleService.updateRole(roleRequestDTO.toRole(), roleId);
 
-        log.info("Returning updated role: roleId = {}, type = {}", updatedRole.getRoleId(), updatedRole.getType());
+        log.info("Returning updated role: {}", updatedRole);
 
         return ResponseEntity.ok().body(RolePrivateResponseDTO.toRolePrivateResponseDTO(updatedRole));
     }
