@@ -190,20 +190,13 @@ public class CarController {
 
             @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
-        log.info("Creating car according to request: make = {}, model = {}, year = {}, " +
-                        "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
-                carRequestDTO.getMake(), carRequestDTO.getModel(), carRequestDTO.getYear(), carRequestDTO.getTrim(),
-                carRequestDTO.getColor(), carRequestDTO.getTransmission(), carRequestDTO.getFuel(), carRequestDTO.getUserId());
+        log.info("Creating car according to request: {}", carRequestDTO);
 
         var newCar = carService.createCar(carRequestDTO.toCar(), carRequestDTO.getUserId());
         var uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/cars/{carId}").
                 buildAndExpand(newCar.getCarId()).toUri();
 
-        log.info("Returning created car: carId = {}, make = {}, model = {}, year = {}, " +
-                        "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
-                newCar.getCarId(), newCar.getMake(), newCar.getModel(),
-                newCar.getYear(), newCar.getTrim(), newCar.getColor(),
-                newCar.getTransmission(), newCar.getFuel(), newCar.getUser().getUserId());
+        log.info("Returning created car: {}", newCar);
 
         return ResponseEntity.created(uri).body(CarPrivateResponseDTO.toCarPrivateDTO(newCar));
     }
@@ -222,18 +215,11 @@ public class CarController {
 
             @Valid @RequestBody CarRequestDTO carRequestDTO) {
 
-        log.info("Updating car according to request: make = {}, model = {}, year = {}, " +
-                        "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
-                carRequestDTO.getMake(), carRequestDTO.getModel(), carRequestDTO.getYear(), carRequestDTO.getTrim(),
-                carRequestDTO.getColor(), carRequestDTO.getTransmission(), carRequestDTO.getFuel(), carRequestDTO.getUserId());
+        log.info("Updating car according to request: {}", carRequestDTO);
 
         var updatedCar = carService.updateCar(carRequestDTO.toCar(), carRequestDTO.getUserId(), carId);
 
-        log.info("Returning updated car: carId = {}, make = {}, model = {}, year = {}, " +
-                        "trim = {}, color = {}, transmission = {}, fuel = {}, userId = {}",
-                updatedCar.getCarId(), updatedCar.getMake(), updatedCar.getModel(),
-                updatedCar.getYear(), updatedCar.getTrim(), updatedCar.getColor(),
-                updatedCar.getTransmission(), updatedCar.getFuel(), updatedCar.getUser().getUserId());
+        log.info("Returning updated car: {}", updatedCar);
 
         return ResponseEntity.ok().body(CarPrivateResponseDTO.toCarPrivateDTO(updatedCar));
     }

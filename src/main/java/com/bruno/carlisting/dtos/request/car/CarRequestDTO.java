@@ -51,4 +51,18 @@ public class CarRequestDTO {
     public Car toCar() {
         return new Car(make, model, year, trim, color, transmission, fuel);
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "\nmake = %s\n" +
+                "model = %s\n" +
+                "year = %s\n" +
+                "trim = %s\n" +
+                "color = %s\n" +
+                "transmission = %s\n" +
+                "fuel = %s\n",
+                this.getMake(), this.getModel(), this.getYear(), this.getTrim(),
+                this.getColor(), this.getTransmission(), this.getFuel());
+    }
 }
