@@ -136,17 +136,13 @@ public class UserController {
 
             @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
-        log.info("Creating user: username = {}, displayName = {}, contact = {}, rolesIds = {}",
-                userRequestDTO.getUsername(), userRequestDTO.getDisplayName(),
-                userRequestDTO.getContact(), userRequestDTO.getRolesIds());
+        log.info("Creating user according to request: {}", userRequestDTO);
 
         var newUser = userService.createUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds());
         var uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{userId}").
                 buildAndExpand(newUser.getUserId()).toUri();
 
-        log.info("Returning created user: userId = {}, username = {}, displayName = {}, contact = {}, rolesIds = {}",
-                newUser.getUserId(), newUser.getUsername(), newUser.getDisplayName(),
-                newUser.getContact(), newUser.getRoles());
+        log.info("Returning created user: {}", newUser);
 
         return ResponseEntity.created(uri).body(UserPrivateResponseDTO.toUserPrivateDTO(newUser));
     }
@@ -165,15 +161,11 @@ public class UserController {
 
             @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
-        log.info("Updating user: username = {}, displayName = {}, contact = {}, rolesIds = {}",
-                userRequestDTO.getUsername(), userRequestDTO.getDisplayName(),
-                userRequestDTO.getContact(), userRequestDTO.getRolesIds());
+        log.info("Updating user according to request: {}", userRequestDTO);
 
         var updatedUser = userService.updateUser(userRequestDTO.toUser(), userRequestDTO.getRolesIds(), userId);
 
-        log.info("Returning updated user: userId = {}, username = {}, displayName = {}, contact = {}, rolesIds = {}",
-                updatedUser.getUserId(), updatedUser.getUsername(), updatedUser.getDisplayName(),
-                updatedUser.getContact(), updatedUser.getRoles());
+        log.info("Returning updated user: {}", updatedUser);
 
         return ResponseEntity.ok().body(UserPrivateResponseDTO.toUserPrivateDTO(updatedUser));
     }

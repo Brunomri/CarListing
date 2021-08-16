@@ -38,4 +38,13 @@ public class UserRequestDTO {
     public User toUser() {
         return new User(username, password, displayName, contact);
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "\nusername = %s\n" +
+                "displayName = %s\n" +
+                "contact = %s\n",
+                this.getUsername(), this.getDisplayName(), this.getContact());
+    }
 }
