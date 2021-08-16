@@ -6,10 +6,10 @@ import com.bruno.carlisting.exceptions.entityRelationshipIntegrityException;
 import com.bruno.carlisting.repositories.RoleRepository;
 import com.bruno.carlisting.services.interfaces.PagingService;
 import com.bruno.carlisting.services.interfaces.RoleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class RoleServiceImpl implements RoleService {
 
     public static final String ROLE_ID_NOT_FOUND = "Role ID %s not found";
@@ -35,8 +36,12 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Page<Role> getAllRoles(int page, int size) {
 
-        Pageable pageRequest = PageRequest.of(page, size);
-        Page<Role> rolesPage = roleRepository.findAll(pageRequest);
+        var pageRequest = PageRequest.of(page, size);
+        var rolesPage = roleRepository.findAll(pageRequest);
+
+        log.debug("method = getAllRoles, page number = {}, page size = {}, rolesPage = {}",
+                rolesPage.getPageable().getPageNumber(), rolesPage.getPageable().getPageSize(), rolesPage.getContent());
+
         pagingService.validatePage(rolesPage, String.format(PAGE_HAS_NO_ROLES, page));
         return rolesPage;
     }
