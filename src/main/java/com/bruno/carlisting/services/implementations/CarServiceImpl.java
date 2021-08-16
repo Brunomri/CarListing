@@ -21,6 +21,7 @@ public class CarServiceImpl implements CarService {
     public static final String PAGE_HAS_NO_CARS = "Page %s has no cars";
     public static final String CARS_OF_MAKE_NOT_FOUND = "No cars of make %s were found on page %s";
     public static final String CARS_NOT_FOUND_FOR_USER_ID = "Cars not found for user ID = %s on page %s";
+    public static final String ER_INTEGRITY_EXCEPTION_MSG = "Entity relationship integrity exception occurred:";
     public static final String CAR_ALREADY_EXISTS = "This car already exists:" +
             " Make = %s -" +
             " Model = %s -" +
@@ -135,7 +136,7 @@ public class CarServiceImpl implements CarService {
             return carRepository.save(currentCar);
         } catch (DataIntegrityViolationException e) {
 
-            log.warn("Entity relationship integrity exception occurred:", e);
+            log.warn(ER_INTEGRITY_EXCEPTION_MSG, e);
 
             throw new entityRelationshipIntegrityException(String.format(
                     CAR_ALREADY_EXISTS, currentCar.getMake(), currentCar.getModel(),
@@ -151,9 +152,15 @@ public class CarServiceImpl implements CarService {
         log.debug("method = updateCarMake, currentCar: {}", currentCar);
 
         currentCar.setMake(make);
+
+        log.debug("method = updateCarMake, currentCar: {}", currentCar);
+
         try {
             return carRepository.save(currentCar);
         } catch (DataIntegrityViolationException e) {
+
+            log.warn(ER_INTEGRITY_EXCEPTION_MSG, e);
+
             throw new entityRelationshipIntegrityException(String.format(CAR_ALREADY_EXISTS, currentCar.getMake(),
                     currentCar.getModel(), currentCar.getYear(), currentCar.getTrim()));
         }
@@ -164,10 +171,18 @@ public class CarServiceImpl implements CarService {
 
         var currentCar = getCarById(carId);
 
+        log.debug("method = updateCarModel, currentCar: {}", currentCar);
+
         currentCar.setModel(model);
+
+        log.debug("method = updateCarModel, currentCar: {}", currentCar);
+
         try {
             return carRepository.save(currentCar);
         } catch (DataIntegrityViolationException e) {
+
+            log.warn(ER_INTEGRITY_EXCEPTION_MSG, e);
+
             throw new entityRelationshipIntegrityException(String.format(CAR_ALREADY_EXISTS, currentCar.getMake(),
                     currentCar.getModel(), currentCar.getYear(), currentCar.getTrim()));
         }
@@ -178,10 +193,18 @@ public class CarServiceImpl implements CarService {
 
         var currentCar = getCarById(carId);
 
+        log.debug("method = updateCarYear, currentCar: {}", currentCar);
+
         currentCar.setYear(year);
+
+        log.debug("method = updateCarYear, currentCar: {}", currentCar);
+
         try {
             return carRepository.save(currentCar);
         } catch (DataIntegrityViolationException e) {
+
+            log.warn(ER_INTEGRITY_EXCEPTION_MSG, e);
+
             throw new entityRelationshipIntegrityException(String.format(CAR_ALREADY_EXISTS, currentCar.getMake(),
                     currentCar.getModel(), currentCar.getYear(), currentCar.getTrim()));
         }
@@ -192,10 +215,18 @@ public class CarServiceImpl implements CarService {
 
         var currentCar = getCarById(carId);
 
+        log.debug("method = updateCarTrim, currentCar: {}", currentCar);
+
         currentCar.setTrim(trim);
+
+        log.debug("method = updateCarTrim, currentCar: {}", currentCar);
+
         try {
             return carRepository.save(currentCar);
         } catch (DataIntegrityViolationException e) {
+
+            log.warn(ER_INTEGRITY_EXCEPTION_MSG, e);
+
             throw new entityRelationshipIntegrityException(String.format(CAR_ALREADY_EXISTS, currentCar.getMake(),
                     currentCar.getModel(), currentCar.getYear(), currentCar.getTrim()));
         }
@@ -206,7 +237,12 @@ public class CarServiceImpl implements CarService {
 
         var currentCar = getCarById(carId);
 
+        log.debug("method = updateCarColor, currentCar: {}", currentCar);
+
         currentCar.setColor(color);
+
+        log.debug("method = updateCarColor, currentCar: {}", currentCar);
+
         return carRepository.save(currentCar);
     }
 
@@ -215,7 +251,12 @@ public class CarServiceImpl implements CarService {
 
         var currentCar = getCarById(carId);
 
+        log.debug("method = updateCarTransmission, currentCar: {}", currentCar);
+
         currentCar.setTransmission(transmission);
+
+        log.debug("method = updateCarTransmission, currentCar: {}", currentCar);
+
         return carRepository.save(currentCar);
     }
 
@@ -224,7 +265,12 @@ public class CarServiceImpl implements CarService {
 
         var currentCar = getCarById(carId);
 
+        log.debug("method = updateCarFuel, currentCar: {}", currentCar);
+
         currentCar.setFuel(fuel);
+
+        log.debug("method = updateCarFuel, currentCar: {}", currentCar);
+
         return carRepository.save(currentCar);
     }
 
@@ -233,7 +279,12 @@ public class CarServiceImpl implements CarService {
 
         var currentCar = getCarById(carId);
 
+        log.debug("method = updateCarUser, currentCar: {}", currentCar);
+
         currentCar.setUser(userService.getUserById(userId));
+
+        log.debug("method = updateCarUser, currentCar: {}", currentCar);
+
         return carRepository.save(currentCar);
     }
 
@@ -241,6 +292,9 @@ public class CarServiceImpl implements CarService {
     public void deleteCar(Long carId) {
 
         var carToDelete = carRepository.findById(carId);
+
+        log.debug("method = deleteCar, currentCar: {}", carToDelete);
+
         carRepository.delete(carToDelete.orElseThrow(() -> new ObjectNotFoundException(
                 String.format(CAR_ID_NOT_FOUND, carId))));
     }
