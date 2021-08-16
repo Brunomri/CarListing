@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -49,17 +48,26 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getRoleById(Integer roleId) {
 
-        Optional<Role> role = roleRepository.findById(roleId);
+        var role = roleRepository.findById(roleId);
+
+        log.debug("method = getRoleById, role = {}", role);
+
         return role.orElseThrow(() -> new ObjectNotFoundException(String.format(ROLE_ID_NOT_FOUND, roleId)));
     }
 
     @Override
     public List<Role> getRolesByUserId(Long userId) {
 
-        List<Role> userRoles = new ArrayList<>();
-        userRoles.addAll(roleRepository.findByUsers_UserId(userId));
-        if (userRoles.isEmpty()) throw new
-                ObjectNotFoundException(String.format(NO_ROLES_ASSOCIATED_TO_USER, userId));
+        List<Role> userRoles = new ArrayList<>(roleRepository.findByUsers_UserId(userId));
+
+        log.debug("method = getRolesByUserId, userRoles = {}", userRoles);
+
+        if (userRoles.isEmpty()) {
+
+            log.warn("Object not found exception occurred:");
+
+            throw new ObjectNotFoundException(String.format(NO_ROLES_ASSOCIATED_TO_USER, userId));
+        }
         return userRoles;
     }
 
@@ -67,8 +75,14 @@ public class RoleServiceImpl implements RoleService {
     public Role createRole(Role newRole) {
 
         try {
+
+            log.debug("method = createRole, newRole = {}", newRole);
+
             return roleRepository.save(newRole);
         } catch (DataIntegrityViolationException e) {
+
+            log.warn("Entity relationship integrity exception occurred:", e);
+
             throw new entityRelationshipIntegrityException(String.format(
                     ROLE_ALREADY_EXISTS, newRole.getType()));
         }
@@ -81,11 +95,18 @@ public class RoleServiceImpl implements RoleService {
         var currentRole = optionalRole.orElseThrow(() -> new ObjectNotFoundException(
                 String.format(ROLE_ID_NOT_FOUND, roleId)));
 
+        log.debug("method = updateRole, currentRole = {}", currentRole);
+
         currentRole.setType(updatedRole.getType());
+
+        log.debug("method = updateRole, currentRole = {}", currentRole);
 
         try {
             return roleRepository.save(currentRole);
         } catch (DataIntegrityViolationException e) {
+
+            log.warn("Entity relationship integrity exception occurred:", e);
+
             throw new entityRelationshipIntegrityException(String.format(
                     ROLE_ALREADY_EXISTS, currentRole.getType()
             ));
@@ -95,7 +116,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRoles(Integer roleId) {
 
-        Optional<Role> roleToDelete = roleRepository.findById(roleId);
+        var roleToDelete = roleRepository.findById(roleId);
+
+        log.debug("method = deleteRoles, roleToDelete = {}", roleToDelete);
+
         roleRepository.delete(roleToDelete.orElseThrow(() -> new ObjectNotFoundException(
                 String.format(ROLE_ID_NOT_FOUND, roleId))));
     }
