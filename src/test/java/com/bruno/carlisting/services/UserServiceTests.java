@@ -60,7 +60,7 @@ class UserServiceTests {
         newUsers.add(user3);
 
         Pageable pageRequest = PageRequest.of(0, 3);
-        Page<User> usersPage = new PageImpl<>(newUsers);
+        Page<User> usersPage = new PageImpl<>(newUsers, pageRequest, newUsers.size());
         when(mockedUserRepository.findAll(pageRequest)).thenReturn(usersPage);
 
         assertEquals(3, userService.getAllUsers(0, 3).getTotalElements());
